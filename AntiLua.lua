@@ -44,7 +44,7 @@ function AntiLua.Notify(message, duration, color, title)
 	
 	if title then
 		temp_title = Instance.new("TextLabel")
-		temp_title.Size = UDim2.new(1, 0, 0, 0)
+		temp_title.Size = UDim2.new(1, -20, 0, 0)
 		temp_title.BackgroundTransparency = 1
 		temp_title.Text = title
 		temp_title.Font = Enum.Font.GothamBold
@@ -52,12 +52,14 @@ function AntiLua.Notify(message, duration, color, title)
 		temp_title.TextWrapped = true
 		temp_title.TextXAlignment = Enum.TextXAlignment.Left
 		temp_title.Parent = temp_frame
-		temp_title.TextBounds = Vector2.new(280, math.huge)
+		
+		task.wait()
+		temp_title.Size = UDim2.new(1, -20, 0, temp_title.TextBounds.Y)
 		total_height = total_height + temp_title.TextBounds.Y + 5
 	end
 	
 	temp_message = Instance.new("TextLabel")
-	temp_message.Size = UDim2.new(1, 0, 0, 0)
+	temp_message.Size = UDim2.new(1, -20, 0, 0)
 	temp_message.BackgroundTransparency = 1
 	temp_message.Text = message
 	temp_message.Font = Enum.Font.Gotham
@@ -65,7 +67,9 @@ function AntiLua.Notify(message, duration, color, title)
 	temp_message.TextWrapped = true
 	temp_message.TextXAlignment = Enum.TextXAlignment.Left
 	temp_message.Parent = temp_frame
-	temp_message.TextBounds = Vector2.new(280, math.huge)
+	
+	task.wait()
+	temp_message.Size = UDim2.new(1, -20, 0, temp_message.TextBounds.Y)
 	total_height = total_height + temp_message.TextBounds.Y + 10
 	
 	temp_frame:Destroy()
@@ -134,8 +138,8 @@ function AntiLua.Notify(message, duration, color, title)
 	
 	Services.Debris:AddItem(notification, duration + 0.5)
 	
-	spawn(function()
-		wait(duration)
+	task.spawn(function()
+		task.wait(duration)
 		local slide_out = Services.TweenService:Create(
 			notification,
 			TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
