@@ -44,32 +44,34 @@ function AntiLua.Notify(message, duration, color, title)
 	
 	if title then
 		temp_title = Instance.new("TextLabel")
-		temp_title.Size = UDim2.new(1, -20, 0, 0)
+		temp_title.Size = UDim2.new(0, 260, 0, 0) -- fixed width
 		temp_title.BackgroundTransparency = 1
 		temp_title.Text = title
 		temp_title.Font = Enum.Font.GothamBold
 		temp_title.TextSize = 16
 		temp_title.TextWrapped = true
 		temp_title.TextXAlignment = Enum.TextXAlignment.Left
+		temp_title.TextYAlignment = Enum.TextYAlignment.Top
 		temp_title.Parent = temp_frame
 		
 		task.wait()
-		temp_title.Size = UDim2.new(1, -20, 0, temp_title.TextBounds.Y)
+		temp_title.Size = UDim2.new(0, 260, 0, temp_title.TextBounds.Y)
 		total_height = total_height + temp_title.TextBounds.Y + 5
 	end
 	
 	temp_message = Instance.new("TextLabel")
-	temp_message.Size = UDim2.new(1, -20, 0, 0)
+	temp_message.Size = UDim2.new(0, 260, 0, 0) -- fixed width
 	temp_message.BackgroundTransparency = 1
 	temp_message.Text = message
 	temp_message.Font = Enum.Font.Gotham
 	temp_message.TextSize = 15
 	temp_message.TextWrapped = true
 	temp_message.TextXAlignment = Enum.TextXAlignment.Left
+	temp_message.TextYAlignment = Enum.TextYAlignment.Top
 	temp_message.Parent = temp_frame
 	
 	task.wait()
-	temp_message.Size = UDim2.new(1, -20, 0, temp_message.TextBounds.Y)
+	temp_message.Size = UDim2.new(0, 260, 0, temp_message.TextBounds.Y)
 	total_height = total_height + temp_message.TextBounds.Y + 10
 	
 	temp_frame:Destroy()
@@ -101,7 +103,7 @@ function AntiLua.Notify(message, duration, color, title)
 	
 	if title then
 		local title_label = Instance.new("TextLabel")
-		title_label.Size = UDim2.new(1, -20, 0, 20)
+		title_label.Size = UDim2.new(0, 260, 0, 0)
 		title_label.Position = UDim2.new(0, 15, 0, current_y)
 		title_label.BackgroundTransparency = 1
 		title_label.Text = title
@@ -113,11 +115,14 @@ function AntiLua.Notify(message, duration, color, title)
 		title_label.TextYAlignment = Enum.TextYAlignment.Top
 		title_label.Parent = notification
 		
-		current_y = current_y + 25
+		task.wait()
+		title_label.Size = UDim2.new(0, 260, 0, title_label.TextBounds.Y)
+		
+		current_y = current_y + title_label.TextBounds.Y + 5
 	end
 	
 	local text_label = Instance.new("TextLabel")
-	text_label.Size = UDim2.new(1, -20, 1, -current_y - 10)
+	text_label.Size = UDim2.new(0, 260, 0, 0)
 	text_label.Position = UDim2.new(0, 15, 0, current_y)
 	text_label.BackgroundTransparency = 1
 	text_label.Text = message
@@ -128,6 +133,9 @@ function AntiLua.Notify(message, duration, color, title)
 	text_label.TextXAlignment = Enum.TextXAlignment.Left
 	text_label.TextYAlignment = Enum.TextYAlignment.Top
 	text_label.Parent = notification
+	
+	task.wait()
+	text_label.Size = UDim2.new(0, 260, 0, text_label.TextBounds.Y)
 	
 	local slide_in = Services.TweenService:Create(
 		notification,
