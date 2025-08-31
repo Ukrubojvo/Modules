@@ -308,13 +308,13 @@ function AntiLua.CreateUI(config)
 	-- // UI Setup // --
 	local GUIParent = gethui and gethui() or game.CoreGui
 
-	local blocker_ui = GUIParent:FindFirstChild("AntiLuaUI")
+	local blocker_ui = GUIParent:FindFirstChild(settings.title)
 	if blocker_ui then
 		blocker_ui:Destroy()
 	end
 
 	screen_gui = Instance.new("ScreenGui")
-	screen_gui.Name = "AntiLuaUI"
+	screen_gui.Name = settings.title
 	screen_gui.ResetOnSpawn = false
 	screen_gui.IgnoreGuiInset = true
 	screen_gui.Parent = GUIParent
