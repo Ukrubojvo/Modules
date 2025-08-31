@@ -39,7 +39,7 @@ local function calculate_text_size(text, font, text_size, max_width)
 	temp_label.TextXAlignment = Enum.TextXAlignment.Left
 	temp_label.TextYAlignment = Enum.TextYAlignment.Top
 	temp_label.Parent = workspace
-
+	
 	Services.RunService.Heartbeat:Wait()
 	
 	local bounds = temp_label.TextBounds
@@ -139,7 +139,7 @@ function AntiLua.Notify(message, duration, color, title)
 	slide_in:Play()
 	
 	Services.Debris:AddItem(notification, duration + 0.5)
-
+	
 	task.spawn(function()
 		task.wait(duration)
 		local slide_out = Services.TweenService:Create(
@@ -201,7 +201,9 @@ end
 -- // Drag Function // --
 local function setup_dragging()
 	local dragging = false
+	local main_dragging = false
 	local drag_input, drag_start, start_pos
+	local main_drag_input, main_drag_start, main_start_pos
 	local tween_info = TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 0, false, 0)
 	local drag_on = { BackgroundTransparency = 0 }
 	local drag_off = { BackgroundTransparency = 0.5 }
@@ -212,6 +214,16 @@ local function setup_dragging()
 		
 		drag_btn.Position = UDim2.new(drag_start_pos.X.Scale, drag_start_pos.X.Offset + delta.X, drag_start_pos.Y.Scale, drag_start_pos.Y.Offset + delta.Y)
 		drag_frame.Position = UDim2.new(drag_start_pos.X.Scale, drag_start_pos.X.Offset + delta.X, drag_start_pos.Y.Scale, drag_start_pos.Y.Offset + delta.Y)
+	end
+	
+	local function update_main_drag(input)
+		local delta = input.Position - main_drag_start
+		local new_position = UDim2.new(main_start_pos.X.Scale, main_start_pos.X.Offset + delta.X, main_start_pos.Y.Scale, main_start_pos.Y.Offset + delta.Y)
+		main_frame.Position = new_position
+		target_position = new_position
+		
+		drag_btn.Position = UDim2.new(new_position.X.Scale, new_position.X.Offset, new_position.Y.Scale, new_position.Y.Offset + 65)
+		drag_frame.Position = UDim2.new(new_position.X.Scale, new_position.X.Offset, new_position.Y.Scale, new_position.Y.Offset + 65)
 	end
 
 	drag_btn.InputBegan:Connect(function(input)
@@ -247,9 +259,31 @@ local function setup_dragging()
 		end
 	end)
 
+	main_frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			main_dragging = true
+			main_drag_start = input.Position
+			main_start_pos = main_frame.Position
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					main_dragging = false
+				end
+			end)
+		end
+	end)
+
+	main_frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			main_drag_input = input
+		end
+	end)
+
 	Services.UserInputService.InputChanged:Connect(function(input)
 		if dragging and input == drag_input then
 			update_drag(input)
+		elseif main_dragging and input == main_drag_input then
+			update_main_drag(input)
 		end
 	end)
 end
@@ -294,8 +328,7 @@ function AntiLua.CreateUI(config)
 	main_frame.BorderSizePixel = 0
 	main_frame.AnchorPoint = Vector2.new(0.5, 0.5)
 	main_frame.Active = true
-	main_frame.Draggable = true
-	main_frame.Selectable = true
+
 	main_frame.Parent = screen_gui
 
 	local corner = Instance.new("UICorner", main_frame)
@@ -353,7 +386,7 @@ function AntiLua.CreateUI(config)
 
 	-- // Setup Dragging // --
 	setup_dragging()
-	
+
 	local function sync_drag_elements()
 		if not (drag_btn:GetAttribute("Dragging") or false) then
 			local main_pos = main_frame.Position
@@ -363,7 +396,7 @@ function AntiLua.CreateUI(config)
 		end
 	end
 	
-	main_frame:GetPropertyChangedSignal("Position"):Connect(sync_drag_elements)
+	Services.RunService.Heartbeat:Connect(sync_drag_elements)
 
 	-- // Toggle Button // --
 	local toggle_button = Instance.new("TextButton")
