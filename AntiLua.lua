@@ -26,16 +26,55 @@ local function create_notification_gui()
 	notification_gui.DisplayOrder = 2147483647
 end
 
-function AntiLua.Notify(message, duration, color)
+function AntiLua.Notify(message, duration, color, title)
 	create_notification_gui()
 	
 	duration = duration or 3
 	color = color or Color3.fromRGB(80, 200, 120)
+	title = title or nil
 	notification_count = notification_count + 1
 	
+	local temp_frame = Instance.new("Frame")
+	temp_frame.Size = UDim2.new(0, 280, 0, 1000)
+	temp_frame.BackgroundTransparency = 1
+	temp_frame.Parent = notification_gui
+	
+	local temp_title, temp_message
+	local total_height = 20
+	
+	if title then
+		temp_title = Instance.new("TextLabel")
+		temp_title.Size = UDim2.new(1, 0, 0, 0)
+		temp_title.BackgroundTransparency = 1
+		temp_title.Text = title
+		temp_title.Font = Enum.Font.GothamBold
+		temp_title.TextSize = 16
+		temp_title.TextWrapped = true
+		temp_title.TextXAlignment = Enum.TextXAlignment.Left
+		temp_title.Parent = temp_frame
+		temp_title.TextBounds = Vector2.new(280, math.huge)
+		total_height = total_height + temp_title.TextBounds.Y + 5
+	end
+	
+	temp_message = Instance.new("TextLabel")
+	temp_message.Size = UDim2.new(1, 0, 0, 0)
+	temp_message.BackgroundTransparency = 1
+	temp_message.Text = message
+	temp_message.Font = Enum.Font.Gotham
+	temp_message.TextSize = 15
+	temp_message.TextWrapped = true
+	temp_message.TextXAlignment = Enum.TextXAlignment.Left
+	temp_message.Parent = temp_frame
+	temp_message.TextBounds = Vector2.new(280, math.huge)
+	total_height = total_height + temp_message.TextBounds.Y + 10
+	
+	temp_frame:Destroy()
+	
+	local notification_height = math.max(60, math.min(200, total_height))
+	
 	local notification = Instance.new("Frame")
-	notification.Size = UDim2.new(0, 300, 0, 60)
-	notification.Position = UDim2.new(1, 320, 1, -80 - (notification_count * 70))
+	notification.Size = UDim2.new(0, 300, 0, notification_height)
+	notification.Position = UDim2.new(1, 320, 1, -notification_height - 20 - (notification_count * (notification_height + 10)))
 	notification.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 	notification.BackgroundTransparency = 0.1
 	notification.BorderSizePixel = 0
@@ -54,39 +93,58 @@ function AntiLua.Notify(message, duration, color)
 	local accent_corner = Instance.new("UICorner", accent)
 	accent_corner.CornerRadius = UDim.new(0, 8)
 	
+	local current_y = 10
+	
+	if title then
+		local title_label = Instance.new("TextLabel")
+		title_label.Size = UDim2.new(1, -20, 0, 20)
+		title_label.Position = UDim2.new(0, 15, 0, current_y)
+		title_label.BackgroundTransparency = 1
+		title_label.Text = title
+		title_label.Font = Enum.Font.GothamBold
+		title_label.TextColor3 = Color3.fromRGB(255, 255, 255)
+		title_label.TextSize = 16
+		title_label.TextWrapped = true
+		title_label.TextXAlignment = Enum.TextXAlignment.Left
+		title_label.TextYAlignment = Enum.TextYAlignment.Top
+		title_label.Parent = notification
+		
+		current_y = current_y + 25
+	end
+	
 	local text_label = Instance.new("TextLabel")
-	text_label.Size = UDim2.new(1, -20, 1, 0)
-	text_label.Position = UDim2.new(0, 15, 0, 0)
+	text_label.Size = UDim2.new(1, -20, 1, -current_y - 10)
+	text_label.Position = UDim2.new(0, 15, 0, current_y)
 	text_label.BackgroundTransparency = 1
 	text_label.Text = message
 	text_label.Font = Enum.Font.Gotham
-	text_label.TextColor3 = Color3.fromRGB(255, 255, 255)
-	text_label.TextSize = 14
+	text_label.TextColor3 = title and Color3.fromRGB(200, 200, 200) or Color3.fromRGB(255, 255, 255)
+	text_label.TextSize = 15
 	text_label.TextWrapped = true
 	text_label.TextXAlignment = Enum.TextXAlignment.Left
+	text_label.TextYAlignment = Enum.TextYAlignment.Top
 	text_label.Parent = notification
 	
-	-- 애니메이션: 슬라이드 인
 	local slide_in = Services.TweenService:Create(
 		notification,
 		TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-		{ Position = UDim2.new(1, -320, 1, -80 - ((notification_count - 1) * 70)) }
+		{ Position = UDim2.new(1, -320, 1, -notification_height - 20 - ((notification_count - 1) * (notification_height + 10))) }
 	)
 	slide_in:Play()
 	
-	-- 자동 삭제
 	Services.Debris:AddItem(notification, duration + 0.5)
 	
-	-- 애니메이션: 슬라이드 아웃
-	wait(duration)
-	local slide_out = Services.TweenService:Create(
-		notification,
-		TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-		{ Position = UDim2.new(1, 320, notification.Position.Y.Scale, notification.Position.Y.Offset) }
-	)
-	slide_out:Play()
-	
-	notification_count = notification_count - 1
+	spawn(function()
+		wait(duration)
+		local slide_out = Services.TweenService:Create(
+			notification,
+			TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+			{ Position = UDim2.new(1, 320, notification.Position.Y.Scale, notification.Position.Y.Offset) }
+		)
+		slide_out:Play()
+		
+		notification_count = notification_count - 1
+	end)
 end
 
 -- // Services // --
