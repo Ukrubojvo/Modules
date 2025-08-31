@@ -39,7 +39,7 @@ local function calculate_text_size(text, font, text_size, max_width)
 	temp_label.TextXAlignment = Enum.TextXAlignment.Left
 	temp_label.TextYAlignment = Enum.TextYAlignment.Top
 	temp_label.Parent = workspace
-	
+
 	Services.RunService.Heartbeat:Wait()
 	
 	local bounds = temp_label.TextBounds
@@ -74,9 +74,10 @@ function AntiLua.Notify(message, duration, color, title)
 	
 	local message_bounds = calculate_text_size(message, Enum.Font.Gotham, 15, text_width)
 	message_height = math.max(20, message_bounds.Y)
-	total_height = total_height + message_height + 10 
+	total_height = total_height + message_height + 10
 	
 	local notification_height = math.max(60, math.min(300, total_height))
+	
 	local notification = Instance.new("Frame")
 	notification.Size = UDim2.new(0, 300, 0, notification_height)
 	notification.Position = UDim2.new(1, 320, 1, -notification_height - 20 - (notification_count * (notification_height + 10)))
@@ -138,7 +139,7 @@ function AntiLua.Notify(message, duration, color, title)
 	slide_in:Play()
 	
 	Services.Debris:AddItem(notification, duration + 0.5)
-	
+
 	task.spawn(function()
 		task.wait(duration)
 		local slide_out = Services.TweenService:Create(
@@ -352,6 +353,17 @@ function AntiLua.CreateUI(config)
 
 	-- // Setup Dragging // --
 	setup_dragging()
+	
+	local function sync_drag_elements()
+		if not (drag_btn:GetAttribute("Dragging") or false) then
+			local main_pos = main_frame.Position
+			drag_btn.Position = UDim2.new(main_pos.X.Scale, main_pos.X.Offset, main_pos.Y.Scale, main_pos.Y.Offset + 65)
+			drag_frame.Position = UDim2.new(main_pos.X.Scale, main_pos.X.Offset, main_pos.Y.Scale, main_pos.Y.Offset + 65)
+			target_position = main_pos
+		end
+	end
+	
+	main_frame:GetPropertyChangedSignal("Position"):Connect(sync_drag_elements)
 
 	-- // Toggle Button // --
 	local toggle_button = Instance.new("TextButton")
