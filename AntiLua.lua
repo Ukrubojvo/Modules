@@ -111,6 +111,7 @@ function AntiLua.CreateUI(config)
 		button_text_active = config.button_text_active or "Script Active",
 		on_toggle = config.on_toggle or function(enabled) end,
 		custom_code = config.custom_code or function() end,
+		toggle_key = config.toggle_key or Enum.KeyCode.Insert,
 		size = config.size or UDim2.new(0, 260, 0, 110),
 		position = config.position or UDim2.new(0.5, 0, 0.5, 0),
 		background_color = config.background_color or Color3.fromRGB(16, 16, 16),
@@ -219,8 +220,10 @@ function AntiLua.CreateUI(config)
 
 	-- // Button State Tracking // --
 	local script_enabled = false
+	local ui_visible = true
 
-	toggle_button.MouseButton1Click:Connect(function()
+	-- // Toggle Function // --
+	local function toggle_script()
 		script_enabled = not script_enabled
 		toggle_button.Text = script_enabled and settings.button_text_active or settings.button_text
 		
@@ -231,6 +234,23 @@ function AntiLua.CreateUI(config)
 		
 		-- Call on_toggle callback
 		settings.on_toggle(script_enabled)
+	end
+
+	-- // UI Visibility Toggle Function // --
+	local function toggle_ui_visibility()
+		ui_visible = not ui_visible
+		screen_gui.Enabled = ui_visible
+	end
+
+	toggle_button.MouseButton1Click:Connect(toggle_script)
+
+	-- // Keyboard Input Handler // --
+	Services.UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if gameProcessed then return end
+		
+		if input.KeyCode == settings.toggle_key then
+			toggle_ui_visibility()
+		end
 	end)
 
 	-- // Start Spring Animation Loop // --
@@ -256,6 +276,19 @@ function AntiLua.CreateUI(config)
 		end,
 		is_enabled = function()
 			return script_enabled
+		end,
+		toggle_visibility = function()
+			toggle_ui_visibility()
+		end,
+		set_visible = function(visible)
+			ui_visible = visible
+			screen_gui.Enabled = ui_visible
+		end,
+		is_visible = function()
+			return ui_visible
+		end,
+		toggle_script = function()
+			toggle_script()
 		end
 	}
 end
