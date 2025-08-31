@@ -6,6 +6,94 @@ local Services = {
 	Players = cloneref(game:GetService("Players")),
 	RunService = cloneref(game:GetService("RunService")),
 	UserInputService = cloneref(game:GetService("UserInputService")),
+	TweenService = cloneref(game:GetService("TweenService")),
+	Debris = cloneref(game:GetService("Debris"))
+}
+
+-- // Notification System // --
+local notification_gui
+local notification_count = 0
+
+local function create_notification_gui()
+	if notification_gui then return end
+	
+	local GUIParent = gethui and gethui() or game.CoreGui
+	notification_gui = Instance.new("ScreenGui")
+	notification_gui.Name = "AntiLuaNotifications"
+	notification_gui.ResetOnSpawn = false
+	notification_gui.IgnoreGuiInset = true
+	notification_gui.Parent = GUIParent
+	notification_gui.DisplayOrder = 2147483647
+end
+
+function AntiLua.Notify(message, duration, color)
+	create_notification_gui()
+	
+	duration = duration or 3
+	color = color or Color3.fromRGB(80, 200, 120)
+	notification_count = notification_count + 1
+	
+	local notification = Instance.new("Frame")
+	notification.Size = UDim2.new(0, 300, 0, 60)
+	notification.Position = UDim2.new(1, 320, 1, -80 - (notification_count * 70))
+	notification.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+	notification.BackgroundTransparency = 0.1
+	notification.BorderSizePixel = 0
+	notification.Parent = notification_gui
+	
+	local corner = Instance.new("UICorner", notification)
+	corner.CornerRadius = UDim.new(0, 8)
+	
+	local accent = Instance.new("Frame")
+	accent.Size = UDim2.new(0, 4, 1, 0)
+	accent.Position = UDim2.new(0, 0, 0, 0)
+	accent.BackgroundColor3 = color
+	accent.BorderSizePixel = 0
+	accent.Parent = notification
+	
+	local accent_corner = Instance.new("UICorner", accent)
+	accent_corner.CornerRadius = UDim.new(0, 8)
+	
+	local text_label = Instance.new("TextLabel")
+	text_label.Size = UDim2.new(1, -20, 1, 0)
+	text_label.Position = UDim2.new(0, 15, 0, 0)
+	text_label.BackgroundTransparency = 1
+	text_label.Text = message
+	text_label.Font = Enum.Font.Gotham
+	text_label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	text_label.TextSize = 14
+	text_label.TextWrapped = true
+	text_label.TextXAlignment = Enum.TextXAlignment.Left
+	text_label.Parent = notification
+	
+	-- 애니메이션: 슬라이드 인
+	local slide_in = Services.TweenService:Create(
+		notification,
+		TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+		{ Position = UDim2.new(1, -320, 1, -80 - ((notification_count - 1) * 70)) }
+	)
+	slide_in:Play()
+	
+	-- 자동 삭제
+	Services.Debris:AddItem(notification, duration + 0.5)
+	
+	-- 애니메이션: 슬라이드 아웃
+	wait(duration)
+	local slide_out = Services.TweenService:Create(
+		notification,
+		TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+		{ Position = UDim2.new(1, 320, notification.Position.Y.Scale, notification.Position.Y.Offset) }
+	)
+	slide_out:Play()
+	
+	notification_count = notification_count - 1
+end
+
+-- // Services // --
+local Services = {
+	Players = cloneref(game:GetService("Players")),
+	RunService = cloneref(game:GetService("RunService")),
+	UserInputService = cloneref(game:GetService("UserInputService")),
 	TweenService = cloneref(game:GetService("TweenService"))
 }
 
