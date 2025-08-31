@@ -26,9 +26,7 @@ local function create_notification_gui()
 	notification_gui.DisplayOrder = 2147483647
 end
 
--- // 텍스트 크기 계산 함수 (개선됨) // --
 local function calculate_text_size(text, font, text_size, max_width)
-	-- \n을 실제 줄바꿈으로 처리
 	text = string.gsub(text, "\\n", "\n")
 	
 	local temp_label = Instance.new("TextLabel")
@@ -40,9 +38,8 @@ local function calculate_text_size(text, font, text_size, max_width)
 	temp_label.TextWrapped = true
 	temp_label.TextXAlignment = Enum.TextXAlignment.Left
 	temp_label.TextYAlignment = Enum.TextYAlignment.Top
-	temp_label.Parent = workspace -- 임시로 workspace에 추가
+	temp_label.Parent = workspace
 	
-	-- 한 프레임 기다려서 TextBounds가 업데이트되도록 함
 	Services.RunService.Heartbeat:Wait()
 	
 	local bounds = temp_label.TextBounds
@@ -59,32 +56,27 @@ function AntiLua.Notify(message, duration, color, title)
 	title = title or nil
 	notification_count = notification_count + 1
 	
-	-- \n을 실제 줄바꿈으로 변환
 	message = string.gsub(message, "\\n", "\n")
 	if title then
 		title = string.gsub(title, "\\n", "\n")
 	end
 	
-	-- 텍스트 크기 계산
 	local text_width = 260
-	local total_height = 20 -- 기본 패딩
+	local total_height = 20
 	local title_height = 0
 	local message_height = 0
 	
 	if title then
 		local title_bounds = calculate_text_size(title, Enum.Font.GothamBold, 16, text_width)
-		title_height = math.max(20, title_bounds.Y) -- 최소 높이 보장
-		total_height = total_height + title_height + 5 -- 제목과 메시지 사이 간격
+		title_height = math.max(20, title_bounds.Y)
+		total_height = total_height + title_height + 5
 	end
 	
 	local message_bounds = calculate_text_size(message, Enum.Font.Gotham, 15, text_width)
-	message_height = math.max(20, message_bounds.Y) -- 최소 높이 보장
-	total_height = total_height + message_height + 10 -- 하단 패딩
+	message_height = math.max(20, message_bounds.Y)
+	total_height = total_height + message_height + 10 
 	
-	-- 알림 높이 설정 (최소 60, 최대 300)
 	local notification_height = math.max(60, math.min(300, total_height))
-	
-	-- 알림 생성
 	local notification = Instance.new("Frame")
 	notification.Size = UDim2.new(0, 300, 0, notification_height)
 	notification.Position = UDim2.new(1, 320, 1, -notification_height - 20 - (notification_count * (notification_height + 10)))
@@ -108,7 +100,6 @@ function AntiLua.Notify(message, duration, color, title)
 	
 	local current_y = 10
 	
-	-- 제목 라벨 생성
 	if title then
 		local title_label = Instance.new("TextLabel")
 		title_label.Size = UDim2.new(0, text_width, 0, title_height)
@@ -126,7 +117,6 @@ function AntiLua.Notify(message, duration, color, title)
 		current_y = current_y + title_height + 5
 	end
 	
-	-- 메시지 라벨 생성
 	local text_label = Instance.new("TextLabel")
 	text_label.Size = UDim2.new(0, text_width, 0, message_height)
 	text_label.Position = UDim2.new(0, 15, 0, current_y)
@@ -140,7 +130,6 @@ function AntiLua.Notify(message, duration, color, title)
 	text_label.TextYAlignment = Enum.TextYAlignment.Top
 	text_label.Parent = notification
 	
-	-- 슬라이드 인 애니메이션
 	local slide_in = Services.TweenService:Create(
 		notification,
 		TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
@@ -150,7 +139,6 @@ function AntiLua.Notify(message, duration, color, title)
 	
 	Services.Debris:AddItem(notification, duration + 0.5)
 	
-	-- 슬라이드 아웃 애니메이션
 	task.spawn(function()
 		task.wait(duration)
 		local slide_out = Services.TweenService:Create(
