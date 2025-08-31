@@ -293,6 +293,8 @@ function AntiLua.CreateUI(config)
 	main_frame.BorderSizePixel = 0
 	main_frame.AnchorPoint = Vector2.new(0.5, 0.5)
 	main_frame.Active = true
+	main_frame.Draggable = true
+	main_frame.Selectable = true
 	main_frame.Parent = screen_gui
 
 	local corner = Instance.new("UICorner", main_frame)
