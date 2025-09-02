@@ -2,13 +2,13 @@
 local AntiLua = {}
 
 -- // Services // --
-local Services = {
-	Players = cloneref(game:GetService("Players")),
-	RunService = cloneref(game:GetService("RunService")),
-	UserInputService = cloneref(game:GetService("UserInputService")),
-	TweenService = cloneref(game:GetService("TweenService")),
-	Debris = cloneref(game:GetService("Debris"))
-}
+local cloneref = missing("function", cloneref, function(...) return ... end)
+local Services = setmetatable({}, {
+    __index = function(self, name)
+        self[name] = cloneref(game:GetService(name))
+        return self[name]
+    end
+})
 
 -- // Notification System // --
 local notification_gui
