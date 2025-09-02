@@ -1,8 +1,18 @@
+function missing(t, f, fallback)
+    if type(f) == t then return f end
+    return fallback
+end
+
+cloneref = missing("function", cloneref, function(...) return ... end)
+sethidden = missing("function", sethiddenproperty or set_hidden_property or set_hidden_prop)
+gethidden = missing("function", gethiddenproperty or get_hidden_property or get_hidden_prop)
+queueteleport = missing("function", queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport))
+httprequest = missing("function", request or http_request or (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request))
+
 -- // AntiLua UI Library // --
 local AntiLua = {}
 
 -- // Services // --
-local cloneref = missing("function", cloneref, function(...) return ... end)
 local Services = setmetatable({}, {
     __index = function(self, name)
         self[name] = cloneref(game:GetService(name))
