@@ -21,7 +21,6 @@ function AcrylicBlur.ApplyToFrame(frame)
     root.Name = HS:GenerateGUID(true)
     
     local DepthOfField
-    -- Find or create DepthOfField effect
     for _, v in pairs(game:GetService("Lighting"):GetChildren()) do
         if v:IsA("DepthOfFieldEffect") and v:HasTag(".") then
             DepthOfField = v
@@ -84,17 +83,27 @@ function AcrylicBlur.ApplyToFrame(frame)
             p0.CastShadow = false
             p0.Material = MTREL
             p0.Size = Vector3.new(sz, sz, sz)
-            p0.Name = HS:GenerateGUID(true)
+            p0.Name = "AcrylicPart"
             local mesh = Instance.new('SpecialMesh', p0)
-            mesh.MeshType = 2
-            mesh.Name = HS:GenerateGUID(true)
+            mesh.MeshType = Enum.MeshType.Wedge
+            mesh.Name = "Mesh"
         end
-        p0[p0.Name].Scale = Vector3.new(0, perp / sz, para / sz)
+        local mesh0 = p0:FindFirstChild("Mesh")
+        if not mesh0 then
+            warn("SpecialMesh not found for p0")
+            return p0, p1
+        end
+        mesh0.Scale = Vector3.new(0, perp / sz, para / sz)
         p0.CFrame = cf0
         if not p1 then
             p1 = p0:Clone()
         end
-        p1[p1.Name].Scale = Vector3.new(0, perp / sz, dif_para / sz)
+        local mesh1 = p1:FindFirstChild("Mesh")
+        if not mesh1 then
+            warn("SpecialMesh not found for p1")
+            return p0, p1
+        end
+        mesh1.Scale = Vector3.new(0, perp / sz, dif_para / sz)
         p1.CFrame = cf1
         return p0, p1
     end
@@ -162,7 +171,6 @@ function AcrylicBlur.ApplyToFrame(frame)
             br = Vector2.new(c * (br.x - mid.x) - s * (br.y - mid.y), s * (br.x - mid.x) + c * (br.y - mid.y)) + mid
         end
         
-        -- Wrap DrawQuad in pcall to catch potential errors
         local success, err = pcall(function()
             DrawQuad(
                 camera:ScreenPointToRay(tl.x, tl.y, zIndex).Origin,
@@ -193,12 +201,10 @@ function AcrylicBlur.ApplyToFrame(frame)
         return x == x
     end
     
-    -- Wait for valid camera coordinates
     while not IsNotNaN(camera:ScreenPointToRay(0, 0).Origin.x) do
         RunService.RenderStepped:Wait()
     end
     
-    -- Use RenderStepped:Connect instead of BindToRenderStep
     local connection
     connection = RunService.RenderStepped:Connect(function()
         local success, err = pcall(UpdateOrientation)
@@ -210,7 +216,6 @@ function AcrylicBlur.ApplyToFrame(frame)
         end
     end)
     
-    -- Initialize orientation
     local success, err = pcall(function() UpdateOrientation(true) end)
     if not success then
         warn("Initial UpdateOrientation failed: " .. tostring(err))
