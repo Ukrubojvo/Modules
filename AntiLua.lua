@@ -181,7 +181,6 @@ function AcrylicBlur.ApplyToFrame(frame)
             )
         end)
         if not success then
-            warn("Error in DrawQuad: " .. tostring(err))
             return
         end
         
