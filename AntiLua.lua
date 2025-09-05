@@ -163,7 +163,9 @@ function AcrylicBlur.ApplyToFrame(frame)
         }
         local zIndex = 1 - 0.05*frame.ZIndex
 
-        local tl, br = frame.AbsolutePosition, frame.AbsolutePosition + frame.AbsoluteSize
+        -- Adjust the frame bounds to match exactly with the UI frame
+        local tl = frame.AbsolutePosition + Vector2.new(1, 1)  -- Small inset
+        local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(1, 1)  -- Small inset
         local tr, bl = Vector2.new(br.x, tl.y), Vector2.new(tl.x, br.y)
         
         local rot = 0;
@@ -536,7 +538,7 @@ function AntiLua.CreateUI(config)
 		on_toggle = config.on_toggle or function(enabled) end,
 		custom_code = config.custom_code or function() end,
 		toggle_key = config.toggle_key or Enum.KeyCode.Insert,
-		size = config.size or UDim2.new(0, 260, 0, 110),
+		size = config.size or UDim2.new(0, 220, 0, 110),
 		position = config.position or UDim2.new(0.5, 0, 0.5, 0),
 		background_color = config.background_color or Color3.fromRGB(16, 16, 16),
 		text_color = config.text_color or Color3.fromRGB(255, 255, 255),
@@ -718,14 +720,19 @@ function AntiLua.CreateUI(config)
 			button_blur = button_blur
 		},
 		destroy = function()
+			-- Clean up blur effects first
 			if main_blur then
 				main_blur.destroy()
+				main_blur = nil
 			end
 			if button_blur then
 				button_blur.destroy()
+				button_blur = nil
 			end
+			-- Then destroy the GUI
 			if screen_gui then
 				screen_gui:Destroy()
+				screen_gui = nil
 			end
 		end,
 		set_enabled = function(enabled)
