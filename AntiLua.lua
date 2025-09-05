@@ -538,7 +538,7 @@ function AntiLua.CreateUI(config)
 		on_toggle = config.on_toggle or function(enabled) end,
 		custom_code = config.custom_code or function() end,
 		toggle_key = config.toggle_key or Enum.KeyCode.Insert,
-		size = config.size or UDim2.new(0, 220, 0, 110),
+		size = config.size or UDim2.new(0, 260, 0, 110),
 		position = config.position or UDim2.new(0.5, 0, 0.5, 0),
 		background_color = config.background_color or Color3.fromRGB(16, 16, 16),
 		text_color = config.text_color or Color3.fromRGB(255, 255, 255),
