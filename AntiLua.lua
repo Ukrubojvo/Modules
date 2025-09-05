@@ -9,6 +9,226 @@ local gethidden = missing("function", gethiddenproperty or get_hidden_property o
 local queueteleport = missing("function", queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport))
 local httprequest = missing("function", request or http_request or (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request))
 
+-- // AcrylicBlur Module // --
+local AcrylicBlur = {}
+
+function AcrylicBlur.ApplyToFrame(frame)
+    local RunService = game:GetService('RunService')
+    local HS = game:GetService('HttpService')
+    local camera = workspace.CurrentCamera
+    local MTREL = "Glass"
+    local binds = {}
+    local root = Instance.new('Folder', camera)
+    local wedgeguid = HS:GenerateGUID(true)
+    root.Name = HS:GenerateGUID(true)
+    
+    local DepthOfField
+    
+    -- Create or find DepthOfField effect
+    for _,v in pairs(game:GetService("Lighting"):GetChildren()) do
+        if v:IsA("DepthOfFieldEffect") and v:HasTag(".") then
+            DepthOfField = v
+            break
+        end
+    end
+    
+    if not DepthOfField then
+        DepthOfField = Instance.new('DepthOfFieldEffect', game:GetService('Lighting'))
+        DepthOfField.FarIntensity = 0
+        DepthOfField.FocusDistance = 51.6
+        DepthOfField.InFocusRadius = 50
+        DepthOfField.NearIntensity = 1
+        DepthOfField.Name = HS:GenerateGUID(true)
+        DepthOfField:AddTag(".")
+    end
+    
+    -- Triangle drawing function
+    local function DrawTriangle(v1, v2, v3, p0, p1)
+        local acos, max, pi, sqrt = math.acos, math.max, math.pi, math.sqrt
+        local sz = 0.2
+        
+        local s1 = (v1 - v2).magnitude
+        local s2 = (v2 - v3).magnitude
+        local s3 = (v3 - v1).magnitude
+        local smax = max(s1, s2, s3)
+        local A, B, C
+        if s1 == smax then
+            A, B, C = v1, v2, v3
+        elseif s2 == smax then
+            A, B, C = v2, v3, v1
+        elseif s3 == smax then
+            A, B, C = v3, v1, v2
+        end
+
+        local para = ( (B-A).x*(C-A).x + (B-A).y*(C-A).y + (B-A).z*(C-A).z ) / (A-B).magnitude
+        local perp = sqrt((C-A).magnitude^2 - para*para)
+        local dif_para = (A - B).magnitude - para
+
+        local st = CFrame.new(B, A)
+        local za = CFrame.Angles(pi/2,0,0)
+
+        local cf0 = st
+        local Top_Look = (cf0 * za).lookVector
+        local Mid_Point = A + CFrame.new(A, B).lookVector * para
+        local Needed_Look = CFrame.new(Mid_Point, C).lookVector
+        local dot = Top_Look.x*Needed_Look.x + Top_Look.y*Needed_Look.y + Top_Look.z*Needed_Look.z
+
+        local ac = CFrame.Angles(0, 0, acos(dot))
+
+        cf0 = cf0 * ac
+        if ((cf0 * za).lookVector - Needed_Look).magnitude > 0.01 then
+            cf0 = cf0 * CFrame.Angles(0, 0, -2*acos(dot))
+        end
+        cf0 = cf0 * CFrame.new(0, perp/2, -(dif_para + para/2))
+
+        local cf1 = st * ac * CFrame.Angles(0, pi, 0)
+        if ((cf1 * za).lookVector - Needed_Look).magnitude > 0.01 then
+            cf1 = cf1 * CFrame.Angles(0, 0, 2*acos(dot))
+        end
+        cf1 = cf1 * CFrame.new(0, perp/2, dif_para/2)
+
+        if not p0 then
+            p0 = Instance.new('Part')
+            p0.FormFactor = 'Custom'
+            p0.TopSurface = 0
+            p0.BottomSurface = 0
+            p0.Anchored = true
+            p0.CanCollide = false
+            p0.CastShadow = false
+            p0.Material = MTREL
+            p0.Size = Vector3.new(sz, sz, sz)
+            p0.Name = HS:GenerateGUID(true)
+            local mesh = Instance.new('SpecialMesh', p0)
+            mesh.MeshType = 2
+            mesh.Name = wedgeguid
+        end
+        p0[wedgeguid].Scale = Vector3.new(0, perp/sz, para/sz)
+        p0.CFrame = cf0
+
+        if not p1 then
+            p1 = p0:clone()
+        end
+        p1[wedgeguid].Scale = Vector3.new(0, perp/sz, dif_para/sz)
+        p1.CFrame = cf1
+
+        return p0, p1
+    end
+
+    local function DrawQuad(v1, v2, v3, v4, parts)
+        parts[1], parts[2] = DrawTriangle(v1, v2, v3, parts[1], parts[2])
+        parts[3], parts[4] = DrawTriangle(v3, v2, v4, parts[3], parts[4])
+    end
+    
+    local parts = {}
+    local f = Instance.new('Folder', root)
+    f.Name = HS:GenerateGUID(true)
+
+    local parents = {}
+    local function add(child)
+        if child:IsA'GuiObject' then
+            parents[#parents + 1] = child
+            add(child.Parent)
+        end
+    end
+    add(frame)
+
+    local function IsVisible(instance)
+        while instance do
+            if instance:IsA("GuiObject") then
+                if not instance.Visible then
+                    return false
+                end
+            elseif instance:IsA("ScreenGui") then
+                if not instance.Enabled then
+                    return false
+                end
+                break
+            end
+            instance = instance.Parent
+        end
+        return true
+    end
+
+    local function UpdateOrientation(fetchProps)
+        if not IsVisible(frame) then
+            for _, pt in pairs(parts) do
+                pt.Parent = nil
+            end
+            return
+        end
+
+        local properties = {
+            Transparency = 0.95;
+            BrickColor = BrickColor.new('Institutional white');
+        }
+        local zIndex = 1 - 0.05*frame.ZIndex
+
+        local tl, br = frame.AbsolutePosition, frame.AbsolutePosition + frame.AbsoluteSize
+        local tr, bl = Vector2.new(br.x, tl.y), Vector2.new(tl.x, br.y)
+        
+        local rot = 0;
+        for _, v in ipairs(parents) do
+            rot = rot + v.Rotation
+        end
+        if rot ~= 0 and rot%180 ~= 0 then
+            local mid = tl:lerp(br, 0.5)
+            local s, c = math.sin(math.rad(rot)), math.cos(math.rad(rot))
+            tl = Vector2.new(c*(tl.x - mid.x) - s*(tl.y - mid.y), s*(tl.x - mid.x) + c*(tl.y - mid.y)) + mid
+            tr = Vector2.new(c*(tr.x - mid.x) - s*(tr.y - mid.y), s*(tr.x - mid.x) + c*(tr.y - mid.y)) + mid
+            bl = Vector2.new(c*(bl.x - mid.x) - s*(bl.y - mid.y), s*(bl.x - mid.x) + c*(bl.y - mid.y)) + mid
+            br = Vector2.new(c*(br.x - mid.x) - s*(br.y - mid.y), s*(br.x - mid.x) + c*(br.y - mid.y)) + mid
+        end
+        
+        DrawQuad(
+            camera:ScreenPointToRay(tl.x, tl.y, zIndex).Origin, 
+            camera:ScreenPointToRay(tr.x, tr.y, zIndex).Origin, 
+            camera:ScreenPointToRay(bl.x, bl.y, zIndex).Origin, 
+            camera:ScreenPointToRay(br.x, br.y, zIndex).Origin, 
+            parts
+        )
+        
+        if fetchProps then
+            for _, pt in pairs(parts) do
+                pt.Parent = f
+            end
+            for propName, propValue in pairs(properties) do
+                for _, pt in pairs(parts) do
+                    pt[propName] = propValue
+                end
+            end
+        end
+    end
+
+    local function IsNotNaN(x)
+        return x == x
+    end
+    local continue = IsNotNaN(camera:ScreenPointToRay(0,0).Origin.x)
+    while not continue do
+        RunService.RenderStepped:Wait()
+        continue = IsNotNaN(camera:ScreenPointToRay(0,0).Origin.x)
+    end
+
+    UpdateOrientation(true)
+    local connection = RunService:BindToRenderStep(HS:GenerateGUID(true), 2000, UpdateOrientation)
+    
+    return {
+        parts = parts,
+        folder = f,
+        connection = connection,
+        destroy = function()
+            if connection then
+                RunService:UnbindFromRenderStep(connection)
+            end
+            if f then
+                f:Destroy()
+            end
+            if root then
+                root:Destroy()
+            end
+        end
+    }
+end
+
 -- // AntiLua UI Library // --
 local AntiLua = {}
 
@@ -92,12 +312,15 @@ function AntiLua.Notify(message, duration, color, title)
 	notification.Size = UDim2.new(0, 300, 0, notification_height)
 	notification.Position = UDim2.new(1, 320, 1, -notification_height - 20 - (notification_count * (notification_height + 10)))
 	notification.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-	notification.BackgroundTransparency = 0.1
+	notification.BackgroundTransparency = 0.3
 	notification.BorderSizePixel = 0
 	notification.Parent = notification_gui
 	
 	local corner = Instance.new("UICorner", notification)
 	corner.CornerRadius = UDim.new(0, 8)
+	
+	-- Apply AcrylicBlur to notification
+	local notification_blur = AcrylicBlur.ApplyToFrame(notification)
 	
 	local accent = Instance.new("Frame")
 	accent.Size = UDim2.new(0, 4, 1, 0)
@@ -158,6 +381,11 @@ function AntiLua.Notify(message, duration, color, title)
 			{ Position = UDim2.new(1, 320, notification.Position.Y.Scale, notification.Position.Y.Offset) }
 		)
 		slide_out:Play()
+		
+		-- Clean up blur effect
+		if notification_blur then
+			notification_blur.destroy()
+		end
 		
 		notification_count = notification_count - 1
 	end)
@@ -312,7 +540,8 @@ function AntiLua.CreateUI(config)
 		position = config.position or UDim2.new(0.5, 0, 0.5, 0),
 		background_color = config.background_color or Color3.fromRGB(16, 16, 16),
 		text_color = config.text_color or Color3.fromRGB(255, 255, 255),
-		button_color = config.button_color or Color3.fromRGB(82, 82, 91)
+		button_color = config.button_color or Color3.fromRGB(82, 82, 91),
+		enable_blur = config.enable_blur ~= false  -- Default to true
 	}
 
 	-- // UI Setup // --
@@ -334,7 +563,7 @@ function AntiLua.CreateUI(config)
 	main_frame.Size = settings.size
 	main_frame.Position = settings.position
 	main_frame.BackgroundColor3 = settings.background_color
-	main_frame.BackgroundTransparency = 0.15
+	main_frame.BackgroundTransparency = settings.enable_blur and 0.3 or 0.15
 	main_frame.BorderSizePixel = 0
 	main_frame.AnchorPoint = Vector2.new(0.5, 0.5)
 	main_frame.Active = true
@@ -343,6 +572,12 @@ function AntiLua.CreateUI(config)
 
 	local corner = Instance.new("UICorner", main_frame)
 	corner.CornerRadius = UDim.new(0, 12)
+
+	-- Apply AcrylicBlur to main frame if enabled
+	local main_blur
+	if settings.enable_blur then
+		main_blur = AcrylicBlur.ApplyToFrame(main_frame)
+	end
 
 	local close_button = Instance.new("ImageButton")
 	close_button.Size = UDim2.new(0, 24, 0, 24)
@@ -354,6 +589,9 @@ function AntiLua.CreateUI(config)
 	close_button.ZIndex = 10
 
 	close_button.MouseButton1Click:Connect(function()
+		if main_blur then
+			main_blur.destroy()
+		end
 		screen_gui:Destroy()
 	end)
 
@@ -413,7 +651,7 @@ function AntiLua.CreateUI(config)
 	toggle_button.Size = UDim2.new(1, -30, 0, 40)
 	toggle_button.Position = UDim2.new(0, 15, 0, 55)
 	toggle_button.BackgroundColor3 = settings.button_color
-	toggle_button.BackgroundTransparency = 0.5
+	toggle_button.BackgroundTransparency = settings.enable_blur and 0.6 or 0.5
 	toggle_button.TextColor3 = settings.text_color
 	toggle_button.Font = Enum.Font.GothamBold
 	toggle_button.TextSize = 16
@@ -425,6 +663,12 @@ function AntiLua.CreateUI(config)
 
 	local toggle_corner = Instance.new("UICorner", toggle_button)
 	toggle_corner.CornerRadius = UDim.new(0, 8)
+
+	-- Apply AcrylicBlur to toggle button if enabled
+	local button_blur
+	if settings.enable_blur then
+		button_blur = AcrylicBlur.ApplyToFrame(toggle_button)
+	end
 
 	-- // Button State Tracking // --
 	local script_enabled = false
@@ -469,7 +713,17 @@ function AntiLua.CreateUI(config)
 		gui = screen_gui,
 		frame = main_frame,
 		toggle_button = toggle_button,
+		blur_effects = {
+			main_blur = main_blur,
+			button_blur = button_blur
+		},
 		destroy = function()
+			if main_blur then
+				main_blur.destroy()
+			end
+			if button_blur then
+				button_blur.destroy()
+			end
 			if screen_gui then
 				screen_gui:Destroy()
 			end
@@ -497,8 +751,59 @@ function AntiLua.CreateUI(config)
 		end,
 		toggle_script = function()
 			toggle_script()
+		end,
+		toggle_blur = function(enable)
+			if enable == nil then enable = not settings.enable_blur end
+			settings.enable_blur = enable
+			
+			if enable then
+				if not main_blur then
+					main_blur = AcrylicBlur.ApplyToFrame(main_frame)
+				end
+				if not button_blur then
+					button_blur = AcrylicBlur.ApplyToFrame(toggle_button)
+				end
+				main_frame.BackgroundTransparency = 0.3
+				toggle_button.BackgroundTransparency = 0.6
+			else
+				if main_blur then
+					main_blur.destroy()
+					main_blur = nil
+				end
+				if button_blur then
+					button_blur.destroy()
+					button_blur = nil
+				end
+				main_frame.BackgroundTransparency = 0.15
+				toggle_button.BackgroundTransparency = 0.5
+			end
 		end
 	}
 end
+
+-- // Example Usage // --
+--[[
+local ui = AntiLua.CreateUI({
+	title = "My Glass UI",
+	button_text = "Activate",
+	button_text_active = "Active",
+	enable_blur = true,  -- Enable glass effect
+	on_toggle = function(enabled)
+		if enabled then
+			AntiLua.Notify("Script activated!", 3, Color3.fromRGB(0, 255, 0), "Success")
+		else
+			AntiLua.Notify("Script deactivated!", 3, Color3.fromRGB(255, 100, 100), "Info")
+		end
+	end,
+	custom_code = function()
+		print("Custom code executed!")
+	end
+})
+
+-- Toggle blur effect
+ui.toggle_blur(true)  -- Enable blur
+ui.toggle_blur(false) -- Disable blur
+ui.toggle_blur()      -- Toggle current state
+--]]
 
 return AntiLua
