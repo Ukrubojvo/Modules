@@ -721,6 +721,8 @@ function AntiLua.CreateUI(config)
 	-- // Start Spring Animation Loop // --
 	Services.RunService.Heartbeat:Connect(update_spring)
 
+	local on_destroy_event = Instance.new("BindableEvent")
+
 	-- // Return UI Controls // --
 	return {
 		gui = screen_gui,
@@ -730,7 +732,9 @@ function AntiLua.CreateUI(config)
 			main_blur = main_blur,
 			button_blur = button_blur
 		},
+		OnDestroy = on_destroy_event.Event,
 		destroy = function()
+			on_destroy_event:Fire()
 			-- Clean up blur effects first
 			if main_blur then
 				main_blur.destroy()
@@ -745,6 +749,7 @@ function AntiLua.CreateUI(config)
 				screen_gui:Destroy()
 				screen_gui = nil
 			end
+			on_destroy_event:Destroy()
 		end,
 		set_enabled = function(enabled)
 			script_enabled = enabled
