@@ -556,6 +556,7 @@ function AntiLua.CreateUI(config)
 		button_color = config.button_color or Color3.fromRGB(82, 82, 91),
 		enable_blur = config.enable_blur ~= false  -- Default to true
 	}
+	local on_destroy_event = Instance.new("BindableEvent")
 
 	-- // UI Setup // --
 	local GUIParent = gethui and gethui() or game.CoreGui
@@ -602,10 +603,12 @@ function AntiLua.CreateUI(config)
 	close_button.ZIndex = 10
 
 	close_button.MouseButton1Click:Connect(function()
+		on_destroy_event:Fire()
 		if main_blur then
 			main_blur.destroy()
 		end
 		screen_gui:Destroy()
+		on_destroy_event:Destroy()
 	end)
 
 	local title = Instance.new("TextLabel")
@@ -720,8 +723,6 @@ function AntiLua.CreateUI(config)
 
 	-- // Start Spring Animation Loop // --
 	Services.RunService.Heartbeat:Connect(update_spring)
-
-	local on_destroy_event = Instance.new("BindableEvent")
 
 	-- // Return UI Controls // --
 	return {
