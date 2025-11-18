@@ -8,7 +8,7 @@ xpcall(function()
 
     local players = cloneref(game:GetService("Players"))
     local coregui = cloneref(game:GetService("CoreGui"))
-    local player = players.LocalPlayer
+    local lp = players.LocalPlayer
 
     if game.CreatorType ~= Enum.CreatorType.Group then
         return warn("This game isnt group game!")
@@ -17,12 +17,24 @@ xpcall(function()
     local old = coregui:FindFirstChild("ModAlertNotification")
     if old then old:Destroy() end
 
+    local function GetRole(plr, groupId)
+        if plr and typeof(plr) == "Instance" then
+            local method = plr.GetRoleInGroup
+            if typeof(method) == "function" then
+                return method(plr, groupId)
+            end
+        end
+        return nil
+    end
+
     local function detectmod()
         for _, plr in ipairs(players:GetPlayers()) do
-            local role = plr:GetRoleInGroup(game.CreatorId)
-            if typeof(role) == "string" then
-                local r = string.lower(role)
-                if string.find(r, "mod") or string.find(r, "staff") or string.find(r, "contributor") or string.find(r, "script") or string.find(r, "build") then return true end
+            if plr and plr.GetRoleInGroup ~= nil then
+                local role = GetRole(plr, game.CreatorId)
+                if role and typeof(role) == "string" then
+                    local r = string.lower(role)
+                    if string.find(r, "mod") or string.find(r, "staff") or string.find(r, "contributor") or string.find(r, "script") or string.find(r, "build") then return true end
+                end
             end
         end
         return false
