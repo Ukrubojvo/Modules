@@ -1,4 +1,6 @@
 xpcall(function()
+    if shared.StaffDetectorLoading then return end
+    shared.StaffDetectorLoading = true
     local cloneref = cloneref or function(obj)
         return obj
     end
