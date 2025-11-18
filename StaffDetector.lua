@@ -1,6 +1,7 @@
 xpcall(function()
     if shared.StaffDetectorLoading then return end
     shared.StaffDetectorLoading = true
+    game.Loaded:Wait()
     local cloneref = cloneref or function(obj)
         return obj
     end
