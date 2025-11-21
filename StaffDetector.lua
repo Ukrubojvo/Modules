@@ -14,6 +14,10 @@ xpcall(function()
         return warn("This game isnt group game!")
     end
 
+    pcall(function()
+        queue_on_teleport([[task.wait(10) loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')()]]) 
+    end)
+
     local old = coregui:FindFirstChild("ModAlertNotification")
     if old then old:Destroy() end
 
