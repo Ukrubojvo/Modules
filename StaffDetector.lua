@@ -57,7 +57,7 @@ xpcall(function()
         frame.Size = UDim2.new(0, 260, 0, 80)
         frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         frame.BorderSizePixel = 0
-        frame.BackgroundTransparency = 1
+        frame.BackgroundTransparency = 0.1
         frame.Parent = screengui
 
         local uicorner = Instance.new("UICorner")
@@ -78,7 +78,6 @@ xpcall(function()
         title.BackgroundTransparency = 1
         title.Position = UDim2.new(0, 15, 0, 10)
         title.Size = UDim2.new(1, -30, 0, 20)
-        title.TextTransparency = 1
         title.Parent = frame
 
         local desc = Instance.new("TextLabel")
@@ -90,7 +89,6 @@ xpcall(function()
         desc.Position = UDim2.new(0, 15, 0, 35)
         desc.Size = UDim2.new(1, -30, 1, -45)
         desc.TextWrapped = true
-        desc.TextTransparency = 1
         desc.Parent = frame
 
         task.spawn(function()
@@ -115,6 +113,6 @@ xpcall(function()
     if detectmod() then
         showNotification("ModAlertNotification", "Moderator Detected", Color3.fromRGB(255, 80, 80), "A player with a moderator role is in this server.", 60)
     else
-        showNotification("NoModAlertNotification", "No Moderator Detected", Color3.fromRGB(80, 255, 80), "No staff members found in this server.", 10)
+        showNotification("NoModAlertNotification", "No Moderator Detected", Color3.fromRGB(236, 236, 236), "No staff members found in this server.", 10)
     end
 end, function() end)
