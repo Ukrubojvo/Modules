@@ -16,7 +16,7 @@ xpcall(function()
 
     pcall(function()
         if not autoload then return end
-        queue_on_teleport([[task.wait(10) loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')(autoload)]]) 
+        queue_on_teleport([[autoload = true; task.wait(10); loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')()]]) 
     end)
 
     local old = coregui:FindFirstChild("ModAlertNotification")
