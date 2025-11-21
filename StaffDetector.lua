@@ -78,7 +78,7 @@ xpcall(function()
         title.TextSize = 18
         title.TextColor3 = titleColor
         title.BackgroundTransparency = 1
-        title.Position = UDim2.new(0, 15, 0, 10)
+        title.Position = UDim2.new(0, 15, 0, 15)
         title.Size = UDim2.new(1, -30, 0, 20)
         title.Parent = frame
 
