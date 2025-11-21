@@ -11,7 +11,7 @@ xpcall(function()
     local lp = players.LocalPlayer
 
     if game.CreatorType ~= Enum.CreatorType.Group then
-        return warn("This game isnt group game!")
+        return
     end
 
     pcall(function()
@@ -44,75 +44,77 @@ xpcall(function()
         return false
     end
 
-    if not detectmod() then
-        return warn("Moderator doesnt detected!")
+    local function showNotification(name, titleText, titleColor, descText, duration)
+        local screengui = Instance.new("ScreenGui")
+        screengui.Name = name
+        screengui.ResetOnSpawn = false
+        screengui.IgnoreGuiInset = true
+        screengui.Parent = coregui
+
+        local frame = Instance.new("Frame")
+        frame.AnchorPoint = Vector2.new(1, 1)
+        frame.Position = UDim2.new(1, -20, 1, -20)
+        frame.Size = UDim2.new(0, 260, 0, 80)
+        frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        frame.BorderSizePixel = 0
+        frame.BackgroundTransparency = 1
+        frame.Parent = screengui
+
+        local uicorner = Instance.new("UICorner")
+        uicorner.CornerRadius = UDim.new(0, 10)
+        uicorner.Parent = frame
+
+        local stroke = Instance.new("UIStroke")
+        stroke.Thickness = 1
+        stroke.Color = Color3.fromRGB(90, 90, 90)
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        stroke.Parent = frame
+
+        local title = Instance.new("TextLabel")
+        title.Text = titleText
+        title.Font = Enum.Font.GothamBold
+        title.TextSize = 18
+        title.TextColor3 = titleColor
+        title.BackgroundTransparency = 1
+        title.Position = UDim2.new(0, 15, 0, 10)
+        title.Size = UDim2.new(1, -30, 0, 20)
+        title.TextTransparency = 1
+        title.Parent = frame
+
+        local desc = Instance.new("TextLabel")
+        desc.Text = descText
+        desc.Font = Enum.Font.Gotham
+        desc.TextSize = 14
+        desc.TextColor3 = Color3.fromRGB(230, 230, 230)
+        desc.BackgroundTransparency = 1
+        desc.Position = UDim2.new(0, 15, 0, 35)
+        desc.Size = UDim2.new(1, -30, 1, -45)
+        desc.TextWrapped = true
+        desc.TextTransparency = 1
+        desc.Parent = frame
+
+        task.spawn(function()
+            for i = 1, 10 do
+                local a = i / 10
+                frame.BackgroundTransparency = 1 - (0.9 * a)
+                title.TextTransparency = 1 - a
+                desc.TextTransparency = 1 - a
+                task.wait(0.03)
+            end
+        end)
+
+        task.delay(duration, function()
+            pcall(function()
+                if screengui then
+                    screengui:Destroy()
+                end
+            end)
+        end)
     end
 
-    local screengui = Instance.new("ScreenGui")
-    screengui.Name = "ModAlertNotification"
-    screengui.ResetOnSpawn = false
-    screengui.IgnoreGuiInset = true
-    screengui.Parent = coregui
-
-    local frame = Instance.new("Frame")
-    frame.AnchorPoint = Vector2.new(1, 1)
-    frame.Position = UDim2.new(1, -20, 1, -20)
-    frame.Size = UDim2.new(0, 260, 0, 80)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    frame.BorderSizePixel = 0
-    frame.BackgroundTransparency = 0.1
-    frame.Parent = screengui
-
-    local uicorner = Instance.new("UICorner")
-    uicorner.CornerRadius = UDim.new(0, 10)
-    uicorner.Parent = frame
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Thickness = 1
-    stroke.Color = Color3.fromRGB(90, 90, 90)
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    stroke.Parent = frame
-
-    local title = Instance.new("TextLabel")
-    title.Text = "Moderator Detected"
-    title.Font = Enum.Font.GothamBold
-    title.TextSize = 18
-    title.TextColor3 = Color3.fromRGB(255, 80, 80)
-    title.BackgroundTransparency = 1
-    title.Position = UDim2.new(0, 15, 0, 10)
-    title.Size = UDim2.new(1, -30, 0, 20)
-    title.Parent = frame
-
-    local desc = Instance.new("TextLabel")
-    desc.Text = "A player with a moderator role is in this server."
-    desc.Font = Enum.Font.Gotham
-    desc.TextSize = 14
-    desc.TextColor3 = Color3.fromRGB(230, 230, 230)
-    desc.BackgroundTransparency = 1
-    desc.Position = UDim2.new(0, 15, 0, 35)
-    desc.Size = UDim2.new(1, -30, 1, -45)
-    desc.TextWrapped = true
-    desc.Parent = frame
-
-    frame.BackgroundTransparency = 1
-    title.TextTransparency = 1
-    desc.TextTransparency = 1
-
-    task.spawn(function()
-        for i = 1, 10 do
-            local a = i / 10
-            frame.BackgroundTransparency = 1 - (0.9 * a)
-            title.TextTransparency = 1 - a
-            desc.TextTransparency = 1 - a
-            task.wait(0.03)
-        end
-    end)
-
-    task.delay(60, function()
-        if screengui then
-            screengui:Destroy()
-        end
-    end)
-end, function(err)
-    warn(err)
-end)
+    if detectmod() then
+        showNotification("ModAlertNotification", "Moderator Detected", Color3.fromRGB(255, 80, 80), "A player with a moderator role is in this server.", 60)
+    else
+        showNotification("NoModAlertNotification", "No Moderator Detected", Color3.fromRGB(80, 255, 80), "No staff members found in this server.", 10)
+    end
+end, function() end)
