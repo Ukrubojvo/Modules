@@ -7,7 +7,7 @@ xpcall(function()
     end
 
     local players = cloneref(game:GetService("Players"))
-    local coregui = cloneref(game:GetService("CoreGui"))
+    local coregui = gethui() or cloneref(game:GetService("CoreGui"))
     local lp = players.LocalPlayer
 
     if game.CreatorType ~= Enum.CreatorType.Group then
@@ -15,7 +15,8 @@ xpcall(function()
     end
 
     pcall(function()
-        queue_on_teleport([[task.wait(10) loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')()]]) 
+        if not autoload then return end
+        queue_on_teleport([[task.wait(10) loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')(autoload)]]) 
     end)
 
     local old = coregui:FindFirstChild("ModAlertNotification")
@@ -48,6 +49,7 @@ xpcall(function()
         local screengui = Instance.new("ScreenGui")
         screengui.Name = name
         screengui.ResetOnSpawn = false
+        screengui.DisplayOrder = 2147483647
         screengui.IgnoreGuiInset = true
         screengui.Parent = coregui
 
@@ -57,7 +59,7 @@ xpcall(function()
         frame.Size = UDim2.new(0, 260, 0, 80)
         frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         frame.BorderSizePixel = 0
-        frame.BackgroundTransparency = 0.1
+        frame.BackgroundTransparency = 0.15
         frame.Parent = screengui
 
         local uicorner = Instance.new("UICorner")
@@ -90,16 +92,6 @@ xpcall(function()
         desc.Size = UDim2.new(1, -30, 1, -45)
         desc.TextWrapped = true
         desc.Parent = frame
-
-        task.spawn(function()
-            for i = 1, 10 do
-                local a = i / 10
-                frame.BackgroundTransparency = 1 - (0.9 * a)
-                title.TextTransparency = 1 - a
-                desc.TextTransparency = 1 - a
-                task.wait(0.03)
-            end
-        end)
 
         task.delay(duration, function()
             pcall(function()
