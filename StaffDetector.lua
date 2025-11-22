@@ -100,7 +100,7 @@ xpcall(function()
         desc.TextSize = 14
         desc.TextColor3 = statusColor
         desc.BackgroundTransparency = 1
-        desc.Position = UDim2.new(0, 15, 0, 34)
+        desc.Position = UDim2.new(0, 15, 0, 33)
         desc.Size = UDim2.new(1, -30, 1, -45)
         desc.TextWrapped = true
         desc.Parent = frame
@@ -117,8 +117,8 @@ xpcall(function()
     local onlineCount, totalCount = countStaff()
 
     if onlineCount > 0 then
-        showNotification("ModAlertNotification", "Moderators detected!", Color3.fromRGB(255, 80, 80), onlineCount, totalCount, 60)
+        showNotification("ModAlertNotification", "🚨 Moderators detected! ", Color3.fromRGB(255, 80, 80), onlineCount, totalCount, 60)
     else
-        showNotification("ModAlertNotification", "No Moderators detected!", Color3.fromRGB(80, 255, 80), onlineCount, totalCount, 10)
+        showNotification("ModAlertNotification", "✅ No Moderators detected.", Color3.fromRGB(80, 255, 80), onlineCount, totalCount, 10)
     end
 end, function() end)
