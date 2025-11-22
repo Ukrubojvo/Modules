@@ -119,6 +119,6 @@ xpcall(function()
     if onlineCount > 0 then
         showNotification("ModAlertNotification", "🚨 Moderators detected! ", Color3.fromRGB(255, 80, 80), onlineCount, totalCount, 60)
     else
-        showNotification("ModAlertNotification", "✅ No Moderators detected.", Color3.fromRGB(80, 255, 80), onlineCount, totalCount, 10)
+        showNotification("ModAlertNotification", "No Moderators detected.", Color3.fromRGB(255, 255, 255), onlineCount, totalCount, 10)
     end
 end, function() end)
