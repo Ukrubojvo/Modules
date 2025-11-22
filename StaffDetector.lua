@@ -16,7 +16,7 @@ xpcall(function()
 
     pcall(function()
         if not autoload then return end
-        queue_on_teleport([[autoload = true; task.wait(15); loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')()]]) 
+        queue_on_teleport([[autoload = true; task.wait(10); loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')()]]) 
     end)
 
     local old = coregui:FindFirstChild("ModAlertNotification")
@@ -32,20 +32,31 @@ xpcall(function()
         return nil
     end
 
-    local function detectmod()
-        for _, plr in ipairs(players:GetPlayers()) do
-            if plr and plr.GetRoleInGroup ~= nil then
-                local role = GetRole(plr, game.CreatorId)
-                if role and typeof(role) == "string" then
-                    local r = string.lower(role)
-                    if string.find(r, "mod") or string.find(r, "staff") or string.find(r, "contributor") or string.find(r, "script") or string.find(r, "build") then return true end
-                end
+    local function isStaffRole(role)
+        if role and typeof(role) == "string" then
+            local r = string.lower(role)
+            if string.find(r, "mod") or string.find(r, "staff") or string.find(r, "contributor") or string.find(r, "script") or string.find(r, "build") then
+                return true
             end
         end
         return false
     end
 
-    local function showNotification(name, titleText, titleColor, descText, duration)
+    local function countStaff()
+        local total = #players:GetPlayers()
+        local online = 0
+        for _, plr in ipairs(players:GetPlayers()) do
+            if plr and plr.GetRoleInGroup ~= nil then
+                local role = GetRole(plr, game.CreatorId)
+                if isStaffRole(role) then
+                    online = online + 1
+                end
+            end
+        end
+        return online, total
+    end
+
+    local function showNotification(name, statusText, statusColor, onlineCount, totalCount, duration)
         local screengui = Instance.new("ScreenGui")
         screengui.Name = name
         screengui.ResetOnSpawn = false
@@ -73,22 +84,23 @@ xpcall(function()
         stroke.Parent = frame
 
         local title = Instance.new("TextLabel")
-        title.Text = titleText
+        title.Text = "Moderator Detector"
         title.Font = Enum.Font.GothamBold
         title.TextSize = 18
-        title.TextColor3 = titleColor
+        title.TextColor3 = Color3.fromRGB(236, 236, 236)
         title.BackgroundTransparency = 1
-        title.Position = UDim2.new(0, 15, 0, 15)
+        title.Position = UDim2.new(0, 15, 0, 14)
         title.Size = UDim2.new(1, -30, 0, 20)
         title.Parent = frame
 
         local desc = Instance.new("TextLabel")
-        desc.Text = descText
+        desc.Text = statusText .. "\n<font color=\"rgb(150,150,150)\">Online Moderators: " .. onlineCount .. "/" .. totalCount .. "</font>"
+        desc.RichText = true
         desc.Font = Enum.Font.Gotham
         desc.TextSize = 14
-        desc.TextColor3 = Color3.fromRGB(230, 230, 230)
+        desc.TextColor3 = statusColor
         desc.BackgroundTransparency = 1
-        desc.Position = UDim2.new(0, 15, 0, 35)
+        desc.Position = UDim2.new(0, 15, 0, 34)
         desc.Size = UDim2.new(1, -30, 1, -45)
         desc.TextWrapped = true
         desc.Parent = frame
@@ -102,9 +114,11 @@ xpcall(function()
         end)
     end
 
-    if detectmod() then
-        showNotification("ModAlertNotification", "Moderator Detected", Color3.fromRGB(255, 80, 80), "A player with a moderator role is in this server.", 60)
+    local onlineCount, totalCount = countStaff()
+
+    if onlineCount > 0 then
+        showNotification("ModAlertNotification", "Moderators detected!", Color3.fromRGB(255, 80, 80), onlineCount, totalCount, 60)
     else
-        showNotification("NoModAlertNotification", "No Moderator Detected", Color3.fromRGB(236, 236, 236), "No staff members found in this server.", 10)
+        showNotification("ModAlertNotification", "No Moderators detected!", Color3.fromRGB(80, 255, 80), onlineCount, totalCount, 10)
     end
 end, function() end)
