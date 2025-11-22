@@ -42,21 +42,28 @@ xpcall(function()
         return false
     end
 
-    local function countStaff()
+    local function shortenName(name)
+        if #name > 6 then
+            return string.sub(name, 1, 3) .. "..."
+        end
+        return name
+    end
+
+    local function getStaffInfo()
         local total = #players:GetPlayers()
-        local online = 0
+        local staffNames = {}
         for _, plr in ipairs(players:GetPlayers()) do
             if plr and plr.GetRoleInGroup ~= nil then
                 local role = GetRole(plr, game.CreatorId)
                 if isStaffRole(role) then
-                    online = online + 1
+                    table.insert(staffNames, shortenName(plr.Name))
                 end
             end
         end
-        return online, total
+        return staffNames, total
     end
 
-    local function showNotification(name, statusText, statusColor, onlineCount, totalCount, duration)
+    local function showNotification(name, statusText, statusColor, staffNames, totalCount, duration)
         local screengui = Instance.new("ScreenGui")
         screengui.Name = name
         screengui.ResetOnSpawn = false
@@ -93,8 +100,15 @@ xpcall(function()
         title.Size = UDim2.new(1, -30, 0, 20)
         title.Parent = frame
 
+        local staffDisplay
+        if #staffNames > 0 then
+            staffDisplay = table.concat(staffNames, ", ")
+        else
+            staffDisplay = "None"
+        end
+
         local desc = Instance.new("TextLabel")
-        desc.Text = statusText .. "\n<font color=\"rgb(150,150,150)\">Online Moderators: " .. onlineCount .. "/" .. totalCount .. "</font>"
+        desc.Text = statusText .. "\n<font color=\"rgb(150,150,150)\" size=\"13\">Moderators: " .. staffDisplay .. "</font>"
         desc.RichText = true
         desc.Font = Enum.Font.Gotham
         desc.TextSize = 14
@@ -114,11 +128,11 @@ xpcall(function()
         end)
     end
 
-    local onlineCount, totalCount = countStaff()
+    local staffNames, totalCount = getStaffInfo()
 
-    if onlineCount > 0 then
-        showNotification("ModAlertNotification", "Moderators detected!", Color3.fromRGB(255, 100, 100), onlineCount, totalCount, 60)
+    if #staffNames > 0 then
+        showNotification("ModAlertNotification", "Moderators detected!", Color3.fromRGB(255, 100, 100), staffNames, totalCount, 60)
     else
-        showNotification("ModAlertNotification", "No Moderators detected.", Color3.fromRGB(255, 255, 255), onlineCount, totalCount, 10)
+        showNotification("ModAlertNotification", "No Moderators detected.", Color3.fromRGB(255, 255, 255), staffNames, totalCount, 10)
     end
 end, function() end)
