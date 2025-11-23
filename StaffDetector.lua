@@ -19,9 +19,6 @@ xpcall(function()
         queue_on_teleport([[autoload = true; task.wait(10); loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')()]]) 
     end)
 
-    local old = coregui:FindFirstChild("ModAlertNotification")
-    if old then old:Destroy() end
-
     local function GetRole(plr, groupId)
         if plr and typeof(plr) == "Instance" then
             local method = plr.GetRoleInGroup
@@ -64,6 +61,9 @@ xpcall(function()
     end
 
     local function showNotification(name, statusText, statusColor, staffNames, totalCount, duration)
+        local old = coregui:FindFirstChild("ModAlertNotification")
+        if old then old:Destroy() end
+        
         local screengui = Instance.new("ScreenGui")
         screengui.Name = name
         screengui.ResetOnSpawn = false
@@ -135,4 +135,13 @@ xpcall(function()
     else
         showNotification("ModAlertNotification", "No Moderators detected.", Color3.fromRGB(255, 255, 255), staffNames, totalCount, 10)
     end
+
+    players.PlayerAdded:Connect(function(plr)
+        plr.CharacterAdded:Wait()
+        local role = GetRole(plr, game.CreatorId)
+        if isStaffRole(role) then
+            local staffNames, totalCount = getStaffInfo()
+            showNotification("ModAlertNotification", "Moderators detected!", Color3.fromRGB(255, 100, 100), staffNames, totalCount, 60)
+        end
+    end)
 end, function() end)
