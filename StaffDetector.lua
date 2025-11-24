@@ -16,7 +16,15 @@ xpcall(function()
 
     pcall(function()
         if not autoload then return end
-        queue_on_teleport([[autoload = true; task.wait(10); loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"), 'Client')()]]) 
+        queue_on_teleport([[
+            pcall(function()
+                autoload = true;
+                local GitRequests = loadstring(game:HttpGet("https://raw.githubusercontent.com/itchino/Roblox-GitRequests/refs/heads/main/GitRequests.lua"))()
+                local Repo = GitRequests.Repo("Ukrubojvo", "Modules")
+                task.wait(10);
+                loadstring(Repo:getFileContent("StaffDetector.lua"))()
+            end)
+        ]])
     end)
 
     local function GetRole(plr, groupId)
