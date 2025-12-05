@@ -8,7 +8,9 @@ xpcall(function()
 
     local players = cloneref(game:GetService("Players"))
     local coregui = gethui() or cloneref(game:GetService("CoreGui"))
+    local http = game:GetService("HttpService")
     local lp = players.LocalPlayer
+    local groupId = game.CreatorId
 
     if game.CreatorType ~= Enum.CreatorType.Group then
         return
@@ -27,6 +29,91 @@ xpcall(function()
         ]])
     end)
 
+    local function fetchURL(url)
+        local ok, res = pcall(game.HttpGet, game, url)
+        if ok then
+            local data = http:JSONDecode(res)
+            return data
+        end
+        return nil
+    end
+
+    local function extractStaffRoleIds(groupId)
+        local url = ("https://groups.roblox.com/v1/groups/%d/roles"):format(groupId)
+        local data = fetchURL(url)
+        local roleIds = {}
+
+        if data and data.roles then
+            for _, r in ipairs(data.roles) do
+                local name = string.lower(r.name)
+                if string.find(name, "mod") or string.find(name, "staff") or string.find(name, "contributor") 
+                or string.find(name, "script") or string.find(name, "build") then
+                    table.insert(roleIds, r.id)
+                end
+            end
+        end
+
+        return roleIds
+    end
+
+    local function fetchUsersInRole(groupId, roleId)
+        local cursor = ""
+        local collected = {}
+
+        while true do
+            local url = string.format("https://groups.roproxy.com/v1/groups/%d/roles/%d/users?limit=100&cursor=%s", groupId, roleId, cursor)
+
+            local success, response = pcall(function()
+                return game:HttpGet(url)
+            end)
+
+            if not success or not response then break end
+            local json = http:JSONDecode(response)
+
+            if json.data and type(json.data) == "table" then
+                for _, user in ipairs(json.data) do
+                    if user.userId then
+                        collected[user.userId] = true
+                    end
+                end
+            end
+
+            if not json.nextPageCursor or json.nextPageCursor == "" then break end
+            cursor = json.nextPageCursor
+        end
+
+        return collected
+    end
+
+
+    local staffRoleIds = extractStaffRoleIds(groupId)
+    local staffUserIds = {}
+
+    for _, roleId in ipairs(staffRoleIds) do
+        local users = fetchUsersInRole(groupId, roleId)
+        for uid, _ in pairs(users) do
+            staffUserIds[uid] = true
+        end
+    end
+
+    --[[
+    local function GetUserRoleInGroup(userId, groupId)
+        local url = string.format("https://groups.roproxy.com/v2/users/%d/groups/roles", userId)
+        local success, response = pcall(game.HttpGet, game, url)
+        if success then
+            local data = http:JSONDecode(response)
+            if data and data.data then
+                for _, info in ipairs(data.data) do
+                    if info.group and info.group.id == groupId then
+                        return info.role and info.role.name or nil
+                    end
+                end
+            end
+        end
+        return nil
+    end
+    ]]
+
     local function GetRole(plr, groupId)
         if plr and typeof(plr) == "Instance" then
             local method = plr.GetRoleInGroup
@@ -37,7 +124,7 @@ xpcall(function()
         return nil
     end
 
-    local function isStaffRole(role)
+    local function isStaffRoleName(role)
         if role and typeof(role) == "string" then
             local r = string.lower(role)
             if string.find(r, "mod") or string.find(r, "staff") or string.find(r, "contributor") or string.find(r, "script") or string.find(r, "build") then
@@ -49,7 +136,7 @@ xpcall(function()
 
     local function shortenName(name)
         if #name > 6 then
-            return string.sub(name, 1, 3) .. "..."
+            return string.sub(name, 1, 6) .. "..."
         end
         return name
     end
@@ -58,17 +145,37 @@ xpcall(function()
         local total = #players:GetPlayers()
         local staffNames = {}
         for _, plr in ipairs(players:GetPlayers()) do
-            if plr and plr.GetRoleInGroup ~= nil then
-                local role = GetRole(plr, game.CreatorId)
-                if isStaffRole(role) then
-                    table.insert(staffNames, shortenName(plr.Name))
-                end
+            local role = GetRole(plr, game.CreatorId)
+            if isStaffRoleName(role) then
+                table.insert(staffNames, shortenName(plr.Name))
             end
         end
         return staffNames, total
     end
 
-    local function showNotification(name, statusText, statusColor, staffNames, totalCount, duration)
+    local function getFriendStaffInfo()
+        local list = {}
+        for _, plr in ipairs(players:GetPlayers()) do
+            local ok, pages = pcall(function()
+                return players:GetFriendsAsync(plr.UserId)
+            end)
+            if ok and pages then
+                while true do
+                    local page = pages:GetCurrentPage()
+                    for _, friend in ipairs(page) do
+                        if staffUserIds[friend.Id] then
+                            table.insert(list, shortenName(friend.Username))
+                        end
+                    end
+                    if pages.IsFinished then break end
+                    pages:AdvanceToNextPageAsync()
+                end
+            end
+        end
+        return list
+    end
+
+    local function showNotification(name, statusText, statusColor, staffNames, friendStaffNames, totalCount, duration)
         local old = coregui:FindFirstChild("ModAlertNotification")
         if old then old:Destroy() end
         
@@ -104,25 +211,21 @@ xpcall(function()
         title.TextSize = 18
         title.TextColor3 = Color3.fromRGB(236, 236, 236)
         title.BackgroundTransparency = 1
-        title.Position = UDim2.new(0, 15, 0, 14)
+        title.Position = UDim2.new(0, 15, 0, 10)
         title.Size = UDim2.new(1, -30, 0, 20)
         title.Parent = frame
 
-        local staffDisplay
-        if #staffNames > 0 then
-            staffDisplay = table.concat(staffNames, ", ")
-        else
-            staffDisplay = "None"
-        end
+        local staffDisplay = #staffNames > 0 and table.concat(staffNames, ", ") or "None"
+        local friendDisplay = #friendStaffNames > 0 and table.concat(friendStaffNames, ", ") or "None"
 
         local desc = Instance.new("TextLabel")
-        desc.Text = statusText .. "\n<font color=\"rgb(150,150,150)\" size=\"13\">Moderators: " .. staffDisplay .. "</font>"
+        desc.Text = statusText .. "\n<font color=\"rgb(150,150,150)\" size=\"13\">Server Moderators: " .. staffDisplay .. "</font>" .. "\n<font color=\"rgb(150,150,150)\" size=\"13\">Friend Moderators: " .. friendDisplay .. "</font>"
         desc.RichText = true
         desc.Font = Enum.Font.Gotham
         desc.TextSize = 14
         desc.TextColor3 = statusColor
         desc.BackgroundTransparency = 1
-        desc.Position = UDim2.new(0, 15, 0, 33)
+        desc.Position = UDim2.new(0, 15, 0, 32)
         desc.Size = UDim2.new(1, -30, 1, -45)
         desc.TextWrapped = true
         desc.Parent = frame
@@ -137,19 +240,36 @@ xpcall(function()
     end
 
     local staffNames, totalCount = getStaffInfo()
+    local friendStaffNames = getFriendStaffInfo()
 
-    if #staffNames > 0 then
-        showNotification("ModAlertNotification", "Moderators detected!", Color3.fromRGB(255, 100, 100), staffNames, totalCount, 60)
-    else
-        showNotification("ModAlertNotification", "No Moderators detected.", Color3.fromRGB(255, 255, 255), staffNames, totalCount, 10)
-    end
+    local hasServerStaff = #staffNames > 0
+    local hasFriendStaff = #friendStaffNames > 0
+
+    local statusText = ""
+    if hasServerStaff then statusText = "Moderators detected!" end
+    if hasFriendStaff then statusText = statusText .. (hasServerStaff and "\n" or "") .. "Staff friends detected!" end
+    if statusText == "" then statusText = "No staff detected." end
+
+    local statusColor = (hasServerStaff or hasFriendStaff) and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
+    local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
+
+    showNotification("ModAlertNotification", statusText, statusColor, staffNames, friendStaffNames, totalCount, duration)
 
     players.PlayerAdded:Connect(function(plr)
         plr.CharacterAdded:Wait()
         local role = GetRole(plr, game.CreatorId)
-        if isStaffRole(role) then
+        if isStaffRoleName(role) then
             local staffNames, totalCount = getStaffInfo()
-            showNotification("ModAlertNotification", "Moderators detected!", Color3.fromRGB(255, 100, 100), staffNames, totalCount, 60)
+            local friendStaffNames = getFriendStaffInfo()
+            local hasServerStaff = #staffNames > 0
+            local hasFriendStaff = #friendStaffNames > 0
+            local statusText = ""
+            if hasServerStaff then statusText = "Moderators detected!" end
+            if hasFriendStaff then statusText = statusText .. (hasServerStaff and "\n" or "") .. "Staff friends detected!" end
+            if statusText == "" then statusText = "No staff detected." end
+            local statusColor = (hasServerStaff or hasFriendStaff) and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
+            local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
+            showNotification("ModAlertNotification", statusText, statusColor, staffNames, friendStaffNames, totalCount, duration)
         end
     end)
 end, function() end)
