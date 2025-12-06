@@ -1,4 +1,7 @@
+--Rivals Only!!
+
 xpcall(function()
+    if (game.GameId ~= 6035872082) then return end
     if shared.StaffDetectorLoading then return end
     shared.StaffDetectorLoading = true
     repeat task.wait() until game:IsLoaded()
