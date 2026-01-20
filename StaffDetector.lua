@@ -28,7 +28,6 @@ xpcall(function()
                 autoload = true;
                 local GitRequests = loadstring(game:HttpGet("https://raw.githubusercontent.com/itchino/Roblox-GitRequests/refs/heads/main/GitRequests.lua"))()
                 local Repo = GitRequests.Repo("Ukrubojvo", "Modules")
-                task.wait(10);
                 loadstring(Repo:getFileContent("StaffDetector.lua"))()
             end)
         ]])
