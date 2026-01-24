@@ -3571,16 +3571,23 @@
 
     -- Notification Library
         function notifications:refresh_notifs() 
-            local offset = 50
+		    local offset = 50
+		
+		    for i, v in notifications.notifs do
+		        local Position = vec2(1, offset)
+		        library:tween(
+		            v,
+		            { Position = dim2(1, -20, 0, offset) },
+		            Enum.EasingStyle.Quad,
+		            0.4
+		        )
+		
+		        offset += (v.AbsoluteSize.Y + 10)
+		    end
+		
+		    return offset
+		end
 
-            for i, v in notifications.notifs do
-                local Position = vec2(20, offset)
-                library:tween(v, {Position = dim_offset(Position.X, Position.Y)}, Enum.EasingStyle.Quad, 0.4)
-                offset += (v.AbsoluteSize.Y + 10)
-            end
-
-            return offset
-        end
         
         function notifications:fade(path, is_fading)
             local fading = is_fading and 1 or 0 
@@ -3706,9 +3713,14 @@
             
             local offset = notifications:refresh_notifs()
 
-            items[ "notification" ].Position = dim_offset(20, offset)
+            items["notification"].Position = dim2(1, 300, 0, offset)
 
-            library:tween(items[ "notification" ], {AnchorPoint = vec2(0, 0)}, Enum.EasingStyle.Quad, 1)
+            library:tween(
+			    items["notification"],
+			    { Position = dim2(1, -20, 0, offset) },
+			    Enum.EasingStyle.Quad,
+			    0.6
+			)
             library:tween(items[ "bar" ], {Size = dim2(1, -8, 0, 5)}, Enum.EasingStyle.Quad, cfg.lifetime)
 
             task.spawn(function()
@@ -3718,7 +3730,13 @@
                 
                 notifications:fade(items[ "notification" ], true)
                 
-                library:tween(items[ "notification" ], {AnchorPoint = vec2(1, 0)}, Enum.EasingStyle.Quad, 1)
+                library:tween(
+				    items["notification"],
+				    { Position = dim2(1, 300, 0, items["notification"].Position.Y.Offset) },
+				    Enum.EasingStyle.Quad,
+				    1
+				)
+
 
                 task.wait(1)
         
