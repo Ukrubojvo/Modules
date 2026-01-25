@@ -1913,6 +1913,7 @@
                 callback = options.callback or function() end;
                 multi = options.multi or false;
                 scrolling = options.scrolling or false;
+                max_visible_items = options.max_visible_items or 12;
 
                 width = options.width or 130;
 
@@ -2089,22 +2090,36 @@
                         ZIndex = 10;
                     });
                     
-                    library:create( "UIPadding" , {
-                        PaddingBottom = dim(0, 6);
-                        PaddingTop = dim(0, 3);
-                        PaddingLeft = dim(0, 3);
-                        Parent = items[ "outline" ]
-                    });
-                    
-                    library:create( "UIListLayout" , {
-                        Parent = items[ "outline" ];
-                        Padding = dim(0, 5);
-                        SortOrder = Enum.SortOrder.LayoutOrder
-                    });
-                    
                     library:create( "UICorner" , {
                         Parent = items[ "outline" ];
                         CornerRadius = dim(0, 4)
+                    });
+                    
+                    items[ "scroll_frame" ] = library:create( "ScrollingFrame" , {
+                        Parent = items[ "outline" ];
+                        Size = dim2(1, -6, 1, -9);
+                        Position = dim2(0, 3, 0, 3);
+                        BackgroundTransparency = 1;
+                        BorderSizePixel = 0;
+                        ScrollBarThickness = 4;
+                        ScrollBarImageColor3 = rgb(86, 86, 87);
+                        CanvasSize = dim2(1, 0, 0, 0);
+                        AutomaticCanvasSize = Enum.AutomaticSize.Y;
+                        ZIndex = 10;
+                    });
+                    
+                    library:create( "UIPadding" , {
+                        PaddingBottom = dim(0, 3);
+                        PaddingTop = dim(0, 0);
+                        PaddingLeft = dim(0, 0);
+                        PaddingRight = dim(0, 0);
+                        Parent = items[ "scroll_frame" ]
+                    });
+                    
+                    library:create( "UIListLayout" , {
+                        Parent = items[ "scroll_frame" ];
+                        Padding = dim(0, 5);
+                        SortOrder = Enum.SortOrder.LayoutOrder
                     });
                 -- 
             end 
@@ -2115,7 +2130,7 @@
                     TextColor3 = rgb(72, 72, 73);
                     BorderColor3 = rgb(0, 0, 0);
                     Text = text;
-                    Parent = items[ "outline" ];
+                    Parent = items[ "scroll_frame" ];
                     Name = "\0";
                     Size = dim2(1, -12, 0, 0);
                     BackgroundTransparency = 1;
@@ -2138,10 +2153,18 @@
             end
             
             function cfg.set_visible(bool)
-                local a = bool and cfg.y_size or 0
+                local max_height = 0
+                if cfg.scrolling then
+                    local item_height = 20
+                    max_height = math.min(cfg.y_size, item_height * cfg.max_visible_items + 9)
+                else
+                    max_height = cfg.y_size
+                end
+                
+                local a = bool and max_height or 0
                 library:tween(items[ "dropdown_holder" ], {Size = dim_offset(items[ "dropdown" ].AbsoluteSize.X, a)})
 
-                items[ "dropdown_holder" ].Position = dim2(0, items[ "dropdown" ].AbsolutePosition.X, 0, items[ "dropdown" ].AbsolutePosition.Y + 80)
+                items[ "dropdown_holder" ].Position = dim2(0, items[ "dropdown" ].AbsolutePosition.X, 0, items[ "dropdown" ].AbsolutePosition.Y + 20)
                 if not (self.sanity and library.current_open == self) then 
                     library:close_element(cfg)
                 end
@@ -2178,7 +2201,7 @@
 
                 for _, option in list do 
                     local button = cfg.render_option(option)
-                    cfg.y_size += button.AbsoluteSize.Y + 6 -- super annoying manual sizing but oh well
+                    cfg.y_size += button.AbsoluteSize.Y + 6
                     insert(cfg.option_instances, button)
                     
                     button.MouseButton1Down:Connect(function()
@@ -3738,21 +3761,15 @@
 
             task.spawn(function()
                 task.wait(cfg.lifetime)
-                
                 notifications.notifs[index] = nil
-                
                 notifications:fade(items[ "notification" ], true)
-                
                 library:tween(
 				    items["notification"],
 				    { Position = dim2(1, 300, 0, items["notification"].Position.Y.Offset) },
 				    Enum.EasingStyle.Quad,
 				    1
 				)
-
-
                 task.wait(1)
-        
                 items[ "notification" ]:Destroy() 
             end)
         end
