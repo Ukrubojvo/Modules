@@ -16,10 +16,19 @@ xpcall(function()
     local http = game:GetService("HttpService")
     local lp = players.LocalPlayer
     local groupId = game.CreatorId
+    local notify_sound = nil
 
     if game.CreatorType ~= Enum.CreatorType.Group then
         return
     end
+
+    task.spawn(function()
+        if not isfile("AntiLua/staffdetect.mp3") then writefile("AntiLua/staffdetect.mp3", tostring(game:HttpGetAsync("https://github.com/Ukrubojvo/api/raw/main/ap-disconnect-boeing.mp3"))) end
+        notify_sound = Instance.new("Sound", workspace)
+        notify_sound.SoundId = getcustomasset("AntiLua/staffdetect.mp3")
+        notify_sound.Volume = 5
+        notify_sound.Looped = true
+    end)
 
     pcall(function()
         if not autoload then return end
@@ -374,7 +383,12 @@ xpcall(function()
         end
         
         YesBtn.MouseButton1Click:Connect(function() FadeOut(OnYes) end)
-        NoBtn.MouseButton1Click:Connect(function() FadeOut(OnNo) end)
+        NoBtn.MouseButton1Click:Connect(function()
+            if notify_sound then
+                notify_sound:Stop()
+            end
+            FadeOut(OnNo) 
+        end)
         
         TS:Create(Backdrop, TI(0.3), {BackgroundTransparency = 0.6}):Play()
         TS:Create(Container, TI(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
@@ -464,6 +478,11 @@ xpcall(function()
     local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
 
     if hasDetected then
+        task.spawn(function()
+            if notify_sound then
+                notify_sound:Play()
+            end
+        end)
         createLeaveUI([[There is a <font color="#FF8888">moderator</font> in this server.<br/>Do you want to leave?]], function()
             game:GetService("TeleportService"):Teleport(17625359962)
         end, nil)
@@ -487,6 +506,11 @@ xpcall(function()
             local statusColor = (hasServerStaff or hasFriendStaff) and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
             local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
             if hasDetected then
+                task.spawn(function()
+                    if notify_sound then
+                        notify_sound:Play()
+                    end
+                end)
                 createLeaveUI([[There is a <font color="#FF8888">moderator</font> in this server.<br/>Do you want to leave?]], function()
                     game:GetService("TeleportService"):Teleport(17625359962)
                 end, nil)
