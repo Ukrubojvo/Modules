@@ -2102,8 +2102,9 @@
                         BorderSizePixel = 0;
                         ScrollBarThickness = 4;
                         ScrollBarImageColor3 = rgb(86, 86, 87);
-                        CanvasSize = dim2(1, 0, 0, 0);
+                        CanvasSize = dim2(0, 0, 0, 0);
                         AutomaticCanvasSize = Enum.AutomaticSize.Y;
+                        ScrollingDirection = Enum.ScrollingDirection.Y;
                         ZIndex = 10;
                     });
                     
@@ -2152,12 +2153,16 @@
             end
             
             function cfg.set_visible(bool)
+                local option_count = #cfg.option_instances
                 local max_height = 0
-                if cfg.scrolling then
-                    local item_height = 20
-                    max_height = math.min(cfg.y_size, item_height * cfg.max_visible_items + 9)
-                else
+                
+                if option_count <= cfg.max_visible_items then
                     max_height = cfg.y_size
+                    items[ "scroll_frame" ].ScrollBarThickness = 0
+                else
+                    local item_height = 20
+                    max_height = item_height * cfg.max_visible_items + 9
+                    items[ "scroll_frame" ].ScrollBarThickness = 4
                 end
                 
                 local a = bool and max_height or 0
