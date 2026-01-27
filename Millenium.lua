@@ -844,7 +844,7 @@
                 -- 
 
                 -- Multi Sections
-                    items[ "multi_section_button_holder" ] = library:create( "Frame" , {
+                    items[ "multi_section_button_holder" ] = library:create( "ScrollingFrame" , {
                         Parent = library.cache;
                         BackgroundTransparency = 1;
                         Name = "\0";
@@ -852,7 +852,12 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, 0, 1, 0);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(255, 255, 255);
+                        CanvasSize = dim2(0, 0, 0, 0);
+                        ScrollBarThickness = 0;
+                        AutomaticCanvasSize = Enum.AutomaticSize.X;
+                        ScrollingDirection = Enum.ScrollingDirection.X;
+                        ClipsDescendants = true;
                     });
                     
                     library:create( "UIListLayout" , {
