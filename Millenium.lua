@@ -2267,92 +2267,122 @@
             }
 
             local items = cfg.items; do 
-                items[ "label" ] = library:create( "TextButton" , {
-                    FontFace = fonts.small;
-                    TextColor3 = rgb(0, 0, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Text = "";
-                    Parent = self.items[ "elements" ];
-                    Name = "\0";
-                    BackgroundTransparency = 1;
-                    Size = dim2(1, 0, 0, 0);
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.Y;
-                    TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
-                });
-                
-                items[ "name" ] = library:create( "TextLabel" , {
-                    FontFace = fonts.small;
-                    TextColor3 = rgb(245, 245, 245);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Text = cfg.name;
-                    Parent = items[ "label" ];
-                    Name = "\0";
-                    Size = dim2(1, 0, 0, 0);
-                    BackgroundTransparency = 1;
-                    TextXAlignment = Enum.TextXAlignment.Left;
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
-                });
+            items[ "label" ] = library:create( "TextButton" , {
+                FontFace = fonts.small;
+                TextColor3 = rgb(0, 0, 0);
+                BorderColor3 = rgb(0, 0, 0);
+                Text = "";
+                Parent = self.items[ "elements" ] or self[ "parent" ];
+                Name = "\0";
+                BackgroundTransparency = 1;
+                Size = dim2(1, 0, 0, 0);
+                BorderSizePixel = 0;
+                AutomaticSize = Enum.AutomaticSize.Y;
+                TextSize = 14;
+                BackgroundColor3 = rgb(255, 255, 255)
+            });
+            
+            items[ "name" ] = library:create( "TextLabel" , {
+                FontFace = fonts.small;
+                TextColor3 = rgb(245, 245, 245);
+                BorderColor3 = rgb(0, 0, 0);
+                Text = cfg.name;
+                Parent = items[ "label" ];
+                Name = "\0";
+                Size = dim2(1, 0, 0, 0);
+                BackgroundTransparency = 1;
+                TextXAlignment = Enum.TextXAlignment.Left;
+                BorderSizePixel = 0;
+                AutomaticSize = Enum.AutomaticSize.XY;
+                TextSize = 16;
+                BackgroundColor3 = rgb(255, 255, 255)
+            });
 
-                if cfg.info then 
-                    items[ "info" ] = library:create( "TextLabel" , {
-                        FontFace = fonts.small;
-                        TextColor3 = rgb(130, 130, 130);
-                        BorderColor3 = rgb(0, 0, 0);
-                        TextWrapped = true;
-                        Text = cfg.info;
-                        Parent = items[ "label" ];
-                        Name = "\0";
-                        Position = dim2(0, 5, 0, 17);
-                        Size = dim2(1, -10, 0, 0);
-                        BackgroundTransparency = 1;
-                        TextXAlignment = Enum.TextXAlignment.Left;
-                        BorderSizePixel = 0;
-                        AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
-                    });
-                end 
-                
-                library:create( "UIPadding" , {
-                    Parent = items[ "name" ];
-                    PaddingRight = dim(0, 5);
-                    PaddingLeft = dim(0, 5)
+            if cfg.info then 
+                items[ "info" ] = library:create( "TextLabel" , {
+                FontFace = fonts.small;
+                TextColor3 = rgb(130, 130, 130);
+                BorderColor3 = rgb(0, 0, 0);
+                TextWrapped = true;
+                Text = cfg.info;
+                Parent = items[ "label" ];
+                Name = "\0";
+                Position = dim2(0, 5, 0, 17);
+                Size = dim2(1, -10, 0, 0);
+                BackgroundTransparency = 1;
+                TextXAlignment = Enum.TextXAlignment.Left;
+                BorderSizePixel = 0;
+                AutomaticSize = Enum.AutomaticSize.XY;
+                TextSize = 16;
+                BackgroundColor3 = rgb(255, 255, 255)
                 });
-                
-                items[ "right_components" ] = library:create( "Frame" , {
-                    Parent = items[ "label" ];
-                    Name = "\0";
-                    Position = dim2(1, 0, 0, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(0, 0, 1, 0);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
-                });
-                
-                library:create( "UIListLayout" , {
-                    FillDirection = Enum.FillDirection.Horizontal;
-                    HorizontalAlignment = Enum.HorizontalAlignment.Right;
-                    Parent = items[ "right_components" ];
-                    Padding = dim(0, 9);
-                    SortOrder = Enum.SortOrder.LayoutOrder
-                });                
+            end 
+            
+            library:create( "UIPadding" , {
+                Parent = items[ "name" ];
+                PaddingRight = dim(0, 5);
+                PaddingLeft = dim(0, 5)
+            });
+            
+            items[ "right_components" ] = library:create( "Frame" , {
+                Parent = items[ "label" ];
+                Name = "\0";
+                Position = dim2(1, 0, 0, 0);
+                BorderColor3 = rgb(0, 0, 0);
+                Size = dim2(0, 0, 1, 0);
+                BorderSizePixel = 0;
+                BackgroundColor3 = rgb(255, 255, 255)
+            });
+            
+            library:create( "UIListLayout" , {
+                FillDirection = Enum.FillDirection.Horizontal;
+                HorizontalAlignment = Enum.HorizontalAlignment.Right;
+                Parent = items[ "right_components" ];
+                Padding = dim(0, 9);
+                SortOrder = Enum.SortOrder.LayoutOrder
+            });                
             end 
 
-            if cfg.seperator then 
-                library:create( "Frame" , {
-                    AnchorPoint = vec2(0, 1);
-                    Parent = self.items[ "elements" ];
-                    Position = dim2(0, 0, 1, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 1, 0, 1);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(36, 36, 37)
+            function cfg.set_name(text)
+            cfg.name = text
+            items[ "name" ].Text = text
+            end
+
+            function cfg.set_info(text)
+            cfg.info = text
+            if items[ "info" ] then
+                items[ "info" ].Text = text
+            else
+                items[ "info" ] = library:create( "TextLabel" , {
+                FontFace = fonts.small;
+                TextColor3 = rgb(130, 130, 130);
+                BorderColor3 = rgb(0, 0, 0);
+                TextWrapped = true;
+                Text = text;
+                Parent = items[ "label" ];
+                Name = "\0";
+                Position = dim2(0, 5, 0, 17);
+                Size = dim2(1, -10, 0, 0);
+                BackgroundTransparency = 1;
+                TextXAlignment = Enum.TextXAlignment.Left;
+                BorderSizePixel = 0;
+                AutomaticSize = Enum.AutomaticSize.XY;
+                TextSize = 16;
+                BackgroundColor3 = rgb(255, 255, 255)
                 });
+            end
+            end
+
+            if cfg.seperator then 
+            library:create( "Frame" , {
+                AnchorPoint = vec2(0, 1);
+                Parent = self.items[ "elements" ];
+                Position = dim2(0, 0, 1, 0);
+                BorderColor3 = rgb(0, 0, 0);
+                Size = dim2(1, 1, 0, 1);
+                BorderSizePixel = 0;
+                BackgroundColor3 = rgb(36, 36, 37)
+            });
             end 
 
             return setmetatable(cfg, library)
