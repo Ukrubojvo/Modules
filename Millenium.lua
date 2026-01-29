@@ -1639,6 +1639,8 @@
             end;
             
             function cfg.set(bool)
+                cfg.enabled = bool
+                
                 if cfg.type == "checkbox" then 
                     library:tween(items[ "tick" ], {Rotation = bool and 0 or 45, ImageTransparency = bool and 0 or 1})
                     library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(67, 67, 68)})
@@ -2354,33 +2356,33 @@
             end 
 
             function cfg.set_name(text)
-            cfg.name = text
-            items[ "name" ].Text = text
+                cfg.name = text
+                items[ "name" ].Text = text
             end
 
             function cfg.set_info(text)
-            cfg.info = text
-            if items[ "info" ] then
-                items[ "info" ].Text = text
-            else
-                items[ "info" ] = library:create( "TextLabel" , {
-                FontFace = fonts.small;
-                TextColor3 = rgb(130, 130, 130);
-                BorderColor3 = rgb(0, 0, 0);
-                TextWrapped = true;
-                Text = text;
-                Parent = items[ "label" ];
-                Name = "\0";
-                Position = dim2(0, 5, 0, 17);
-                Size = dim2(1, -10, 0, 0);
-                BackgroundTransparency = 1;
-                TextXAlignment = Enum.TextXAlignment.Left;
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.XY;
-                TextSize = 16;
-                BackgroundColor3 = rgb(255, 255, 255)
-                });
-            end
+                cfg.info = text
+                if items[ "info" ] then
+                    items[ "info" ].Text = text
+                else
+                    items[ "info" ] = library:create( "TextLabel" , {
+                    FontFace = fonts.small;
+                    TextColor3 = rgb(130, 130, 130);
+                    BorderColor3 = rgb(0, 0, 0);
+                    TextWrapped = true;
+                    Text = text;
+                    Parent = items[ "label" ];
+                    Name = "\0";
+                    Position = dim2(0, 5, 0, 17);
+                    Size = dim2(1, -10, 0, 0);
+                    BackgroundTransparency = 1;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    BorderSizePixel = 0;
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    TextSize = 16;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                    });
+                end
             end
 
             if cfg.seperator then 
