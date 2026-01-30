@@ -412,7 +412,8 @@
 
                 if function_set then 
                     if type(v) == "table" and v["Transparency"] and v["Color"] then
-                        function_set(hex(v["Color"]), v["Transparency"])
+                        local color_obj = type(v["Color"]) == "string" and hex(v["Color"]) or v["Color"]
+                        function_set(color_obj, v["Transparency"])
                     elseif type(v) == "table" and v["active"] then 
                         function_set(v)
                     else
@@ -420,7 +421,7 @@
                     end
                 end 
             end 
-        end 
+        end
         
         function library:round(number, float) 
             local multiplier = 1 / (float or 1)
@@ -2835,13 +2836,24 @@
                     return
                 end 
 
+                if type(color) == "table" then
+                    if color.Color and color.Transparency then
+                        alpha = color.Transparency
+                        color = color.Color
+                    end
+                end
+                
+                if type(color) == "string" then
+                    color = hex(color)
+                end
+
                 if color then 
                     h, s, v = color:ToHSV()
                 end
                 
                 if alpha then 
                     a = alpha
-                end 
+                end
                 
                 local Color = hsv(h, s, v)
 
