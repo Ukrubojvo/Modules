@@ -1925,6 +1925,7 @@
                 multi = options.multi or false;
                 scrolling = options.scrolling or false;
                 max_visible_items = options.max_visible_items or 12;
+                searchable = options.searchable or false;
 
                 width = options.width or 130;
 
@@ -1936,6 +1937,7 @@
                 items = {};
                 y_size;
                 seperator = options.seperator or options.Seperator or true;
+                search_text = "";
             }   
 
             cfg.default = options.default or (cfg.multi and {cfg.items[1]}) or cfg.items[1] or "None"
@@ -2106,10 +2108,43 @@
                         CornerRadius = dim(0, 4)
                     });
                     
+                    if cfg.searchable then
+                        items[ "search_holder" ] = library:create( "Frame" , {
+                            Parent = items[ "outline" ];
+                            Size = dim2(1, -6, 0, 24);
+                            Position = dim2(0, 3, 0, 3);
+                            BackgroundColor3 = rgb(25, 25, 27);
+                            BorderSizePixel = 0;
+                            ZIndex = 10;
+                        });
+                        
+                        library:create( "UICorner" , {
+                            Parent = items[ "search_holder" ];
+                            CornerRadius = dim(0, 4)
+                        });
+                        
+                        items[ "search_box" ] = library:create( "TextBox" , {
+                            FontFace = fonts.small;
+                            Text = "";
+                            Parent = items[ "search_holder" ];
+                            PlaceholderText = "Search...";
+                            PlaceholderColor3 = rgb(86, 86, 87);
+                            TextColor3 = rgb(245, 245, 245);
+                            BorderSizePixel = 0;
+                            Size = dim2(1, -10, 1, 0);
+                            Position = dim2(0, 5, 0, 0);
+                            BackgroundTransparency = 1;
+                            TextXAlignment = Enum.TextXAlignment.Left;
+                            TextSize = 14;
+                            ClearTextOnFocus = false;
+                            ZIndex = 11;
+                        });
+                    end
+                    
                     items[ "scroll_frame" ] = library:create( "ScrollingFrame" , {
                         Parent = items[ "outline" ];
-                        Size = dim2(1, -6, 1, -9);
-                        Position = dim2(0, 3, 0, 3);
+                        Size = cfg.searchable and dim2(1, -6, 1, -36) or dim2(1, -6, 1, -9);
+                        Position = cfg.searchable and dim2(0, 3, 0, 30) or dim2(0, 3, 0, 3);
                         BackgroundTransparency = 1;
                         BorderSizePixel = 0;
                         ScrollBarThickness = 4;
@@ -2164,16 +2199,31 @@
                 return button
             end
             
+            function cfg.filter_options(search)
+                for _, option in cfg.option_instances do
+                    local text_lower = option.Text:lower()
+                    local search_lower = search:lower()
+                    option.Visible = search == "" or text_lower:find(search_lower, 1, true) ~= nil
+                end
+            end
+            
             function cfg.set_visible(bool)
-                local option_count = #cfg.option_instances
+                local option_count = 0
+                for _, option in cfg.option_instances do
+                    if option.Visible then
+                        option_count = option_count + 1
+                    end
+                end
+                
                 local max_height = 0
+                local search_offset = cfg.searchable and 27 or 0
                 
                 if option_count <= cfg.max_visible_items then
-                    max_height = cfg.y_size
+                    max_height = cfg.y_size + search_offset
                     items[ "scroll_frame" ].ScrollBarThickness = 0
                 else
                     local item_height = 20
-                    max_height = item_height * cfg.max_visible_items + 9
+                    max_height = item_height * cfg.max_visible_items + 9 + search_offset
                     items[ "scroll_frame" ].ScrollBarThickness = 4
                 end
                 
@@ -2181,6 +2231,14 @@
                 library:tween(items[ "dropdown_holder" ], {Size = dim_offset(items[ "dropdown" ].AbsoluteSize.X, a)})
 
                 items[ "dropdown_holder" ].Position = dim2(0, items[ "dropdown" ].AbsolutePosition.X, 0, items[ "dropdown" ].AbsolutePosition.Y + 20)
+                
+                if cfg.searchable and bool then
+                    items[ "search_box" ].Text = ""
+                    cfg.filter_options("")
+                    task.wait(0.1)
+                    items[ "search_box" ]:CaptureFocus()
+                end
+                
                 if not (self.sanity and library.current_open == self) then 
                     library:close_element(cfg)
                 end
@@ -2246,6 +2304,13 @@
                 
                 cfg.set_visible(cfg.open)
             end)
+            
+            if cfg.searchable then
+                items[ "search_box" ]:GetPropertyChangedSignal("Text"):Connect(function()
+                    cfg.search_text = items[ "search_box" ].Text
+                    cfg.filter_options(cfg.search_text)
+                end)
+            end
 
             if cfg.seperator then 
                 library:create( "Frame" , {
