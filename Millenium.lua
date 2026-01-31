@@ -472,14 +472,30 @@
             local open_element = library.current_open
 
             if open_element and new_path ~= open_element then
-                open_element.set_visible(false)
-                open_element.open = false;
+                if open_element.set_visible then
+                    open_element.set_visible(false)
+                end
+                open_element.open = false
             end 
 
-            if new_path ~= open_element then 
-                library.current_open = new_path or nil;
+            if not new_path then
+                for _, instance in pairs(library["items"]:GetDescendants()) do
+                    if instance.Name == "colorpicker_holder" or 
+                    instance.Name == "dropdown_holder" or 
+                    (instance.Parent and instance.Parent.Name == "dropdown") then
+                        if instance.Name == "colorpicker_holder" or instance.Name == "dropdown_holder" then
+                            instance.Parent = library["other"]
+                        elseif instance.Parent.Name == "dropdown" then
+                            library:tween(instance.Parent, {Size = dim_offset(0, 0)})
+                        end
+                    end
+                end
             end
-        end 
+
+            if new_path ~= open_element then 
+                library.current_open = new_path or nil
+            end
+        end
 
         function library:create(instance, options)
             local ins = Instance.new(instance) 
