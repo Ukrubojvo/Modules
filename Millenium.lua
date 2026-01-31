@@ -2270,20 +2270,20 @@
                 
                 if option_count <= cfg.max_visible_items then
                     max_height = cfg.y_size + search_offset
-                    items[ "scroll_frame" ].ScrollBarThickness = 0
+                    library:tween(items[ "scroll_frame "], {ScrollBarThickness = 0}, Enum.EasingStyle.Quad, 0.2)
                 else
                     local item_height = 20
                     max_height = item_height * cfg.max_visible_items + 9 + search_offset
-                    items[ "scroll_frame" ].ScrollBarThickness = 4
+                    library:tween(items[ "scroll_frame "], {ScrollBarThickness = 4}, Enum.EasingStyle.Quad, 0.2)
                 end
                 
                 local a = bool and max_height or 0
-                library:tween(items[ "dropdown_holder" ], {Size = dim_offset(items[ "dropdown" ].AbsoluteSize.X, a)})
-
-                items[ "dropdown_holder" ].Parent = bool and library[ "items" ] or library[ "other" ]
-                items[ "dropdown_holder" ].Position = dim_offset(
-                    items[ "dropdown" ].AbsolutePosition.X, 
-                    items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 60
+                library:tween(items[ "dropdown_holder "], {Size = dim_offset(items[ "dropdown "].AbsoluteSize.X, a)})
+                
+                items[ "dropdown_holder "].Parent = bool and library[ "items "] or library[ "other "]
+                items[ "dropdown_holder "].Position = dim_offset(
+                    items[ "dropdown "].AbsolutePosition.X, 
+                    items[ "dropdown "].AbsolutePosition.Y + items[ "dropdown "].AbsoluteSize.Y + 60
                 )
 
                 if bool then
@@ -2298,10 +2298,10 @@
                 end
                 
                 if cfg.searchable and bool then
-                    items[ "search_box" ].Text = ""
-                    cfg.filter_options("")
+                    items[ "search_box "].Text = " "
+                    cfg.filter_options(" ")
                     task.wait(0.1)
-                    items[ "search_box" ]:CaptureFocus()
+                    items[ "search_box "]:CaptureFocus()
                 end
                 
                 if not (self.sanity and library.current_open == self) then 
