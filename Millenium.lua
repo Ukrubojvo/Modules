@@ -2283,7 +2283,7 @@
                 items[ "dropdown_holder" ].Parent = bool and library[ "items" ] or library[ "other" ]
                 items[ "dropdown_holder" ].Position = dim_offset(
                     items[ "dropdown" ].AbsolutePosition.X, 
-                    items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 50
+                    items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 60
                 )
 
                 if bool then
