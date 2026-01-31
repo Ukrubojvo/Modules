@@ -1976,48 +1976,63 @@
                 scrolling = options.scrolling or false;
                 max_visible_items = options.max_visible_items or 12;
                 searchable = options.searchable or false;
-
                 width = options.width or 130;
-
-                -- Ignore these 
                 open = false;
                 option_instances = {};
                 multi_items = {};
                 ignore = options.ignore or false;
                 items = {};
-                y_size;
+                y_size = 0;
                 seperator = options.seperator or options.Seperator or true;
                 search_text = "";
             }   
 
-            cfg.default = options.default or (cfg.multi and {cfg.items[1]}) or cfg.items[1] or "None"
+            cfg.default = options.default or (cfg.multi and {cfg.options[1]}) or cfg.options[1] or "None"
             flags[cfg.flag] = cfg.default
 
             local items = cfg.items; do 
-                -- Element
-                    items[ "dropdown_object" ] = library:create( "TextButton" , {
+                items["dropdown_object"] = library:create("TextButton", {
+                    FontFace = fonts.small;
+                    TextColor3 = rgb(0, 0, 0);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Text = "";
+                    Parent = self.items["elements"];
+                    Name = "\0";
+                    BackgroundTransparency = 1;
+                    Size = dim2(1, 0, 0, 0);
+                    BorderSizePixel = 0;
+                    AutomaticSize = Enum.AutomaticSize.Y;
+                    TextSize = 14;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+                
+                items["name"] = library:create("TextLabel", {
+                    FontFace = fonts.small;
+                    TextColor3 = rgb(245, 245, 245);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Text = cfg.name or "Dropdown";
+                    Parent = items["dropdown_object"];
+                    Name = "\0";
+                    Size = dim2(1, 0, 0, 0);
+                    BackgroundTransparency = 1;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    BorderSizePixel = 0;
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    TextSize = 16;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+                
+                if cfg.info then 
+                    items["info"] = library:create("TextLabel", {
                         FontFace = fonts.small;
-                        TextColor3 = rgb(0, 0, 0);
+                        TextColor3 = rgb(130, 130, 130);
                         BorderColor3 = rgb(0, 0, 0);
-                        Text = "";
-                        Parent = self.items[ "elements" ];
+                        TextWrapped = true;
+                        Text = cfg.info;
+                        Parent = items["dropdown_object"];
                         Name = "\0";
-                        BackgroundTransparency = 1;
-                        Size = dim2(1, 0, 0, 0);
-                        BorderSizePixel = 0;
-                        AutomaticSize = Enum.AutomaticSize.Y;
-                        TextSize = 14;
-                        BackgroundColor3 = rgb(255, 255, 255)
-                    });
-                    
-                    items[ "name" ] = library:create( "TextLabel" , {
-                        FontFace = fonts.small;
-                        TextColor3 = rgb(245, 245, 245);
-                        BorderColor3 = rgb(0, 0, 0);
-                        Text = cfg.name or "Dropdown";
-                        Parent = items[ "dropdown_object" ];
-                        Name = "\0";
-                        Size = dim2(1, 0, 0, 0);
+                        Position = dim2(0, 5, 0, 17);
+                        Size = dim2(1, -10, 0, 0);
                         BackgroundTransparency = 1;
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
@@ -2025,209 +2040,187 @@
                         TextSize = 16;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
-                    
-                    if cfg.info then 
-                        items[ "info" ] = library:create( "TextLabel" , {
-                            FontFace = fonts.small;
-                            TextColor3 = rgb(130, 130, 130);
-                            BorderColor3 = rgb(0, 0, 0);
-                            TextWrapped = true;
-                            Text = cfg.info;
-                            Parent = items[ "dropdown_object" ];
-                            Name = "\0";
-                            Position = dim2(0, 5, 0, 17);
-                            Size = dim2(1, -10, 0, 0);
-                            BackgroundTransparency = 1;
-                            TextXAlignment = Enum.TextXAlignment.Left;
-                            BorderSizePixel = 0;
-                            AutomaticSize = Enum.AutomaticSize.XY;
-                            TextSize = 16;
-                            BackgroundColor3 = rgb(255, 255, 255)
-                        });
-                    end 
+                end 
 
-                    library:create( "UIPadding" , {
-                        Parent = items[ "name" ];
-                        PaddingRight = dim(0, 5);
-                        PaddingLeft = dim(0, 5)
-                    });
-                    
-                    items[ "right_components" ] = library:create( "Frame" , {
-                        Parent = items[ "dropdown_object" ];
-                        Name = "\0";
-                        Position = dim2(1, 0, 0, 0);
-                        BorderColor3 = rgb(0, 0, 0);
-                        Size = dim2(0, 0, 1, 0);
+                library:create("UIPadding", {
+                    Parent = items["name"];
+                    PaddingRight = dim(0, 5);
+                    PaddingLeft = dim(0, 5)
+                });
+                
+                items["right_components"] = library:create("Frame", {
+                    Parent = items["dropdown_object"];
+                    Name = "\0";
+                    Position = dim2(1, 0, 0, 0);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Size = dim2(0, 0, 1, 0);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+                
+                library:create("UIListLayout", {
+                    FillDirection = Enum.FillDirection.Horizontal;
+                    HorizontalAlignment = Enum.HorizontalAlignment.Right;
+                    Parent = items["right_components"];
+                    Padding = dim(0, 7);
+                    SortOrder = Enum.SortOrder.LayoutOrder
+                });
+                
+                items["dropdown"] = library:create("TextButton", {
+                    FontFace = fonts.small;
+                    TextColor3 = rgb(0, 0, 0);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Text = "";
+                    AutoButtonColor = false;
+                    AnchorPoint = vec2(1, 0);
+                    Parent = items["right_components"];
+                    Name = "\0";
+                    Position = dim2(1, 0, 0, 0);
+                    Size = dim2(0, cfg.width, 0, 16);
+                    BorderSizePixel = 0;
+                    TextSize = 14;
+                    BackgroundColor3 = rgb(33, 33, 35)
+                });
+                
+                library:create("UICorner", {
+                    Parent = items["dropdown"];
+                    CornerRadius = dim(0, 4)
+                });
+                
+                items["sub_text"] = library:create("TextLabel", {
+                    FontFace = fonts.small;
+                    TextColor3 = rgb(86, 86, 87);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Text = "";
+                    Parent = items["dropdown"];
+                    Name = "\0";
+                    Size = dim2(1, -12, 0, 0);
+                    BorderSizePixel = 0;
+                    BackgroundTransparency = 1;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    TextTruncate = Enum.TextTruncate.AtEnd;
+                    AutomaticSize = Enum.AutomaticSize.Y;
+                    TextSize = 14;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+                
+                library:create("UIPadding", {
+                    Parent = items["sub_text"];
+                    PaddingTop = dim(0, 1);
+                    PaddingRight = dim(0, 5);
+                    PaddingLeft = dim(0, 5)
+                });
+                
+                items["indicator"] = library:create("ImageLabel", {
+                    ImageColor3 = rgb(86, 86, 87);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Parent = items["dropdown"];
+                    AnchorPoint = vec2(1, 0.5);
+                    Image = "rbxassetid://101025591575185";
+                    BackgroundTransparency = 1;
+                    Position = dim2(1, -5, 0.5, 0);
+                    Name = "\0";
+                    Size = dim2(0, 12, 0, 12);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+
+                items["dropdown_holder"] = library:create("Frame", {
+                    BorderColor3 = rgb(0, 0, 0);
+                    Parent = library["other"]; 
+                    Name = "\0";
+                    Visible = false;
+                    BackgroundTransparency = 1;
+                    Size = dim2(0, 0, 0, 0);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(0, 0, 0);
+                    ZIndex = 10;
+                });
+                
+                items["outline"] = library:create("Frame", {
+                    Parent = items["dropdown_holder"];
+                    Size = dim2(1, 0, 1, 0);
+                    ClipsDescendants = true;
+                    BorderColor3 = rgb(0, 0, 0);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(33, 33, 35);
+                    ZIndex = 10;
+                });
+                
+                library:create("UICorner", {
+                    Parent = items["outline"];
+                    CornerRadius = dim(0, 4)
+                });
+                
+                if cfg.searchable then
+                    items["search_holder"] = library:create("Frame", {
+                        Parent = items["outline"];
+                        Size = dim2(1, -6, 0, 24);
+                        Position = dim2(0, 3, 0, 3);
+                        BackgroundColor3 = rgb(25, 25, 27);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        ZIndex = 10;
                     });
                     
-                    library:create( "UIListLayout" , {
-                        FillDirection = Enum.FillDirection.Horizontal;
-                        HorizontalAlignment = Enum.HorizontalAlignment.Right;
-                        Parent = items[ "right_components" ];
-                        Padding = dim(0, 7);
-                        SortOrder = Enum.SortOrder.LayoutOrder
-                    });
-                    
-                    items[ "dropdown" ] = library:create( "TextButton" , {
-                        FontFace = fonts.small;
-                        TextColor3 = rgb(0, 0, 0);
-                        BorderColor3 = rgb(0, 0, 0);
-                        Text = "";
-                        AutoButtonColor = false;
-                        AnchorPoint = vec2(1, 0);
-                        Parent = items[ "right_components" ];
-                        Name = "\0";
-                        Position = dim2(1, 0, 0, 0);
-                        Size = dim2(0, cfg.width, 0, 16);
-                        BorderSizePixel = 0;
-                        TextSize = 14;
-                        BackgroundColor3 = rgb(33, 33, 35)
-                    });
-                    
-                    library:create( "UICorner" , {
-                        Parent = items[ "dropdown" ];
+                    library:create("UICorner", {
+                        Parent = items["search_holder"];
                         CornerRadius = dim(0, 4)
                     });
                     
-                    items[ "sub_text" ] = library:create( "TextLabel" , {
+                    items["search_box"] = library:create("TextBox", {
                         FontFace = fonts.small;
-                        TextColor3 = rgb(86, 86, 87);
-                        BorderColor3 = rgb(0, 0, 0);
-                        Text = "awdawdawdawdawdawdawdaw";
-                        Parent = items[ "dropdown" ];
-                        Name = "\0";
-                        Size = dim2(1, -12, 0, 0);
+                        Text = "";
+                        Parent = items["search_holder"];
+                        PlaceholderText = "Search...";
+                        PlaceholderColor3 = rgb(86, 86, 87);
+                        TextColor3 = rgb(245, 245, 245);
                         BorderSizePixel = 0;
+                        Size = dim2(1, -10, 1, 0);
+                        Position = dim2(0, 5, 0, 0);
                         BackgroundTransparency = 1;
                         TextXAlignment = Enum.TextXAlignment.Left;
-                        TextTruncate = Enum.TextTruncate.AtEnd;
-                        AutomaticSize = Enum.AutomaticSize.Y;
                         TextSize = 14;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        ClearTextOnFocus = false;
+                        ZIndex = 11;
                     });
-                    
-                    library:create( "UIPadding" , {
-                        Parent = items[ "sub_text" ];
-                        PaddingTop = dim(0, 1);
-                        PaddingRight = dim(0, 5);
-                        PaddingLeft = dim(0, 5)
-                    });
-                    
-                    items[ "indicator" ] = library:create( "ImageLabel" , {
-                        ImageColor3 = rgb(86, 86, 87);
-                        BorderColor3 = rgb(0, 0, 0);
-                        Parent = items[ "dropdown" ];
-                        AnchorPoint = vec2(1, 0.5);
-                        Image = "rbxassetid://101025591575185";
-                        BackgroundTransparency = 1;
-                        Position = dim2(1, -5, 0.5, 0);
-                        Name = "\0";
-                        Size = dim2(0, 12, 0, 12);
-                        BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
-                    });
-                -- 
-
-                -- Element Holder
-                    items[ "dropdown_holder" ] = library:create( "Frame" , {
-                        BorderColor3 = rgb(0, 0, 0);
-                        Parent = library[ "other" ]; 
-                        Name = "\0";
-                        Visible = true;
-                        BackgroundTransparency = 1;
-                        Size = dim2(0, 0, 0, 0);
-                        BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(0, 0, 0);
-                        ZIndex = 10;
-                    });
-                    
-                    items[ "outline" ] = library:create( "Frame" , {
-                        Parent = items[ "dropdown_holder" ];
-                        Size = dim2(1, 0, 1, 0);
-                        ClipsDescendants = true;
-                        BorderColor3 = rgb(0, 0, 0);
-                        BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(33, 33, 35);
-                        ZIndex = 10;
-                    });
-                    
-                    library:create( "UICorner" , {
-                        Parent = items[ "outline" ];
-                        CornerRadius = dim(0, 4)
-                    });
-                    
-                    if cfg.searchable then
-                        items[ "search_holder" ] = library:create( "Frame" , {
-                            Parent = items[ "outline" ];
-                            Size = dim2(1, -6, 0, 24);
-                            Position = dim2(0, 3, 0, 3);
-                            BackgroundColor3 = rgb(25, 25, 27);
-                            BorderSizePixel = 0;
-                            ZIndex = 10;
-                        });
-                        
-                        library:create( "UICorner" , {
-                            Parent = items[ "search_holder" ];
-                            CornerRadius = dim(0, 4)
-                        });
-                        
-                        items[ "search_box" ] = library:create( "TextBox" , {
-                            FontFace = fonts.small;
-                            Text = "";
-                            Parent = items[ "search_holder" ];
-                            PlaceholderText = "Search...";
-                            PlaceholderColor3 = rgb(86, 86, 87);
-                            TextColor3 = rgb(245, 245, 245);
-                            BorderSizePixel = 0;
-                            Size = dim2(1, -10, 1, 0);
-                            Position = dim2(0, 5, 0, 0);
-                            BackgroundTransparency = 1;
-                            TextXAlignment = Enum.TextXAlignment.Left;
-                            TextSize = 14;
-                            ClearTextOnFocus = false;
-                            ZIndex = 11;
-                        });
-                    end
-                    
-                    items[ "scroll_frame" ] = library:create( "ScrollingFrame" , {
-                        Parent = items[ "outline" ];
-                        Size = cfg.searchable and dim2(1, -6, 1, -36) or dim2(1, -6, 1, -9);
-                        Position = cfg.searchable and dim2(0, 3, 0, 30) or dim2(0, 3, 0, 3);
-                        BackgroundTransparency = 1;
-                        BorderSizePixel = 0;
-                        ScrollBarThickness = 4;
-                        ScrollBarImageColor3 = rgb(86, 86, 87);
-                        CanvasSize = dim2(0, 0, 0, 0);
-                        AutomaticCanvasSize = Enum.AutomaticSize.Y;
-                        ScrollingDirection = Enum.ScrollingDirection.Y;
-                        ZIndex = 10;
-                    });
-                    
-                    library:create( "UIPadding" , {
-                        PaddingBottom = dim(0, 3);
-                        PaddingTop = dim(0, 0);
-                        PaddingLeft = dim(0, 0);
-                        PaddingRight = dim(0, 0);
-                        Parent = items[ "scroll_frame" ]
-                    });
-                    
-                    library:create( "UIListLayout" , {
-                        Parent = items[ "scroll_frame" ];
-                        Padding = dim(0, 5);
-                        SortOrder = Enum.SortOrder.LayoutOrder
-                    });
-                -- 
+                end
+                
+                items["scroll_frame"] = library:create("ScrollingFrame", {
+                    Parent = items["outline"];
+                    Size = cfg.searchable and dim2(1, -6, 1, -36) or dim2(1, -6, 1, -9);
+                    Position = cfg.searchable and dim2(0, 3, 0, 30) or dim2(0, 3, 0, 3);
+                    BackgroundTransparency = 1;
+                    BorderSizePixel = 0;
+                    ScrollBarThickness = 4;
+                    ScrollBarImageColor3 = rgb(86, 86, 87);
+                    CanvasSize = dim2(0, 0, 0, 0);
+                    AutomaticCanvasSize = Enum.AutomaticSize.Y;
+                    ScrollingDirection = Enum.ScrollingDirection.Y;
+                    ZIndex = 10;
+                });
+                
+                library:create("UIPadding", {
+                    PaddingBottom = dim(0, 3);
+                    PaddingTop = dim(0, 0);
+                    PaddingLeft = dim(0, 0);
+                    PaddingRight = dim(0, 0);
+                    Parent = items["scroll_frame"]
+                });
+                
+                library:create("UIListLayout", {
+                    Parent = items["scroll_frame"];
+                    Padding = dim(0, 5);
+                    SortOrder = Enum.SortOrder.LayoutOrder
+                });
             end 
 
             function cfg.render_option(text)
-                local button = library:create( "TextButton" , {
+                local button = library:create("TextButton", {
                     FontFace = fonts.small;
                     TextColor3 = rgb(72, 72, 73);
                     BorderColor3 = rgb(0, 0, 0);
                     Text = text;
-                    Parent = items[ "scroll_frame" ];
+                    Parent = items["scroll_frame"];
                     Name = "\0";
                     Size = dim2(1, -12, 0, 0);
                     BackgroundTransparency = 1;
@@ -2237,9 +2230,10 @@
                     TextSize = 14;
                     BackgroundColor3 = rgb(255, 255, 255);
                     ZIndex = 10;
-                }); library:apply_theme(button, "accent", "TextColor3");
+                }); 
+                library:apply_theme(button, "accent", "TextColor3");
                 
-                library:create( "UIPadding" , {
+                library:create("UIPadding", {
                     Parent = button;
                     PaddingTop = dim(0, 1);
                     PaddingRight = dim(0, 5);
@@ -2270,25 +2264,28 @@
                 
                 if option_count <= cfg.max_visible_items then
                     max_height = cfg.y_size + search_offset
-                    if items.scroll_frame then
-                        library:tween(items.scroll_frame, {ScrollBarThickness = 0}, Enum.EasingStyle.Quad, 0.2)
+                    if items["scroll_frame"] then
+                        library:tween(items["scroll_frame"], {ScrollBarThickness = 0}, Enum.EasingStyle.Quad, 0.2)
                     end
                 else
                     local item_height = 20
                     max_height = item_height * cfg.max_visible_items + 9 + search_offset
-                    if items.scroll_frame then
-                        library:tween(items.scroll_frame, {ScrollBarThickness = 4}, Enum.EasingStyle.Quad, 0.2)
+                    if items["scroll_frame"] then
+                        library:tween(items["scroll_frame"], {ScrollBarThickness = 4}, Enum.EasingStyle.Quad, 0.2)
                     end
                 end
                 
                 local a = bool and max_height or 0
-                library:tween(items[ "dropdown_holder "], {Size = dim_offset(items[ "dropdown "].AbsoluteSize.X, a)})
-                
-                items[ "dropdown_holder "].Parent = bool and library[ "items "] or library[ "other "]
-                items[ "dropdown_holder "].Position = dim_offset(
-                    items[ "dropdown "].AbsolutePosition.X, 
-                    items[ "dropdown "].AbsolutePosition.Y + items[ "dropdown "].AbsoluteSize.Y + 60
-                )
+                if items["dropdown_holder"] and items["dropdown"] then
+                    library:tween(items["dropdown_holder"], {Size = dim_offset(items["dropdown"].AbsoluteSize.X, a)})
+                    
+                    items["dropdown_holder"].Parent = bool and library["items"] or library["other"]
+                    items["dropdown_holder"].Position = dim_offset(
+                        items["dropdown"].AbsolutePosition.X, 
+                        items["dropdown"].AbsolutePosition.Y + items["dropdown"].AbsoluteSize.Y + 60
+                    )
+                    items["dropdown_holder"].Visible = bool
+                end
 
                 if bool then
                     library.open_popups[#library.open_popups + 1] = cfg
@@ -2301,11 +2298,11 @@
                     end
                 end
                 
-                if cfg.searchable and bool then
-                    items[ "search_box "].Text = " "
-                    cfg.filter_options(" ")
+                if cfg.searchable and bool and items["search_box"] then
+                    items["search_box"].Text = ""
+                    cfg.filter_options("")
                     task.wait(0.1)
-                    items[ "search_box "]:CaptureFocus()
+                    items["search_box"]:CaptureFocus()
                 end
                 
                 if not (self.sanity and library.current_open == self) then 
@@ -2327,19 +2324,18 @@
                     end
                 end
 
-                items[ "sub_text" ].Text = isTable and concat(selected, ", ") or selected[1] or ""
+                if items["sub_text"] then
+                    items["sub_text"].Text = isTable and concat(selected, ", ") or selected[1] or ""
+                end
                 flags[cfg.flag] = isTable and selected or selected[1]
-                
                 cfg.callback(flags[cfg.flag]) 
             end
             
             function cfg.refresh_options(list) 
                 cfg.y_size = 0
-
                 for _, option in cfg.option_instances do 
                     option:Destroy() 
                 end
-                
                 cfg.option_instances = {} 
 
                 for _, option in list do 
@@ -2350,41 +2346,37 @@
                     button.MouseButton1Down:Connect(function()
                         if cfg.multi then 
                             local selected_index = find(cfg.multi_items, button.Text)
-                            
                             if selected_index then 
                                 remove(cfg.multi_items, selected_index)
                             else
                                 insert(cfg.multi_items, button.Text)
                             end
-                            
-                            cfg.set(cfg.multi_items) 				
+                            cfg.set(cfg.multi_items)                
                         else 
                             cfg.set_visible(false)
                             cfg.open = false 
-                            
                             cfg.set(button.Text)
                         end
                     end)
                 end
             end
 
-            items[ "dropdown" ].MouseButton1Click:Connect(function()
+            items["dropdown"].MouseButton1Click:Connect(function()
                 cfg.open = not cfg.open 
-                
                 cfg.set_visible(cfg.open)
             end)
             
             if cfg.searchable then
-                items[ "search_box" ]:GetPropertyChangedSignal("Text"):Connect(function()
-                    cfg.search_text = items[ "search_box" ].Text
+                items["search_box"]:GetPropertyChangedSignal("Text"):Connect(function()
+                    cfg.search_text = items["search_box"].Text
                     cfg.filter_options(cfg.search_text)
                 end)
             end
 
             if cfg.seperator then 
-                library:create( "Frame" , {
+                library:create("Frame", {
                     AnchorPoint = vec2(0, 1);
-                    Parent = self.items[ "elements" ];
+                    Parent = self.items["elements"];
                     Position = dim2(0, 0, 1, 0);
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
@@ -2395,7 +2387,6 @@
 
             flags[cfg.flag] = {} 
             config_flags[cfg.flag] = cfg.set
-            
             cfg.refresh_options(cfg.options)
             cfg.set(cfg.default)
                 
