@@ -2133,7 +2133,7 @@
                 -- Element Holder
                     items[ "dropdown_holder" ] = library:create( "Frame" , {
                         BorderColor3 = rgb(0, 0, 0);
-                        Parent = library[ "items" ];
+                        Parent = library[ "other" ]; 
                         Name = "\0";
                         Visible = true;
                         BackgroundTransparency = 1;
@@ -2280,7 +2280,11 @@
                 local a = bool and max_height or 0
                 library:tween(items[ "dropdown_holder" ], {Size = dim_offset(items[ "dropdown" ].AbsoluteSize.X, a)})
 
-                items[ "dropdown_holder" ].Position = dim2(0, items[ "dropdown" ].AbsolutePosition.X, 0, items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 5)
+                items[ "dropdown_holder" ].Parent = bool and library[ "items" ] or library[ "other" ]
+                items[ "dropdown_holder" ].Position = dim_offset(
+                    items[ "dropdown" ].AbsolutePosition.X, 
+                    items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 5
+                )
 
                 if bool then
                     library.open_popups[#library.open_popups + 1] = cfg
