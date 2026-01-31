@@ -425,10 +425,10 @@
                 end
 
                 if function_set then 
-                    if type(v) == "table" and v["Transparency"] and v["Color"] then
+                    if type(v) == "table" and v["Color"] and v["Transparency"] then
                         local color_obj = type(v["Color"]) == "string" and hex(v["Color"]) or v["Color"]
                         function_set(color_obj, v["Transparency"])
-                    elseif type(v) == "table" and v["active"] then 
+                    elseif type(v) == "table" and v["mode"] then 
                         function_set(v)
                     else
                         function_set(v)
