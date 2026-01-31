@@ -2252,6 +2252,12 @@
             end
             
             function cfg.set_visible(bool)
+                if bool then
+                    for _, option in cfg.option_instances do
+                        option.Visible = true
+                    end
+                end
+
                 local option_count = 0
                 for _, option in cfg.option_instances do
                     if option.Visible then
