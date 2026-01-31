@@ -2270,11 +2270,15 @@
                 
                 if option_count <= cfg.max_visible_items then
                     max_height = cfg.y_size + search_offset
-                    library:tween(items[ "scroll_frame "], {ScrollBarThickness = 0}, Enum.EasingStyle.Quad, 0.2)
+                    if items.scroll_frame then
+                        library:tween(items.scroll_frame, {ScrollBarThickness = 0}, Enum.EasingStyle.Quad, 0.2)
+                    end
                 else
                     local item_height = 20
                     max_height = item_height * cfg.max_visible_items + 9 + search_offset
-                    library:tween(items[ "scroll_frame "], {ScrollBarThickness = 4}, Enum.EasingStyle.Quad, 0.2)
+                    if items.scroll_frame then
+                        library:tween(items.scroll_frame, {ScrollBarThickness = 4}, Enum.EasingStyle.Quad, 0.2)
+                    end
                 end
                 
                 local a = bool and max_height or 0
