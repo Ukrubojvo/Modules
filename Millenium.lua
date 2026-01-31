@@ -2283,7 +2283,7 @@
                 items[ "dropdown_holder" ].Parent = bool and library[ "items" ] or library[ "other" ]
                 items[ "dropdown_holder" ].Position = dim_offset(
                     items[ "dropdown" ].AbsolutePosition.X, 
-                    items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 5
+                    items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 25
                 )
 
                 if bool then
@@ -3062,7 +3062,7 @@
 
             local items = cfg.items; do 
                 items[ "textbox" ] = library:create( "TextButton" , {
-                    LayoutOrder = -1;
+                    --LayoutOrder = -1;
                     FontFace = fonts.font;
                     TextColor3 = rgb(0, 0, 0);
                     BorderColor3 = rgb(0, 0, 0);
