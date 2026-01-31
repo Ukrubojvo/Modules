@@ -78,7 +78,8 @@
         config_flags = {},
         connections = {},   
         notifications = {notifs = {}},
-        current_open; 
+        current_open = nil,
+        open_popups = {},
     }
 
     local themes = {
@@ -479,17 +480,13 @@
             end 
 
             if not new_path then
-                for _, instance in pairs(library["items"]:GetDescendants()) do
-                    if instance.Name == "colorpicker_holder" or 
-                    instance.Name == "dropdown_holder" or 
-                    (instance.Parent and instance.Parent.Name == "dropdown") then
-                        if instance.Name == "colorpicker_holder" or instance.Name == "dropdown_holder" then
-                            instance.Parent = library["other"]
-                        elseif instance.Parent.Name == "dropdown" then
-                            library:tween(instance.Parent, {Size = dim_offset(0, 0)})
-                        end
+                for _, popup in pairs(library.open_popups) do
+                    if popup and popup.set_visible then
+                        popup.set_visible(false)
+                        popup.open = false
                     end
                 end
+                library.open_popups = {}
             end
 
             if new_path ~= open_element then 
@@ -2262,6 +2259,17 @@
                 library:tween(items[ "dropdown_holder" ], {Size = dim_offset(items[ "dropdown" ].AbsoluteSize.X, a)})
 
                 items[ "dropdown_holder" ].Position = dim2(0, items[ "dropdown" ].AbsolutePosition.X, 0, items[ "dropdown" ].AbsolutePosition.Y + 20)
+
+                if bool then
+                    library.open_popups[#library.open_popups + 1] = cfg
+                else
+                    for i, popup in pairs(library.open_popups) do
+                        if popup == cfg then
+                            table.remove(library.open_popups, i)
+                            break
+                        end
+                    end
+                end
                 
                 if cfg.searchable and bool then
                     items[ "search_box" ].Text = ""
@@ -2855,6 +2863,17 @@
 
                 library:tween(items[ "colorpicker_fade" ], {BackgroundTransparency = 1}, Enum.EasingStyle.Quad, 0.4)
                 library:tween(items[ "colorpicker_holder" ], {Position = items[ "colorpicker_holder" ].Position + dim_offset(0, 20)}) -- p100 check
+
+                if bool then
+                    library.open_popups[#library.open_popups + 1] = cfg
+                else
+                    for i, popup in pairs(library.open_popups) do
+                        if popup == cfg then
+                            table.remove(library.open_popups, i)
+                            break
+                        end
+                    end
+                end
                 
                 if not (self.sanity and library.current_open == self and self.open) then 
                     library:close_element(cfg)
@@ -3412,6 +3431,17 @@
                 library:tween(items[ "dropdown" ], {Size = dim_offset(items[ "keybind_holder" ].AbsoluteSize.X, size)})
 
                 items[ "dropdown" ].Position = dim_offset(items[ "keybind_holder" ].AbsolutePosition.X, items[ "keybind_holder" ].AbsolutePosition.Y + items[ "keybind_holder" ].AbsoluteSize.Y + 60)
+            
+                if bool then
+                    library.open_popups[#library.open_popups + 1] = cfg
+                else
+                    for i, popup in pairs(library.open_popups) do
+                        if popup == cfg then
+                            table.remove(library.open_popups, i)
+                            break
+                        end
+                    end
+                end
             end
         
             items[ "keybind_holder" ].MouseButton1Down:Connect(function()
