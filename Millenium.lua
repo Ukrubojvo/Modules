@@ -512,6 +512,10 @@
             if library[ "other" ] then 
                 library[ "other" ]:Destroy()
             end 
+
+            if library[ "notifications_gui" ] then 
+                library[ "notifications_gui" ]:Destroy()
+            end
             
             for index, connection in library.connections do 
                 connection:Disconnect() 
@@ -550,6 +554,14 @@
                 ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
                 IgnoreGuiInset = true;
             }); 
+
+            library[ "notifications_gui" ] = library:create( "ScreenGui" , {
+                Parent = coregui;
+                Name = "\0";
+                Enabled = true;
+                ZIndexBehavior = Enum.ZIndexBehavior.Global;
+                IgnoreGuiInset = true;
+            });
 
             local items = cfg.items; do
                 items[ "main" ] = library:create( "Frame" , {
@@ -3855,7 +3867,7 @@
 
             local items = cfg.items; do 
                 items[ "notification" ] = library:create( "Frame" , {
-                    Parent = library[ "items" ];
+                    Parent = library[ "notifications_gui" ];
                     Size = dim2(0, 210, 0, 53);
                     Name = "\0";
                     BorderColor3 = rgb(0, 0, 0);
