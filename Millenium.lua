@@ -504,7 +504,17 @@
             return ins 
         end
 
-        function library:unload_menu() 
+        function library:unload_menu()
+            for flag, data in pairs(library.flags) do
+                local set_fn = library.config_flags[flag]
+                if set_fn and type(data) == "boolean" and data == true then
+                    set_fn(false)
+                elseif set_fn and type(data) == "table" and data.active == true then
+                    data.active = false
+                    set_fn(data)
+                end
+            end
+
             if library[ "items" ] then 
                 library[ "items" ]:Destroy()
             end
@@ -523,7 +533,7 @@
             end
             
             library = nil 
-        end 
+        end
     --
     
     -- Library element functions
