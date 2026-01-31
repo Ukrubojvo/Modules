@@ -2848,7 +2848,22 @@
                 end
 
                 if color then 
-                    h, s, v = color:ToHSV()
+                    if type(color) == "table" and not color.ToHSV then
+                        if color.h and color.s and color.v then
+                            h, s, v = color.h, color.s, color.v
+                        elseif color.R and color.G and color.B then
+                            color = Color3.new(color.R, color.G, color.B)
+                            h, s, v = color:ToHSV()
+                        else
+                            warn("Invalid color format:", color)
+                            return
+                        end
+                    elseif typeof(color) == "Color3" then
+                        h, s, v = color:ToHSV()
+                    else
+                        warn("Unexpected color type:", typeof(color), color)
+                        return
+                    end
                 end
                 
                 if alpha then 
