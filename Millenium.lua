@@ -2280,7 +2280,7 @@
                 local a = bool and max_height or 0
                 library:tween(items[ "dropdown_holder" ], {Size = dim_offset(items[ "dropdown" ].AbsoluteSize.X, a)})
 
-                items[ "dropdown_holder" ].Position = dim2(0, items[ "dropdown" ].AbsolutePosition.X, 0, items[ "dropdown" ].AbsolutePosition.Y + 20)
+                items[ "dropdown_holder" ].Position = dim2(0, items[ "dropdown" ].AbsolutePosition.X, 0, items[ "dropdown" ].AbsolutePosition.Y + items[ "dropdown" ].AbsoluteSize.Y + 5)
 
                 if bool then
                     library.open_popups[#library.open_popups + 1] = cfg
@@ -3120,7 +3120,8 @@
                     Name = "\0";
                     TextTruncate = Enum.TextTruncate.AtEnd;
                     BorderSizePixel = 0;
-                    PlaceholderColor3 = rgb(255, 255, 255);
+                    PlaceholderColor3 = rgb(86, 86, 87);
+                    PlaceholderText = cfg.placeholder;
                     CursorPosition = -1;
                     ClearTextOnFocus = false;
                     TextSize = 14;
