@@ -3646,7 +3646,18 @@
             function cfg.set_visible(bool)                 
                 library:tween(items[ "outline" ], {Size = dim_offset(bool and 240 or 0, 0)})
                 items[ "outline" ].Position = dim_offset(items[ "tick" ].AbsolutePosition.X, items[ "tick" ].AbsolutePosition.Y + 90)
-                library:close_element(cfg)
+                
+                if not bool then
+                    for _, popup in pairs(library.open_popups) do
+                        if popup and popup.set_visible and popup ~= cfg then
+                            popup.set_visible(false)
+                            popup.open = false
+                        end
+                    end
+                    library.open_popups = {}
+                end
+                
+                library:close_element(bool and cfg or nil)
             end
             
             items[ "tick" ].MouseButton1Click:Connect(function()
