@@ -203,6 +203,20 @@
             font = Font.new(SemiBold, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
         }
     end
+
+    local function print_table(tbl, indent)
+        indent = indent or 0
+        local prefix = string.rep("  ", indent)
+        for key, value in pairs(tbl) do
+            local key_str = tostring(key)
+            if type(value) == "table" then
+                print(prefix .. key_str .. ":")
+                print_table(value, indent + 1)
+            else
+                print(prefix .. key_str .. " = " .. tostring(value))
+            end
+        end
+    end
 --
 
 -- Library functions 
@@ -2855,6 +2869,7 @@
                             color = Color3.new(color.R, color.G, color.B)
                             h, s, v = color:ToHSV()
                         else
+                            print_table(color)
                             warn("Invalid color format:", color)
                             return
                         end
