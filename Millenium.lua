@@ -3804,7 +3804,15 @@
 		    
 		    local column = main:column({})
 		    local section = column:section({name = "Configs", size = 1, default = true, icon = "rbxassetid://139628202576511"})
-		    config_holder = section:list({options = {"Report", "This", "Error", "To", "Finobe"}, callback = function(option) end, flag = "config_name_list"}); library:update_config_list()
+            config_holder = section:list({
+                options = {"Report", "This", "Error", "To", "Finobe"}, 
+                callback = function(option) 
+                    local config_name = option:match("([^/]+)$")
+                    flags["config_name_text"] = config_name
+                    library.config_flags["config_name_text"](config_name)
+                end, 
+                flag = "config_name_list"
+            })
 		    
 		    local column = main:column({})
 		    local section = column:section({name = "Settings", side = "right", size = 1, default = true, icon = "rbxassetid://129380150574313"})
