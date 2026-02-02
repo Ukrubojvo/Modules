@@ -3813,6 +3813,8 @@
                 end, 
                 flag = "config_name_list"
             })
+
+            library:update_config_list()
 		    
 		    local column = main:column({})
 		    local section = column:section({name = "Settings", side = "right", size = 1, default = true, icon = "rbxassetid://129380150574313"})
