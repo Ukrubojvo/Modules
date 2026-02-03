@@ -236,6 +236,7 @@
             Frame.BorderSizePixel = 0
             Frame.BackgroundColor3 = rgb(255, 255, 255)
             Frame.Parent = frame
+            Frame.Modal = true
             Frame.BackgroundTransparency = 1 
             Frame.Text = ""
 
