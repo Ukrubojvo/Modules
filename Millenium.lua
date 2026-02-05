@@ -189,20 +189,22 @@
             return getcustomasset(Name .. ".font");
         end
         
-        local Medium = Register_Font("Medium", 200, "Normal", {
-            Id = "Medium.ttf",
-            Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/Inter_28pt-Medium.ttf"),
-        })
+        pcall(function()
+            local Medium = Register_Font("Medium", 200, "Normal", {
+                Id = "Medium.ttf",
+                Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/Inter_28pt-Medium.ttf"),
+            })
 
-        local SemiBold = Register_Font("SemiBold", 200, "Normal", {
-            Id = "SemiBold.ttf",
-            Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/Inter_28pt-SemiBold.ttf"),
-        })
+            local SemiBold = Register_Font("SemiBold", 200, "Normal", {
+                Id = "SemiBold.ttf",
+                Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/Inter_28pt-SemiBold.ttf"),
+            })
 
-        fonts = {
-            small = Font.new(Medium, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-            font = Font.new(SemiBold, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-        }
+            fonts = {
+                small = Font.new(Medium, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+                font = Font.new(SemiBold, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+            }
+        end)
     end
 
     local function print_table(tbl, indent)
