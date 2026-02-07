@@ -2324,19 +2324,60 @@
                 local isTable = type(value) == "table"
 
                 for _, option in cfg.option_instances do 
-                    if option.Text == value or (isTable and find(value, option.Text)) then 
-                        insert(selected, option.Text)
-                        cfg.multi_items = selected
-                        option.TextColor3 = themes.preset.accent
+                    option.TextColor3 = rgb(72, 72, 73)
+                end
+
+                if cfg.multi then
+                    if isTable then
+                        cfg.multi_items = {}
+                        for _, v in ipairs(value) do
+                            insert(cfg.multi_items, v)
+                        end
+                        
+                        for _, option in cfg.option_instances do 
+                            if find(cfg.multi_items, option.Text) then
+                                insert(selected, option.Text)
+                                option.TextColor3 = themes.preset.accent
+                            end
+                        end
                     else
-                        option.TextColor3 = rgb(72, 72, 73)
+                        local found = false
+                        for i, item in ipairs(cfg.multi_items) do
+                            if item == value then
+                                remove(cfg.multi_items, i)
+                                found = true
+                                break
+                            end
+                        end
+                        
+                        if not found then
+                            insert(cfg.multi_items, value)
+                        end
+                        
+                        for _, option in cfg.option_instances do 
+                            if find(cfg.multi_items, option.Text) then
+                                option.TextColor3 = themes.preset.accent
+                            end
+                        end
+                        
+                        for _, item in ipairs(cfg.multi_items) do
+                            insert(selected, item)
+                        end
+                    end
+                else
+                    for _, option in cfg.option_instances do 
+                        if option.Text == value then 
+                            insert(selected, option.Text)
+                            option.TextColor3 = themes.preset.accent
+                        end
                     end
                 end
 
                 if items["sub_text"] then
-                    items["sub_text"].Text = isTable and concat(selected, ", ") or selected[1] or ""
+                    items["sub_text"].Text = (#selected > 0) and concat(selected, ", ") or ""
                 end
-                flags[cfg.flag] = isTable and selected or selected[1]
+                
+                flags[cfg.flag] = cfg.multi and selected or (selected[1] or "")
                 cfg.callback(flags[cfg.flag]) 
             end
             
@@ -2354,13 +2395,7 @@
                     
                     button.MouseButton1Down:Connect(function()
                         if cfg.multi then 
-                            local selected_index = find(cfg.multi_items, button.Text)
-                            if selected_index then 
-                                remove(cfg.multi_items, selected_index)
-                            else
-                                insert(cfg.multi_items, button.Text)
-                            end
-                            cfg.set(cfg.multi_items)                
+                            cfg.set(button.Text)
                         else 
                             cfg.set_visible(false)
                             cfg.open = false 
@@ -2394,7 +2429,20 @@
                 });
             end 
 
-            flags[cfg.flag] = {} 
+            if cfg.multi then
+                local default_items = type(cfg.default) == "table" and cfg.default or {cfg.default}
+                cfg.multi_items = {}
+                for _, v in ipairs(default_items) do
+                    insert(cfg.multi_items, v)
+                end
+                flags[cfg.flag] = {}
+                for _, v in ipairs(cfg.multi_items) do
+                    insert(flags[cfg.flag], v)
+                end
+            else
+                flags[cfg.flag] = cfg.default
+            end
+
             config_flags[cfg.flag] = cfg.set
             cfg.refresh_options(cfg.options)
             cfg.set(cfg.default)
