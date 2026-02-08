@@ -431,7 +431,7 @@
         function library:load_config(config_json) 
             local success, config = pcall(function() return http_service:JSONDecode(config_json) end)
             if not success then
-                warn("콘픽 파일 형식이 잘못되었습니다.")
+                warn("The config file format is incorrect.")
                 return
             end
             
@@ -448,7 +448,7 @@
                         function_set(v)
                     end
                 else
-                    warn("불러오기 실패: [" .. tostring(flag) .. "] 에 대응하는 UI 업데이트 함수가 등록되지 않음.")
+                    warn("Failed to load: No UI update function registered for [" .. tostring(flag) .. "].")
                 end 
             end 
         end
