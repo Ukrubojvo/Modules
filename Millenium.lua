@@ -2381,6 +2381,24 @@
                     option.TextColor3 = rgb(72, 72, 73)
                 end
 
+                if value == nil then
+                    for _, option in cfg.option_instances do 
+                        option.TextColor3 = rgb(72, 72, 73)
+                    end
+                    
+                    if cfg.multi then
+                        cfg.multi_items = {}
+                    end
+                    
+                    if items["sub_text"] then
+                        items["sub_text"].Text = ""
+                    end
+                    
+                    flags[cfg.flag] = cfg.multi and {} or ""
+                    cfg.callback(flags[cfg.flag])
+                    return
+                end
+
                 if cfg.multi then
                     if isTable then
                         cfg.multi_items = {}
