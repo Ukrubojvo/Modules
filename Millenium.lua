@@ -403,18 +403,39 @@
             end
             
             for idx, file in listfiles(game_config_path) do
-                local name = file:gsub(game_config_path .. "\\", ""):gsub(".cfg", ""):gsub(game_config_path .. "/", "")
-                list[#list + 1] = name
+                local name = file:match("([^/\\]+)%.cfg$") or file:match("([^/\\]+)$")
+                if name and name ~= "" and not name:find("autoload") then
+                    list[#list + 1] = name
+                end
             end
 
             config_holder.refresh_options(list)
         end
 
-        function library:auto_load_config()
+        function library:get_auto_load_config()
             local auto_load_path = library.directory .. "/configs/" .. library.game_id .. "/autoload.txt"
             
             if isfile(auto_load_path) then
-                local config_name = readfile(auto_load_path)
+                return readfile(auto_load_path)
+            end
+            
+            return nil
+        end
+
+        function library:set_auto_load_config(config_name)
+            local auto_load_path = library.directory .. "/configs/" .. library.game_id .. "/autoload.txt"
+            
+            if config_name and config_name ~= "" then
+                writefile(auto_load_path, config_name)
+            elseif isfile(auto_load_path) then
+                delfile(auto_load_path)
+            end
+        end
+
+        function library:auto_load_config()
+            local config_name = library:get_auto_load_config()
+            
+            if config_name then
                 local config_path = library.directory .. "/configs/" .. library.game_id .. "/" .. config_name .. ".cfg"
                 
                 if isfile(config_path) then
@@ -424,17 +445,12 @@
                         name = "Auto Load", 
                         info = "Loaded config:\n" .. config_name
                     })
+                else
+                    notifications:create_notification({
+                        name = "Auto Load Error", 
+                        info = "Config not found:\n" .. config_name
+                    })
                 end
-            end
-        end
-
-        function library:set_auto_load(config_name)
-            local auto_load_path = library.directory .. "/configs/" .. library.game_id .. "/autoload.txt"
-            
-            if library.auto_load and config_name ~= "" then
-                writefile(auto_load_path, config_name)
-            elseif isfile(auto_load_path) then
-                delfile(auto_load_path)
             end
         end
 
@@ -3891,80 +3907,177 @@
             
             local column = main:column({})
             local section = column:section({name = "Configs", size = 1, default = true, icon = "rbxassetid://139628202576511"})
+            
             config_holder = section:list({
-                options = {"Report", "This", "Error", "To", "Finobe"}, 
+                options = {}, 
                 callback = function(option) 
-                    local config_name = option:match("([^/]+)$")
-                    flags["config_name_text"] = config_name
-                    library.config_flags["config_name_text"](config_name)
+                    flags["config_name_text"] = option
+                    library.config_flags["config_name_text"](option)
                 end, 
                 flag = "config_name_list"
+            })
+            
+            section:button({
+                name = "Refresh List", 
+                callback = function() 
+                    library:update_config_list()
+                    notifications:create_notification({
+                        name = "Configs", 
+                        info = "Config list refreshed"
+                    })
+                end
             })
 
             library:update_config_list()
             
-            local column = main:column({})
-            local section = column:section({name = "Settings", side = "right", size = 1, default = true, icon = "rbxassetid://129380150574313"})
+            local column2 = main:column({})
+            local section2 = column2:section({name = "Settings", size = 1, default = true, icon = "rbxassetid://129380150574313"})
             
-            section:label({name = "Game ID: " .. library.game_id, seperator = true})
+            section2:textbox({
+                name = "Config Name:", 
+                flag = "config_name_text",
+                placeholder = "Enter config name..."
+            })
             
-            section:textbox({name = "Config name:", flag = "config_name_text"})
-            
-            section:button({name = "Save", callback = function() 
-                local config_name = (flags["config_name_text"] ~= "" and flags["config_name_text"] or flags["config_name_list"]:match("([^/]+)$"))
+            section2:button({name = "Save Config", callback = function() 
+                local config_name = flags["config_name_text"]
+                
+                if not config_name or config_name == "" then
+                    notifications:create_notification({
+                        name = "Error", 
+                        info = "Please enter a config name"
+                    })
+                    return
+                end
+                
                 local save_path = library.directory .. "/configs/" .. library.game_id .. "/" .. config_name .. ".cfg"
                 
                 writefile(save_path, library:get_config()) 
                 library:update_config_list() 
-                notifications:create_notification({name = "Configs", info = "Saved config to:\n" .. config_name}) 
+                notifications:create_notification({
+                    name = "Configs", 
+                    info = "Saved config:\n" .. config_name
+                }) 
             end}) 
             
-            section:button({name = "Load", callback = function() 
-                local config_name = (flags["config_name_text"] ~= "" and flags["config_name_text"] or flags["config_name_list"]:match("([^/]+)$"))
+            section2:button({name = "Load Config", callback = function() 
+                local config_name = flags["config_name_text"]
+                
+                if not config_name or config_name == "" then
+                    notifications:create_notification({
+                        name = "Error", 
+                        info = "Please select or enter a config name"
+                    })
+                    return
+                end
+                
                 local load_path = library.directory .. "/configs/" .. library.game_id .. "/" .. config_name .. ".cfg"
                 
                 if isfile(load_path) then
                     library:load_config(readfile(load_path))  
-                    library:update_config_list() 
-                    notifications:create_notification({name = "Configs", info = "Loaded config:\n" .. config_name}) 
+                    notifications:create_notification({
+                        name = "Configs", 
+                        info = "Loaded config:\n" .. config_name
+                    }) 
                 else
-                    notifications:create_notification({name = "Error", info = "Config not found:\n" .. config_name}) 
+                    notifications:create_notification({
+                        name = "Error", 
+                        info = "Config not found:\n" .. config_name
+                    }) 
                 end
             end})
             
-            section:button({name = "Delete", callback = function() 
-                local config_name = (flags["config_name_text"] ~= "" and flags["config_name_text"] or flags["config_name_list"]:match("([^/]+)$"))
+            section2:button({name = "Delete Config", callback = function() 
+                local config_name = flags["config_name_text"]
+                
+                if not config_name or config_name == "" then
+                    notifications:create_notification({
+                        name = "Error", 
+                        info = "Please select or enter a config name"
+                    })
+                    return
+                end
+                
                 local delete_path = library.directory .. "/configs/" .. library.game_id .. "/" .. config_name .. ".cfg"
                 
                 if isfile(delete_path) then
-                    delfile(delete_path)  
+                    delfile(delete_path)
+                    
+                    if library:get_auto_load_config() == config_name then
+                        library:set_auto_load_config(nil)
+                    end
+                    
                     library:update_config_list() 
-                    notifications:create_notification({name = "Configs", info = "Deleted config:\n" .. config_name}) 
+                    notifications:create_notification({
+                        name = "Configs", 
+                        info = "Deleted config:\n" .. config_name
+                    }) 
                 else
-                    notifications:create_notification({name = "Error", info = "Config not found:\n" .. config_name}) 
+                    notifications:create_notification({
+                        name = "Error", 
+                        info = "Config not found:\n" .. config_name
+                    }) 
                 end
             end})
             
-            section:toggle({
-                name = "Auto Load Config",
-                default = library.auto_load,
-                flag = "auto_load_config",
-                callback = function(bool)
-                    library.auto_load = bool
-                    if bool then
-                        local config_name = flags["config_name_text"] ~= "" and flags["config_name_text"] or flags["config_name_list"]:match("([^/]+)$")
-                        library:set_auto_load(config_name)
-                        notifications:create_notification({name = "Auto Load", info = "Enabled for:\n" .. config_name})
-                    else
-                        library:set_auto_load("")
-                        notifications:create_notification({name = "Auto Load", info = "Disabled"})
-                    end
-                end,
+            section2:label({name = "", seperator = true})
+            
+            section2:button({name = "Set Auto Load", callback = function() 
+                local config_name = flags["config_name_text"]
+                
+                if not config_name or config_name == "" then
+                    notifications:create_notification({
+                        name = "Error", 
+                        info = "Please select a config"
+                    })
+                    return
+                end
+                
+                local config_path = library.directory .. "/configs/" .. library.game_id .. "/" .. config_name .. ".cfg"
+                
+                if isfile(config_path) then
+                    library:set_auto_load_config(config_name)
+                    notifications:create_notification({
+                        name = "Auto Load", 
+                        info = "Set auto load to:\n" .. config_name
+                    })
+                else
+                    notifications:create_notification({
+                        name = "Error", 
+                        info = "Config not found:\n" .. config_name
+                    })
+                end
+            end})
+
+            section2:button({name = "Clear Auto Load", callback = function() 
+                library:set_auto_load_config(nil)
+                notifications:create_notification({
+                    name = "Auto Load", 
+                    info = "Auto load cleared"
+                })
+            end})
+            
+            local current_autoload = library:get_auto_load_config()
+            section2:label({
+                name = "Current Auto Load: " .. (current_autoload or "None"),
                 seperator = true
             })
             
-            section:colorpicker({name = "Menu Accent", callback = function(color, alpha) library:update_theme("accent", color) end, color = themes.preset.accent})
-            section:keybind({name = "Menu Bind", callback = function(bool) window.toggle_menu(bool) end, default = true})
+            section2:colorpicker({
+                name = "Menu Accent", 
+                callback = function(color, alpha) 
+                    library:update_theme("accent", color) 
+                end, 
+                color = themes.preset.accent
+            })
+            
+            section2:keybind({
+                name = "Menu Bind", 
+                callback = function(bool) 
+                    window.toggle_menu(bool) 
+                end, 
+                default = true
+            })
         end
     --
 
