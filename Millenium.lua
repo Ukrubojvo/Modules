@@ -4005,6 +4005,9 @@
                     
                     if library:get_auto_load_config() == config_name then
                         library:set_auto_load_config(nil)
+                        if autoload_label then
+                            autoload_label.set_name("Current Auto Load: None")
+                        end
                     end
                     
                     library:update_config_list() 
@@ -4022,6 +4025,12 @@
             
             section2:label({name = "", seperator = true})
             
+            local current_autoload = library:get_auto_load_config()
+            local autoload_label = section2:label({
+                name = "Current Auto Load: " .. (current_autoload or "None"),
+                seperator = false
+            })
+            
             section2:button({name = "Set Auto Load", callback = function() 
                 local config_name = flags["config_name_text"]
                 
@@ -4037,6 +4046,7 @@
                 
                 if isfile(config_path) then
                     library:set_auto_load_config(config_name)
+                    autoload_label.set_name("Current Auto Load: " .. config_name)
                     notifications:create_notification({
                         name = "Auto Load", 
                         info = "Set auto load to:\n" .. config_name
@@ -4048,20 +4058,17 @@
                     })
                 end
             end})
-
+            
             section2:button({name = "Clear Auto Load", callback = function() 
                 library:set_auto_load_config(nil)
+                autoload_label.set_name("Current Auto Load: None")
                 notifications:create_notification({
                     name = "Auto Load", 
                     info = "Auto load cleared"
                 })
             end})
             
-            local current_autoload = library:get_auto_load_config()
-            section2:label({
-                name = "Current Auto Load: " .. (current_autoload or "None"),
-                seperator = true
-            })
+            section2:label({name = "", seperator = true})
             
             section2:colorpicker({
                 name = "Menu Accent", 
