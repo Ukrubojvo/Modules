@@ -4077,7 +4077,7 @@
                 end, 
                 color = themes.preset.accent
             })
-            
+            --[[
             section2:keybind({
                 name = "Menu Bind", 
                 callback = function(bool) 
@@ -4085,6 +4085,7 @@
                 end, 
                 default = true
             })
+            ]]
         end
     --
 
