@@ -412,6 +412,47 @@
             config_holder.refresh_options(list)
         end
 
+        function library:get_config()
+            local Config = {}
+            
+            for _, v in next, flags do
+                if type(v) == "table" and v.key then
+                    Config[_] = {active = v.active, mode = v.mode, key = tostring(v.key)}
+                elseif type(v) == "table" and v["Transparency"] and v["Color"] then
+                    Config[_] = {Transparency = v["Transparency"], Color = v["Color"]:ToHex()}
+                else
+                    Config[_] = v
+                end
+            end 
+            
+            return http_service:JSONEncode(Config)
+        end
+
+        function library:load_config(config_json) 
+            local success, config = pcall(function() return http_service:JSONDecode(config_json) end)
+            if not success then
+                warn("콘픽 파일 형식이 잘못되었습니다.")
+                return
+            end
+            
+            for flag, v in pairs(config) do 
+                if flag == "config_name_list" then continue end
+
+                local function_set = library.config_flags[flag]
+                
+                if function_set then 
+                    if type(v) == "table" and v["Color"] and v["Transparency"] then
+                        local color_obj = hex(v["Color"])
+                        function_set(color_obj, v["Transparency"])
+                    else
+                        function_set(v)
+                    end
+                else
+                    warn("불러오기 실패: [" .. tostring(flag) .. "] 에 대응하는 UI 업데이트 함수가 등록되지 않음.")
+                end 
+            end 
+        end
+
         function library:get_auto_load_config()
             local auto_load_path = library.directory .. "/configs/" .. library.game_id .. "/autoload.txt"
             
@@ -452,45 +493,6 @@
                     })
                 end
             end
-        end
-
-        function library:get_config()
-            local Config = {}
-            
-            for _, v in next, flags do
-                if type(v) == "table" and v.key then
-                    Config[_] = {active = v.active, mode = v.mode, key = tostring(v.key)}
-                elseif type(v) == "table" and v["Transparency"] and v["Color"] then
-                    Config[_] = {Transparency = v["Transparency"], Color = v["Color"]:ToHex()}
-                else
-                    Config[_] = v
-                end
-            end 
-            
-            return http_service:JSONEncode(Config)
-        end
-
-        function library:load_config(config_json) 
-            local config = http_service:JSONDecode(config_json)
-            
-            for _, v in config do 
-                local function_set = library.config_flags[_]
-                
-                if _ == "config_name_list" then 
-                    continue 
-                end
-
-                if function_set then 
-                    if type(v) == "table" and v["Color"] and v["Transparency"] then
-                        local color_obj = type(v["Color"]) == "string" and hex(v["Color"]) or v["Color"]
-                        function_set(color_obj, v["Transparency"])
-                    elseif type(v) == "table" and v["mode"] then 
-                        function_set(v)
-                    else
-                        function_set(v)
-                    end
-                end 
-            end 
         end
         
         function library:round(number, float) 
