@@ -441,7 +441,7 @@
                 local function_set = library.config_flags[flag]
                 
                 if function_set then 
-                    if type(v) == "table" and v["Color"] and v["Transparency"] then
+                    if type(v) == "table" and v["Color"] and v["Transparency"] ~= nil then
                         local color_obj = hex(v["Color"])
                         function_set(color_obj, v["Transparency"])
                     else
@@ -2525,7 +2525,7 @@
         function library:label(options)
             local cfg = {
                 enabled = options.enabled or nil,
-                name = options.name or "Toggle",
+                name = options.name or nil,
                 seperator = options.seperator or options.Seperator or false;
                 info = options.info or nil; 
 
@@ -2548,21 +2548,23 @@
                 BackgroundColor3 = rgb(255, 255, 255)
             });
             
-            items[ "name" ] = library:create( "TextLabel" , {
-                FontFace = fonts.small;
-                TextColor3 = rgb(245, 245, 245);
-                BorderColor3 = rgb(0, 0, 0);
-                Text = cfg.name;
-                Parent = items[ "label" ];
-                Name = "\0";
-                Size = dim2(1, 0, 0, 0);
-                BackgroundTransparency = 1;
-                TextXAlignment = Enum.TextXAlignment.Left;
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.XY;
-                TextSize = 16;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+            if cfg.name then
+                items[ "name" ] = library:create( "TextLabel" , {
+                    FontFace = fonts.small;
+                    TextColor3 = rgb(245, 245, 245);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Text = cfg.name;
+                    Parent = items[ "label" ];
+                    Name = "\0";
+                    Size = dim2(1, 0, 0, 0);
+                    BackgroundTransparency = 1;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    BorderSizePixel = 0;
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    TextSize = 16;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+            end
 
             if cfg.info then 
                 items[ "info" ] = library:create( "TextLabel" , {
@@ -2584,11 +2586,13 @@
                 });
             end 
             
-            library:create( "UIPadding" , {
-                Parent = items[ "name" ];
-                PaddingRight = dim(0, 5);
-                PaddingLeft = dim(0, 5)
-            });
+            if items[ "name" ] then
+                library:create( "UIPadding" , {
+                    Parent = items[ "name" ];
+                    PaddingRight = dim(0, 5);
+                    PaddingLeft = dim(0, 5)
+                });
+            end
             
             items[ "right_components" ] = library:create( "Frame" , {
                 Parent = items[ "label" ];
@@ -2611,7 +2615,25 @@
 
             function cfg.set_name(text)
                 cfg.name = text
-                items[ "name" ].Text = text
+                if items[ "name" ] then
+                    items[ "name" ].Text = text
+                else
+                    items[ "name" ] = library:create( "TextLabel" , {
+                        FontFace = fonts.small;
+                        TextColor3 = rgb(245, 245, 245);
+                        BorderColor3 = rgb(0, 0, 0);
+                        Text = text;
+                        Parent = items[ "label" ];
+                        Name = "\0";
+                        Size = dim2(1, 0, 0, 0);
+                        BackgroundTransparency = 1;
+                        TextXAlignment = Enum.TextXAlignment.Left;
+                        BorderSizePixel = 0;
+                        AutomaticSize = Enum.AutomaticSize.XY;
+                        TextSize = 16;
+                        BackgroundColor3 = rgb(255, 255, 255)
+                    });
+                end
             end
 
             function cfg.set_info(text)
@@ -2620,35 +2642,35 @@
                     items[ "info" ].Text = text
                 else
                     items[ "info" ] = library:create( "TextLabel" , {
-                    FontFace = fonts.small;
-                    TextColor3 = rgb(130, 130, 130);
-                    BorderColor3 = rgb(0, 0, 0);
-                    TextWrapped = true;
-                    Text = text;
-                    Parent = items[ "label" ];
-                    Name = "\0";
-                    Position = dim2(0, 5, 0, 17);
-                    Size = dim2(1, -10, 0, 0);
-                    BackgroundTransparency = 1;
-                    TextXAlignment = Enum.TextXAlignment.Left;
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                        FontFace = fonts.small;
+                        TextColor3 = rgb(130, 130, 130);
+                        BorderColor3 = rgb(0, 0, 0);
+                        TextWrapped = true;
+                        Text = text;
+                        Parent = items[ "label" ];
+                        Name = "\0";
+                        Position = dim2(0, 5, 0, 17);
+                        Size = dim2(1, -10, 0, 0);
+                        BackgroundTransparency = 1;
+                        TextXAlignment = Enum.TextXAlignment.Left;
+                        BorderSizePixel = 0;
+                        AutomaticSize = Enum.AutomaticSize.XY;
+                        TextSize = 16;
+                        BackgroundColor3 = rgb(255, 255, 255)
                     });
                 end
             end
 
             if cfg.seperator then 
-            library:create( "Frame" , {
-                AnchorPoint = vec2(0, 1);
-                Parent = self.items[ "elements" ];
-                Position = dim2(0, 0, 1, 0);
-                BorderColor3 = rgb(0, 0, 0);
-                Size = dim2(1, 1, 0, 1);
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(36, 36, 37)
-            });
+                library:create( "Frame" , {
+                    AnchorPoint = vec2(0, 1);
+                    Parent = self.items[ "elements" ];
+                    Position = dim2(0, 0, 1, 0);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Size = dim2(1, 1, 0, 1);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(36, 36, 37)
+                });
             end 
 
             return setmetatable(cfg, library)
@@ -2659,7 +2681,7 @@
                 name = options.name or "Color", 
                 flag = options.flag or library:next_flag(),
 
-                color = options.color or color(1, 1, 1), -- Default to white color if not provided
+                color = options.color or color(1, 1, 1),
                 alpha = options.alpha and 1 - options.alpha or 0,
                 
                 open = false, 
