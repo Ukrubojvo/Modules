@@ -1810,7 +1810,7 @@
                 intervals = options.interval or options.decimal or 1,
                 default = options.default or 10,
                 value = options.default or 10, 
-                seperator = options.seperator or options.Seperator or true;
+                seperator = options.seperator or options.Seperator or false;
 
                 dragging = false,
                 items = {}
@@ -2040,7 +2040,7 @@
                 ignore = options.ignore or false;
                 items = {};
                 y_size = 0;
-                seperator = options.seperator or options.Seperator or true;
+                seperator = options.seperator or options.Seperator or false;
                 search_text = "";
             }   
 
