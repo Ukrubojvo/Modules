@@ -315,47 +315,55 @@
 
         function library:draggify(frame)
             local dragging = false 
-            local drag_start = nil
-            local frame_start = nil
+            local start_size = frame.Position
+            local start 
+            local input_object = nil
 
             frame.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
-                    drag_start = vec2(input.Position.X, input.Position.Y - gui_offset)
-                    frame_start = vec2(frame.AbsolutePosition.X, frame.AbsolutePosition.Y)
+                    start = input.Position
+                    start_size = frame.Position
+                    input_object = input
                 end
             end)
 
             frame.InputEnded:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    dragging = false
-                    frame_start = vec2(frame.AbsolutePosition.X, frame.AbsolutePosition.Y)
+                    if input == input_object or input_object == nil then
+                        dragging = false
+                        input_object = nil
+                    end
                 end
             end)
 
             library:connection(uis.InputChanged, function(input, game_event) 
-                if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-                    local viewport_x = camera.ViewportSize.X
-                    local viewport_y = camera.ViewportSize.Y
-                    
-                    local half_width = frame.Size.X.Offset / 2
-                    local half_height = frame.Size.Y.Offset / 2
-                    
-                    local current_input = vec2(input.Position.X, input.Position.Y - gui_offset)
-                    local delta = current_input - drag_start
+                if dragging then
+                    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                        local viewport_x = camera.ViewportSize.X
+                        local viewport_y = camera.ViewportSize.Y
+                        
+                        local half_width = frame.Size.X.Offset / 2
+                        local half_height = frame.Size.Y.Offset / 2
 
-                    local new_x = frame_start.X + delta.X
-                    local new_y = frame_start.Y + delta.Y
+                        local current_position = dim2(
+                            0,
+                            clamp(
+                                start_size.X.Offset + (input.Position.X - start.X),
+                                half_width,
+                                viewport_x - half_width
+                            ),
+                            0,
+                            clamp(
+                                start_size.Y.Offset + (input.Position.Y - start.Y),
+                                half_height,
+                                viewport_y - half_height
+                            )
+                        )
 
-                    local current_position = dim2(
-                        0,
-                        clamp(new_x, half_width, viewport_x - half_width),
-                        0,
-                        clamp(new_y, half_height, viewport_y - half_height)
-                    )
-
-                    frame.Position = current_position
-                    library:close_element()
+                        frame.Position = current_position
+                        library:close_element()
+                    end
                 end
             end)
         end
