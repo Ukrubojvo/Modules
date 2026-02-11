@@ -3295,13 +3295,17 @@
                 });
             end 
             
-            function cfg.set(text) 
+            function cfg.set(text)
+                if type(text) == "table" then
+                    text = ""
+                elseif type(text) ~= "string" then
+                    text = tostring(text or "")
+                end
+                
                 flags[cfg.flag] = text
-
                 items[ "input" ].Text = text
-
                 cfg.callback(text)
-            end 
+            end
             
             items[ "input" ]:GetPropertyChangedSignal("Text"):Connect(function()
                 cfg.set(items[ "input" ].Text) 
