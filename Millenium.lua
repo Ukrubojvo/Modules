@@ -2033,7 +2033,7 @@
                 scrolling = options.scrolling or false;
                 max_visible_items = options.max_visible_items or 12;
                 searchable = options.searchable or false;
-                width = options.width or 130;
+                width = options.width or 100;
                 open = false;
                 option_instances = {};
                 multi_items = {};
