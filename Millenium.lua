@@ -635,7 +635,7 @@
                     Parent = library[ "items" ];
                     Size = cfg.size;
                     Name = "\0";
-                    --Position = dim2(0.5, 0, 0.5, 0);
+                    Position = dim2(0.5, -cfg.size.X.Offset / 2, 0.5, -cfg.size.Y.Offset / 2);
                     AnchorPoint = vec2(0.5, 0.5);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
