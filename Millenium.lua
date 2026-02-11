@@ -322,12 +322,7 @@
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
                     drag_start = vec2(input.Position.X, input.Position.Y - gui_offset)
-                    frame_start = frame.AbsolutePosition
-                    
-                    print("Drag Start:")
-                    print("Input Position:", input.Position.X, input.Position.Y)
-                    print("Frame AbsolutePosition:", frame_start.X, frame_start.Y)
-                    print("Frame Position Offset:", frame.Position.X.Offset, frame.Position.Y.Offset)
+                    frame_start = vec2(frame.AbsolutePosition.X, frame.AbsolutePosition.Y)
                 end
             end)
 
