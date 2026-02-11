@@ -366,34 +366,6 @@
                     end
                 end
             end)
-            
-            frame.TouchMoved:Connect(function(touch)
-                if dragging then
-                    local viewport_x = camera.ViewportSize.X
-                    local viewport_y = camera.ViewportSize.Y
-                    
-                    local half_width = frame.Size.X.Offset / 2
-                    local half_height = frame.Size.Y.Offset / 2
-
-                    local current_position = dim2(
-                        0,
-                        clamp(
-                            start_size.X.Offset + (touch.Position.X - start.X),
-                            half_width,
-                            viewport_x - half_width
-                        ),
-                        0,
-                        clamp(
-                            start_size.Y.Offset + (touch.Position.Y - start.Y),
-                            half_height,
-                            viewport_y - half_height
-                        )
-                    )
-
-                    frame.Position = current_position
-                    library:close_element()
-                end
-            end)
         end
 
         function library:convert(str)
