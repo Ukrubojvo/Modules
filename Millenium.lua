@@ -323,7 +323,7 @@
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
                     start = input.Position
-                    start_size = dim2(0, frame.AbsolutePosition.X, 0, frame.AbsolutePosition.Y)
+                    start_size = frame.AbsolutePosition
                     input_object = input
                 end
             end)
@@ -343,19 +343,19 @@
                         local viewport_x = camera.ViewportSize.X
                         local viewport_y = camera.ViewportSize.Y
                         
-                        local half_width = frame.Size.X.Offset / 2
-                        local half_height = frame.Size.Y.Offset / 2
+                        local half_width = frame.AbsoluteSize.X / 2
+                        local half_height = frame.AbsoluteSize.Y / 2
 
                         local current_position = dim2(
                             0,
                             clamp(
-                                start_size.X.Offset + (input.Position.X - start.X),
+                                start_size.X + (input.Position.X - start.X),
                                 half_width,
                                 viewport_x - half_width
                             ),
                             0,
                             clamp(
-                                start_size.Y.Offset + (input.Position.Y - start.Y),
+                                start_size.Y + (input.Position.Y - start.Y),
                                 half_height,
                                 viewport_y - half_height
                             )
