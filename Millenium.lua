@@ -317,42 +317,80 @@
             local dragging = false 
             local start_size = frame.Position
             local start 
+            local input_object = nil
 
             frame.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
                     start = input.Position
                     start_size = frame.Position
+                    input_object = input
                 end
             end)
 
             frame.InputEnded:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    dragging = false
+                    if input == input_object or input_object == nil then
+                        dragging = false
+                        input_object = nil
+                    end
                 end
             end)
 
             library:connection(uis.InputChanged, function(input, game_event) 
-                if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                if dragging then
+                    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                        local viewport_x = camera.ViewportSize.X
+                        local viewport_y = camera.ViewportSize.Y
+                        
+                        local half_width = frame.Size.X.Offset / 2
+                        local half_height = frame.Size.Y.Offset / 2
+
+                        local current_position = dim2(
+                            0,
+                            clamp(
+                                start_size.X.Offset + (input.Position.X - start.X),
+                                half_width,
+                                viewport_x - half_width
+                            ),
+                            0,
+                            clamp(
+                                start_size.Y.Offset + (input.Position.Y - start.Y),
+                                half_height,
+                                viewport_y - half_height
+                            )
+                        )
+
+                        frame.Position = current_position
+                        library:close_element()
+                    end
+                end
+            end)
+            
+            frame.TouchMoved:Connect(function(touch)
+                if dragging then
                     local viewport_x = camera.ViewportSize.X
                     local viewport_y = camera.ViewportSize.Y
+                    
+                    local half_width = frame.Size.X.Offset / 2
+                    local half_height = frame.Size.Y.Offset / 2
 
                     local current_position = dim2(
                         0,
                         clamp(
-                            start_size.X.Offset + (input.Position.X - start.X),
-                            0,
-                            viewport_x - frame.Size.X.Offset
+                            start_size.X.Offset + (touch.Position.X - start.X),
+                            half_width,
+                            viewport_x - half_width
                         ),
                         0,
-                        math.clamp(
-                            start_size.Y.Offset + (input.Position.Y - start.Y),
-                            0,
-                            viewport_y - frame.Size.Y.Offset
+                        clamp(
+                            start_size.Y.Offset + (touch.Position.Y - start.Y),
+                            half_height,
+                            viewport_y - half_height
                         )
                     )
 
-                    library:tween(frame, {Position = current_position}, Enum.EasingStyle.Linear, 0.05)
+                    frame.Position = current_position
                     library:close_element()
                 end
             end)
