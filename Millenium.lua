@@ -323,7 +323,7 @@
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
                     start = input.Position
-                    start_size = frame.Position
+                    start_size = dim2(0, frame.AbsolutePosition.X, 0, frame.AbsolutePosition.Y)
                     input_object = input
                 end
             end)
