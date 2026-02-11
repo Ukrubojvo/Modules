@@ -315,17 +315,18 @@
 
         function library:draggify(frame)
             local dragging = false 
-            local start_size = frame.Position
-            local start 
+            local drag_start = nil
+            local frame_start = nil
             local input_object = nil
 
             frame.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
-                    start = input.Position
-                    local center_x = frame.AbsolutePosition.X + frame.AbsoluteSize.X * frame.AnchorPoint.X
-                    local center_y = frame.AbsolutePosition.Y + frame.AbsoluteSize.Y * frame.AnchorPoint.Y
-                    start_size = dim2(0, center_x, 0, center_y)
+                    drag_start = vec2(input.Position.X, input.Position.Y)
+                    frame_start = vec2(
+                        frame.AbsolutePosition.X + frame.AbsoluteSize.X * frame.AnchorPoint.X,
+                        frame.AbsolutePosition.Y + frame.AbsoluteSize.Y * frame.AnchorPoint.Y
+                    )
                     input_object = input
                 end
             end)
@@ -345,21 +346,23 @@
                         local viewport_x = camera.ViewportSize.X
                         local viewport_y = camera.ViewportSize.Y
                         
-                        local half_width = frame.AbsoluteSize.X / 2
-                        local half_height = frame.AbsoluteSize.Y / 2
+                        local delta = vec2(input.Position.X - drag_start.X, input.Position.Y - drag_start.Y)
+                        
+                        local half_width = frame.AbsoluteSize.X * frame.AnchorPoint.X
+                        local half_height = frame.AbsoluteSize.Y * frame.AnchorPoint.Y
 
                         local current_position = dim2(
                             0,
                             clamp(
-                                start_size.X.Offset + (input.Position.X - start.X),
+                                frame_start.X + delta.X,
                                 half_width,
-                                viewport_x - half_width
+                                viewport_x - (frame.AbsoluteSize.X - half_width)
                             ),
                             0,
                             clamp(
-                                start_size.Y.Offset + (input.Position.Y - start.Y),
+                                frame_start.Y + delta.Y,
                                 half_height,
-                                viewport_y - half_height
+                                viewport_y - (frame.AbsoluteSize.Y - half_height)
                             )
                         )
 
