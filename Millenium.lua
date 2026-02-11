@@ -315,14 +315,14 @@
 
         function library:draggify(frame)
             local dragging = false 
-            local start_size = frame.Position
-            local start 
+            local drag_start = nil
+            local frame_start = nil
 
             frame.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
-                    start = vec2(input.Position.X, input.Position.Y - gui_offset)
-                    start_size = frame.Position
+                    drag_start = vec2(input.Position.X, input.Position.Y - gui_offset)
+                    frame_start = vec2(frame.Position.X.Offset, frame.Position.Y.Offset)
                 end
             end)
 
@@ -340,18 +340,19 @@
                     local half_width = frame.Size.X.Offset / 2
                     local half_height = frame.Size.Y.Offset / 2
                     
-                    local current_pos = vec2(input.Position.X, input.Position.Y - gui_offset)
+                    local current_input = vec2(input.Position.X, input.Position.Y - gui_offset)
+                    local delta = current_input - drag_start
 
                     local current_position = dim2(
                         0,
                         clamp(
-                            start_size.X.Offset + (current_pos.X - start.X),
+                            frame_start.X + delta.X,
                             half_width,
                             viewport_x - half_width
                         ),
                         0,
                         clamp(
-                            start_size.Y.Offset + (current_pos.Y - start.Y),
+                            frame_start.Y + delta.Y,
                             half_height,
                             viewport_y - half_height
                         )
