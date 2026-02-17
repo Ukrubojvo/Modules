@@ -306,6 +306,7 @@ xpcall(function()
             Btn.BackgroundColor3 = Color
             Btn.BorderSizePixel = 0
             Btn.Text = ""
+            Btn.Modal = true
             Btn.AutoButtonColor = false
             Btn.Parent = ButtonsFrame
             
