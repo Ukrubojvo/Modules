@@ -3858,7 +3858,7 @@
             function cfg.set_visible(bool)
                 if bool then
                     items["outline"].Position = dim_offset(
-                        items["tick"].AbsolutePosition.X - 240 + items["tick"].AbsoluteSize.X,
+                        items["tick"].AbsolutePosition.X - 290 + items["tick"].AbsoluteSize.X,
                         items["tick"].AbsolutePosition.Y + items["tick"].AbsoluteSize.Y + 5
                     )
                 end
