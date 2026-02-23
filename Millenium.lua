@@ -567,10 +567,14 @@
         end
 
         function library:create(instance, options)
-            local ins = Instance.new(instance) 
+            local ok, ins = pcall(Instance.new, instance)
+            if not ok then
+                warn("Instance.new 실패:", instance)
+                return nil
+            end
             
-            for prop, value in options do 
-                ins[prop] = value
+            for prop, value in options do
+                pcall(function() ins[prop] = value end)
             end
             
             return ins 
@@ -3762,6 +3766,26 @@
                 items = {}; 
                 sanity = true; -- made this for my own sanity.
             }
+
+            if not self.items["right_components"] then
+                self.items["right_components"] = library:create("Frame", {
+                    Parent = self.items[next(self.items)];
+                    Name = "\0";
+                    Position = dim2(1, 0, 0, 0);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Size = dim2(0, 0, 1, 0);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                })
+                
+                library:create("UIListLayout", {
+                    FillDirection = Enum.FillDirection.Horizontal;
+                    HorizontalAlignment = Enum.HorizontalAlignment.Right;
+                    Parent = self.items["right_components"];
+                    Padding = dim(0, 7);
+                    SortOrder = Enum.SortOrder.LayoutOrder
+                })
+            end
 
             local items = cfg.items; do 
                 items["outline"] = library:create("Frame", {
