@@ -35,7 +35,7 @@ xpcall(function()
         queue_on_teleport([[
             pcall(function()
                 autoload = true;
-                local GitRequests = loadstring(game:HttpGet("https://raw.githubusercontent.com/itchino/Roblox-GitRequests/refs/heads/main/GitRequests.lua"))()
+                local GitRequests = loadstring(game:HttpGet('https://raw.githubusercontent.com/Ukrubojvo/Roblox-GitRequests/refs/heads/main/GitRequests.lua'))()
                 local Repo = GitRequests.Repo("Ukrubojvo", "Modules")
                 loadstring(Repo:getFileContent("StaffDetector.lua"))()
             end)
@@ -402,7 +402,7 @@ xpcall(function()
     local function showNotification(name, statusText, statusColor, staffNames, friendStaffNames, totalCount, duration)
         local old = coregui:FindFirstChild("ModAlertNotification")
         if old then old:Destroy() end
-        
+
         local screengui = Instance.new("ScreenGui")
         screengui.Name = name
         screengui.ResetOnSpawn = false
@@ -410,24 +410,38 @@ xpcall(function()
         screengui.IgnoreGuiInset = true
         screengui.Parent = coregui
 
-        local frame = Instance.new("Frame")
-        frame.AnchorPoint = Vector2.new(1, 1)
-        frame.Position = UDim2.new(1, -20, 1, -20)
-        frame.Size = UDim2.new(0, 260, 0, 80)
-        frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        frame.BorderSizePixel = 0
-        frame.BackgroundTransparency = 0.15
-        frame.Parent = screengui
+        local canvas = Instance.new("CanvasGroup")
+        canvas.AnchorPoint = Vector2.new(1, 1)
+        canvas.Position = UDim2.new(1, -20, 1, -20)
+        canvas.Size = UDim2.new(0, 280, 0, 0)
+        canvas.AutomaticSize = Enum.AutomaticSize.Y
+        canvas.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        canvas.BorderSizePixel = 0
+        canvas.BackgroundTransparency = 0.15
+        canvas.Parent = screengui
 
         local uicorner = Instance.new("UICorner")
         uicorner.CornerRadius = UDim.new(0, 10)
-        uicorner.Parent = frame
+        uicorner.Parent = canvas
 
         local stroke = Instance.new("UIStroke")
         stroke.Thickness = 1
         stroke.Color = Color3.fromRGB(90, 90, 90)
         stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-        stroke.Parent = frame
+        stroke.Parent = canvas
+
+        local listLayout = Instance.new("UIListLayout")
+        listLayout.FillDirection = Enum.FillDirection.Vertical
+        listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        listLayout.Padding = UDim.new(0, 4)
+        listLayout.Parent = canvas
+
+        local padding = Instance.new("UIPadding")
+        padding.PaddingTop = UDim.new(0, 10)
+        padding.PaddingBottom = UDim.new(0, 12)
+        padding.PaddingLeft = UDim.new(0, 15)
+        padding.PaddingRight = UDim.new(0, 15)
+        padding.Parent = canvas
 
         local title = Instance.new("TextLabel")
         title.Text = "Moderator Detector"
@@ -435,9 +449,10 @@ xpcall(function()
         title.TextSize = 18
         title.TextColor3 = Color3.fromRGB(236, 236, 236)
         title.BackgroundTransparency = 1
-        title.Position = UDim2.new(0, 15, 0, 10)
-        title.Size = UDim2.new(1, -30, 0, 20)
-        title.Parent = frame
+        title.Size = UDim2.new(1, 0, 0, 24)
+        title.TextXAlignment = Enum.TextXAlignment.Left
+        title.LayoutOrder = 1
+        title.Parent = canvas
 
         local staffDisplay = #staffNames > 0 and table.concat(staffNames, ", ") or "None"
         local friendDisplay = #friendStaffNames > 0 and table.concat(friendStaffNames, ", ") or "None"
@@ -449,10 +464,13 @@ xpcall(function()
         desc.TextSize = 14
         desc.TextColor3 = statusColor
         desc.BackgroundTransparency = 1
-        desc.Position = UDim2.new(0, 15, 0, 32)
-        desc.Size = UDim2.new(1, -30, 1, -45)
+        desc.Size = UDim2.new(1, 0, 0, 0)
+        desc.AutomaticSize = Enum.AutomaticSize.Y 
         desc.TextWrapped = true
-        desc.Parent = frame
+        desc.TextXAlignment = Enum.TextXAlignment.Left
+        desc.TextYAlignment = Enum.TextYAlignment.Top
+        desc.LayoutOrder = 2
+        desc.Parent = canvas
 
         task.delay(duration, function()
             pcall(function()
