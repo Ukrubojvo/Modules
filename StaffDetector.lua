@@ -198,65 +198,65 @@ xpcall(function()
         Gui.IgnoreGuiInset = true
         Gui.DisplayOrder = 2147483647
         Gui.Parent = coregui
-        
+
         local Backdrop = Instance.new("Frame")
         Backdrop.Size = UDim2.new(1, 0, 1, 0)
-        Backdrop.BackgroundColor3 = Color3.new(0, 0, 0)
+        Backdrop.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         Backdrop.BackgroundTransparency = 1
         Backdrop.BorderSizePixel = 0
         Backdrop.Parent = Gui
-        
-        local Container = Instance.new("Frame")
-        Container.Size = UDim2.new(0, 0, 0, 0)
+
+        local Container = Instance.new("CanvasGroup")
+        Container.Size = UDim2.new(0, 380, 0, 0)
+        Container.AutomaticSize = Enum.AutomaticSize.Y
         Container.Position = UDim2.new(0.5, 0, 0.5, 0)
         Container.AnchorPoint = Vector2.new(0.5, 0.5)
         Container.BackgroundColor3 = Color3.fromRGB(18, 18, 20)
         Container.BorderSizePixel = 0
-        Container.ClipsDescendants = false
+        Container.GroupTransparency = 1
         Container.Parent = Gui
-        
-        Instance.new("UICorner", Container).CornerRadius = UDim.new(0, 16)
-        
-        local GradientFrame = Instance.new("Frame")
-        GradientFrame.Size = UDim2.new(1, 0, 0, 120)
-        GradientFrame.BackgroundTransparency = 0.3
-        GradientFrame.BorderSizePixel = 0
-        GradientFrame.Parent = Container
-        
-        Instance.new("UICorner", GradientFrame).CornerRadius = UDim.new(0, 16)
-        
-        local Gradient = Instance.new("UIGradient")
-        Gradient.Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 40, 90)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(18, 18, 20))
-        })
-        Gradient.Rotation = 90
-        Gradient.Parent = GradientFrame
-        
+
+        Instance.new("UICorner", Container).CornerRadius = UDim.new(0, 12)
+
         local Border = Instance.new("UIStroke")
-        Border.Color = Color3.fromRGB(100, 80, 140)
-        Border.Thickness = 1.5
-        Border.Transparency = 0.4
+        Border.Color = Color3.fromRGB(45, 45, 50)
+        Border.Thickness = 1
+        Border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         Border.Parent = Container
-        
+
+        local Padding = Instance.new("UIPadding")
+        Padding.PaddingTop = UDim.new(0, 24)
+        Padding.PaddingBottom = UDim.new(0, 20)
+        Padding.PaddingLeft = UDim.new(0, 24)
+        Padding.PaddingRight = UDim.new(0, 24)
+        Padding.Parent = Container
+
+        local Layout = Instance.new("UIListLayout")
+        Layout.FillDirection = Enum.FillDirection.Vertical
+        Layout.SortOrder = Enum.SortOrder.LayoutOrder
+        Layout.Padding = UDim.new(0, 14)
+        Layout.Parent = Container
+
+        local Header = Instance.new("Frame")
+        Header.Size = UDim2.new(1, 0, 0, 32)
+        Header.BackgroundTransparency = 1
+        Header.LayoutOrder = 1
+        Header.Parent = Container
+
+        local HeaderLayout = Instance.new("UIListLayout")
+        HeaderLayout.FillDirection = Enum.FillDirection.Horizontal
+        HeaderLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+        HeaderLayout.Padding = UDim.new(0, 10)
+        HeaderLayout.Parent = Header
+
         local IconFrame = Instance.new("Frame")
-        IconFrame.Size = UDim2.new(0, 52, 0, 52)
-        IconFrame.Position = UDim2.new(0.5, 0, 0, 30)
-        IconFrame.AnchorPoint = Vector2.new(0.5, 0)
-        IconFrame.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+        IconFrame.Size = UDim2.new(0, 32, 0, 32)
+        IconFrame.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
         IconFrame.BorderSizePixel = 0
-        IconFrame.Parent = Container
-        
-        Instance.new("UICorner", IconFrame).CornerRadius = UDim.new(1, 0)
-        
-        local IconGradient = Instance.new("UIGradient")
-        IconGradient.Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 120, 120)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 80, 80))
-        })
-        IconGradient.Rotation = 45
-        IconGradient.Parent = IconFrame
-        
+        IconFrame.Parent = Header
+
+        Instance.new("UICorner", IconFrame).CornerRadius = UDim.new(0, 8)
+
         local IconImage = Instance.new("ImageLabel")
         IconImage.Size = UDim2.new(0.6, 0, 0.6, 0)
         IconImage.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -265,137 +265,112 @@ xpcall(function()
         IconImage.Image = "rbxassetid://18797417802"
         IconImage.ImageColor3 = Color3.new(1, 1, 1)
         IconImage.Parent = IconFrame
-        
+
         local Title = Instance.new("TextLabel")
-        Title.Size = UDim2.new(1, -60, 0, 30)
-        Title.Position = UDim2.new(0, 30, 0, 90)
+        Title.Size = UDim2.new(1, -42, 1, 0)
         Title.BackgroundTransparency = 1
         Title.Text = "Moderator Detected"
-        Title.TextColor3 = Color3.new(1, 1, 1)
-        Title.TextSize = 20
+        Title.TextColor3 = Color3.fromRGB(240, 240, 240)
+        Title.TextSize = 17
         Title.Font = Enum.Font.GothamBold
-        Title.Parent = Container
-        
+        Title.TextXAlignment = Enum.TextXAlignment.Left
+        Title.Parent = Header
+
+        local Divider = Instance.new("Frame")
+        Divider.Size = UDim2.new(1, 0, 0, 1)
+        Divider.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+        Divider.BorderSizePixel = 0
+        Divider.LayoutOrder = 2
+        Divider.Parent = Container
+
         local Message = Instance.new("TextLabel")
-        Message.Size = UDim2.new(1, -60, 0, 40)
-        Message.Position = UDim2.new(0, 30, 0, 120)
+        Message.Size = UDim2.new(1, 0, 0, 0)
+        Message.AutomaticSize = Enum.AutomaticSize.Y
         Message.BackgroundTransparency = 1
         Message.Text = MessageText
         Message.RichText = true
-        Message.TextColor3 = Color3.fromRGB(200, 200, 210)
-        Message.TextSize = 15
+        Message.TextColor3 = Color3.fromRGB(160, 160, 170)
+        Message.TextSize = 14
         Message.Font = Enum.Font.Gotham
         Message.TextWrapped = true
+        Message.TextXAlignment = Enum.TextXAlignment.Left
+        Message.TextYAlignment = Enum.TextYAlignment.Top
+        Message.LayoutOrder = 3
         Message.Parent = Container
-        
+
         local ButtonsFrame = Instance.new("Frame")
-        ButtonsFrame.Size = UDim2.new(1, -60, 0, 48)
-        ButtonsFrame.Position = UDim2.new(0, 30, 1, -68)
+        ButtonsFrame.Size = UDim2.new(1, 0, 0, 42)
         ButtonsFrame.BackgroundTransparency = 1
+        ButtonsFrame.LayoutOrder = 4
         ButtonsFrame.Parent = Container
-        
+
         local ButtonLayout = Instance.new("UIListLayout")
         ButtonLayout.FillDirection = Enum.FillDirection.Horizontal
-        ButtonLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-        ButtonLayout.Padding = UDim.new(0, 16)
+        ButtonLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+        ButtonLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+        ButtonLayout.Padding = UDim.new(0, 10)
         ButtonLayout.Parent = ButtonsFrame
-        
-        local function CreateButton(Text, Color)
+
+        local function CreateButton(Text, BgColor, TextColor)
             local Btn = Instance.new("TextButton")
-            Btn.Size = UDim2.new(0, 150, 1, 0)
-            Btn.BackgroundColor3 = Color
+            Btn.Size = UDim2.new(0, 130, 0, 38)
+            Btn.BackgroundColor3 = BgColor
             Btn.BorderSizePixel = 0
-            Btn.Text = ""
+            Btn.Text = Text
+            Btn.TextColor3 = TextColor
+            Btn.TextSize = 14
+            Btn.Font = Enum.Font.GothamSemibold
             Btn.Modal = true
             Btn.AutoButtonColor = false
             Btn.Parent = ButtonsFrame
-            
-            Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 12)
-            
-            local BtnGradient = Instance.new("UIGradient")
-            BtnGradient.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(
-                    math.max(Color.R * 255 - 20, 0),
-                    math.max(Color.G * 255 - 20, 0),
-                    math.max(Color.B * 255 - 20, 0)
-                ))
-            })
-            BtnGradient.Rotation = 90
-            BtnGradient.Parent = Btn
-            
-            local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, 0, 1, 0)
-            Label.BackgroundTransparency = 1
-            Label.Text = Text
-            Label.TextColor3 = Color3.new(1, 1, 1)
-            Label.TextSize = 16
-            Label.Font = Enum.Font.GothamBold
-            Label.Parent = Btn
-            
+
+            Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
+
             Btn.MouseEnter:Connect(function()
-                TS:Create(Btn, TI(0.2), {
+                TS:Create(Btn, TI(0.15), {
                     BackgroundColor3 = Color3.fromRGB(
-                        math.min(Color.R * 255 + 15, 255),
-                        math.min(Color.G * 255 + 15, 255),
-                        math.min(Color.B * 255 + 15, 255)
-                    ),
-                    Size = UDim2.new(0, 155, 1, 2)
+                        math.min(BgColor.R * 255 + 12, 255),
+                        math.min(BgColor.G * 255 + 12, 255),
+                        math.min(BgColor.B * 255 + 12, 255)
+                    )
                 }):Play()
             end)
-            
+
             Btn.MouseLeave:Connect(function()
-                TS:Create(Btn, TI(0.2), {
-                    BackgroundColor3 = Color,
-                    Size = UDim2.new(0, 150, 1, 0)
-                }):Play()
+                TS:Create(Btn, TI(0.15), { BackgroundColor3 = BgColor }):Play()
             end)
-            
-            return Btn, Label
+
+            return Btn
         end
-        
-        local YesBtn, YesLabel = CreateButton("Leave Server", Color3.fromRGB(220, 80, 80))
-        local NoBtn, NoLabel = CreateButton("Stay Here", Color3.fromRGB(80, 140, 220))
-        
+
+        local NoBtn  = CreateButton("Stay Here",    Color3.fromRGB(38, 38, 42),  Color3.fromRGB(180, 180, 190))
+        local YesBtn = CreateButton("Leave Server", Color3.fromRGB(185, 50, 50), Color3.fromRGB(255, 255, 255))
+
+        local NoBorder = Instance.new("UIStroke")
+        NoBorder.Color = Color3.fromRGB(55, 55, 62)
+        NoBorder.Thickness = 1
+        NoBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        NoBorder.Parent = NoBtn
+
         local function FadeOut(callback)
-            local function FadeAllDescendants(obj)
-                for _, v in ipairs(obj:GetDescendants()) do
-                    if v:IsA("GuiObject") then
-                        if v.BackgroundTransparency < 1 then
-                            TS:Create(v, TI(0.3), {BackgroundTransparency = 1}):Play()
-                        end
-                    end
-                    if v:IsA("TextLabel") or v:IsA("TextButton") then
-                        TS:Create(v, TI(0.3), {TextTransparency = 1}):Play()
-                    end
-                    if v:IsA("ImageLabel") or v:IsA("ImageButton") then
-                        TS:Create(v, TI(0.3), {ImageTransparency = 1}):Play()
-                    end
-                    if v:IsA("UIStroke") then
-                        TS:Create(v, TI(0.3), {Transparency = 1}):Play()
-                    end
-                end
-            end
-            
-            FadeAllDescendants(Gui)
-            task.wait(0.3)
+            TS:Create(Backdrop, TI(0.25), { BackgroundTransparency = 1 }):Play()
+            TS:Create(Container, TI(0.25), { GroupTransparency = 1 }):Play()
+            task.wait(0.25)
             if callback then callback() end
             Gui:Destroy()
         end
-        
+
         YesBtn.MouseButton1Click:Connect(function() FadeOut(OnYes) end)
         NoBtn.MouseButton1Click:Connect(function()
-            if notify_sound then
-                notify_sound:Stop()
-            end
-            FadeOut(OnNo) 
+            if notify_sound then notify_sound:Stop() end
+            FadeOut(OnNo)
         end)
-        
-        TS:Create(Backdrop, TI(0.3), {BackgroundTransparency = 0.6}):Play()
-        TS:Create(Container, TI(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 420, 0, 240)
+
+        TS:Create(Backdrop, TI(0.3), { BackgroundTransparency = 0.55 }):Play()
+        TS:Create(Container, TI(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+            GroupTransparency = 0
         }):Play()
-        
+
         return Gui
     end
 
