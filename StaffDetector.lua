@@ -27,7 +27,7 @@ xpcall(function()
     end
 
     task.spawn(function()
-        if not isfile("AntiLua/staffdetect.mp3") then writefile("AntiLua/staffdetect.mp3", tostring(game:HttpGetAsync("https://github.com/Ukrubojvo/api/raw/main/ap-disconnect-boeing.mp3"))) end
+        if not isfile("AntiLua/staffdetect.mp3") then writefile("AntiLua/staffdetect.mp3", tostring(game:HttpGetAsync("https://github.com/Ukrubojvo/api/raw/main/alert.mp3"))) end
         notify_sound = Instance.new("Sound", workspace)
         notify_sound.SoundId = getcustomasset("AntiLua/staffdetect.mp3")
         notify_sound.Volume = 5
