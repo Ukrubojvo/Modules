@@ -1,5 +1,6 @@
 --Rivals Only!!
 --원작자(.antilua.)의 허락 없이 2차 창작물을 제작하거나 배포하는 것을 금지합니다.
+--The creation or distribution of derivative works without the permission of the original author (.antilua.) is prohibited.
 --Original Script는 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"))() 입니다!
 
 xpcall(function()
