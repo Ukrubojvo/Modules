@@ -1,4 +1,6 @@
 --Rivals Only!!
+--원작자(.antilua.)의 허락 없이 2차 창작물을 제작하거나 배포하는 것을 금지합니다.
+--Original Script는 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"))() 입니다!
 
 xpcall(function()
     if (game.GameId ~= 6035872082) then return end
@@ -8,6 +10,8 @@ xpcall(function()
     local cloneref = cloneref or function(obj)
         return obj
     end
+
+    if autoload == nil then autoload=true end
 
     local players = cloneref(game:GetService("Players"))
     local coregui = gethui() or cloneref(game:GetService("CoreGui"))
