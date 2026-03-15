@@ -1,4 +1,7 @@
 --Rivals Only!!
+--원작자(.antilua.)의 허락 없이 2차 창작물을 제작하거나 배포하는 것을 금지합니다.
+--The creation or distribution of derivative works without the permission of the original author (.antilua.) is prohibited.
+--Original Script는 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Ukrubojvo/Modules/main/StaffDetector.lua"))() 입니다!
 
 xpcall(function()
     if (game.GameId ~= 6035872082) then return end
@@ -8,6 +11,8 @@ xpcall(function()
     local cloneref = cloneref or function(obj)
         return obj
     end
+
+    if autoload == nil then autoload=true end
 
     local players = cloneref(game:GetService("Players"))
     local coregui = gethui() or cloneref(game:GetService("CoreGui"))
@@ -23,7 +28,7 @@ xpcall(function()
     end
 
     task.spawn(function()
-        if not isfile("AntiLua/staffdetect.mp3") then writefile("AntiLua/staffdetect.mp3", tostring(game:HttpGetAsync("https://github.com/Ukrubojvo/api/raw/main/ap-disconnect-boeing.mp3"))) end
+        if not isfile("AntiLua/staffdetect.mp3") then writefile("AntiLua/staffdetect.mp3", tostring(game:HttpGetAsync("https://github.com/Ukrubojvo/api/raw/main/alert.mp3"))) end
         notify_sound = Instance.new("Sound", workspace)
         notify_sound.SoundId = getcustomasset("AntiLua/staffdetect.mp3")
         notify_sound.Volume = 5
