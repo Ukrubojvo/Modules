@@ -23,6 +23,7 @@ xpcall(function()
     local lp = players.LocalPlayer
     local groupId = game.CreatorId
     local notify_sound = nil
+    local CACHE_FILE = "AntiLua/staffcache_" .. groupId .. ".json"
 
     if game.CreatorType ~= Enum.CreatorType.Group then
         return
@@ -56,6 +57,31 @@ xpcall(function()
             return data
         end
         return nil
+    end
+
+    local function loadCachedStaffIds()
+        local cached = {}
+        pcall(function()
+            if isfile(CACHE_FILE) then
+                local data = http:JSONDecode(readfile(CACHE_FILE))
+                if type(data) == "table" then
+                    for _, uid in ipairs(data) do
+                        cached[uid] = true
+                    end
+                end
+            end
+        end)
+        return cached
+    end
+
+    local function saveCachedStaffIds(ids)
+        pcall(function()
+            local list = {}
+            for uid, _ in pairs(ids) do
+                table.insert(list, uid)
+            end
+            writefile(CACHE_FILE, http:JSONEncode(list))
+        end)
     end
 
     local function extractStaffRoleIds(groupId)
@@ -107,14 +133,7 @@ xpcall(function()
 
 
     local staffRoleIds = extractStaffRoleIds(groupId)
-    local staffUserIds = {}
-
-    for _, roleId in ipairs(staffRoleIds) do
-        local users = fetchUsersInRole(groupId, roleId)
-        for uid, _ in pairs(users) do
-            staffUserIds[uid] = true
-        end
-    end
+    local staffUserIds = loadCachedStaffIds()
 
     --[[
     local function GetUserRoleInGroup(userId, groupId)
@@ -463,68 +482,61 @@ xpcall(function()
         end)
     end
 
-    local staffNames, totalCount = getStaffInfo()
-    local friendStaffNames = getFriendStaffInfo()
+    local function runDetection()
+        local staffNames, totalCount = getStaffInfo()
+        local friendStaffNames = getFriendStaffInfo()
 
-    local hasServerStaff = #staffNames > 0
-    local hasFriendStaff = #friendStaffNames > 0
-    local hasDetected = (hasServerStaff or hasFriendStaff)
+        local hasServerStaff = #staffNames > 0
+        local hasFriendStaff = #friendStaffNames > 0
+        local hasDetected = (hasServerStaff or hasFriendStaff)
 
-    local statusText = ""
-    if hasServerStaff then statusText = "Moderators detected!" end
-    if hasFriendStaff then statusText = statusText .. (hasServerStaff and "\n" or "") .. "Staff friends detected!" end
-    if statusText == "" then statusText = "No staff detected." end
+        local statusText = ""
+        if hasServerStaff then statusText = "Moderators detected!" end
+        if hasFriendStaff then statusText = statusText .. (hasServerStaff and "\n" or "") .. "Staff friends detected!" end
+        if statusText == "" then statusText = "No staff detected." end
 
-    local statusColor = (hasServerStaff or hasFriendStaff) and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
-    local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
+        local statusColor = hasDetected and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
+        local duration = hasDetected and 60 or 10
 
-    if hasDetected then
-        if autoleave then
-            lp:Kick('Leaved!')
-            return
-        end
-        task.spawn(function()
-            if notify_sound then
-                notify_sound:Play()
+        if hasDetected then
+            if autoleave then
+                lp:Kick('Leaved!')
+                return true
             end
-        end)
-        createLeaveUI([[There is a <font color="#FF8888">moderator</font> in this server.<br/>Do you want to leave?]], function()
-            game:GetService("TeleportService"):Teleport(17625359962)
-        end, nil)
+            task.spawn(function()
+                if notify_sound then notify_sound:Play() end
+            end)
+            createLeaveUI([[There is a <font color="#FF8888">moderator</font> in this server.<br/>Do you want to leave?]], function()
+                game:GetService("TeleportService"):Teleport(17625359962)
+            end, nil)
+        end
+
+        showNotification("ModAlertNotification", statusText, statusColor, staffNames, friendStaffNames, totalCount, duration)
+        return hasDetected
     end
 
-    showNotification("ModAlertNotification", statusText, statusColor, staffNames, friendStaffNames, totalCount, duration)
+    runDetection()
+
+    task.spawn(function()
+        for _, roleId in ipairs(staffRoleIds) do
+            local users = fetchUsersInRole(groupId, roleId)
+            for uid, _ in pairs(users) do
+                staffUserIds[uid] = true
+            end
+        end
+        saveCachedStaffIds(staffUserIds)
+        if not coregui:FindFirstChild("ModAlertLeaveUI") then
+            runDetection()
+        end
+    end)
 
     players.PlayerAdded:Connect(function(plr)
         plr.CharacterAdded:Wait()
         local role = GetRole(plr, game.CreatorId)
         if isStaffRoleName(role) then
-            local staffNames, totalCount = getStaffInfo()
-            local friendStaffNames = getFriendStaffInfo()
-            local hasServerStaff = #staffNames > 0
-            local hasFriendStaff = #friendStaffNames > 0
-            local hasDetected = (hasServerStaff or hasFriendStaff)
-            local statusText = ""
-            if hasServerStaff then statusText = "Moderators detected!" end
-            if hasFriendStaff then statusText = statusText .. (hasServerStaff and "\n" or "") .. "Staff friends detected!" end
-            if statusText == "" then statusText = "No staff detected." end
-            local statusColor = (hasServerStaff or hasFriendStaff) and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
-            local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
-            if hasDetected then
-                if autoleave then
-                    lp:Kick('Leaved!')
-                    return
-                end
-                task.spawn(function()
-                    if notify_sound then
-                        notify_sound:Play()
-                    end
-                end)
-                createLeaveUI([[There is a <font color="#FF8888">moderator</font> in this server.<br/>Do you want to leave?]], function()
-                    game:GetService("TeleportService"):Teleport(17625359962)
-                end, nil)
+            if not coregui:FindFirstChild("ModAlertLeaveUI") then
+                runDetection()
             end
-            showNotification("ModAlertNotification", statusText, statusColor, staffNames, friendStaffNames, totalCount, duration)
         end
     end)
 end, function() end)
