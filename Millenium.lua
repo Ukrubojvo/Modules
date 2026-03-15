@@ -3754,11 +3754,36 @@
                 }); library:apply_theme(items[ "name" ], "accent", "BackgroundColor3");                            
             end 
 
-            items[ "button" ].MouseButton1Click:Connect(function()
-                cfg.callback()
+            local confirming = false
+            local confirm_thread = nil
+            local original_name = cfg.name
+            local confirm_text = options.confirm_text or "Confirm?"
 
-                items[ "name" ].TextColor3 = themes.preset.accent 
-                library:tween(items[ "name" ], {TextColor3 = rgb(245, 245, 245)})
+            items[ "button" ].MouseButton1Click:Connect(function()
+                if options.confirm then
+                    if confirming then
+                        confirming = false
+                        if confirm_thread then task.cancel(confirm_thread) confirm_thread = nil end
+                        items[ "name" ].Text = original_name
+                        items[ "name" ].TextColor3 = rgb(245, 245, 245)
+                        cfg.callback()
+                    else
+                        confirming = true
+                        items[ "name" ].Text = confirm_text
+                        items[ "name" ].TextColor3 = rgb(255, 60, 60)
+
+                        confirm_thread = task.delay(1, function()
+                            confirming = false
+                            confirm_thread = nil
+                            items[ "name" ].Text = original_name
+                            items[ "name" ].TextColor3 = rgb(245, 245, 245)
+                        end)
+                    end
+                else
+                    cfg.callback()
+                    items[ "name" ].TextColor3 = themes.preset.accent
+                    library:tween(items[ "name" ], {TextColor3 = rgb(245, 245, 245)})
+                end
             end)
             
             return setmetatable(cfg, library)
@@ -4029,7 +4054,7 @@
                 placeholder = "Enter config name..."
             })
             
-            section2:button({name = "Save Config", callback = function() 
+            section2:button({name = "Save Config", confirm = true, confirm_text = "Save changes?", callback = function() 
                 local config_name = flags["config_name_text"]
                 
                 if not config_name or config_name == "" then
@@ -4050,7 +4075,7 @@
                 }) 
             end}) 
             
-            section2:button({name = "Load Config", callback = function() 
+            section2:button({name = "Load Config", confirm = true, confirm_text = "Load now?", callback = function() 
                 local config_name = flags["config_name_text"]
                 
                 if not config_name or config_name == "" then
