@@ -13,6 +13,7 @@ xpcall(function()
     end
 
     if autoload == nil then autoload=true end
+    if autoleave == nil then autoleave=true end
 
     local players = cloneref(game:GetService("Players"))
     local coregui = gethui() or cloneref(game:GetService("CoreGui"))
@@ -40,6 +41,7 @@ xpcall(function()
         queue_on_teleport([[
             pcall(function()
                 autoload = true;
+                autoleave = ]]..autoleave..[[
                 local GitRequests = loadstring(game:HttpGet('https://raw.githubusercontent.com/Ukrubojvo/Roblox-GitRequests/refs/heads/main/GitRequests.lua'))()
                 local Repo = GitRequests.Repo("Ukrubojvo", "Modules")
                 loadstring(Repo:getFileContent("StaffDetector.lua"))()
@@ -477,6 +479,10 @@ xpcall(function()
     local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
 
     if hasDetected then
+        if autoleave then
+            lp:Kick('Leaved!')
+            return
+        end
         task.spawn(function()
             if notify_sound then
                 notify_sound:Play()
@@ -505,6 +511,10 @@ xpcall(function()
             local statusColor = (hasServerStaff or hasFriendStaff) and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
             local duration = (hasServerStaff or hasFriendStaff) and 60 or 10
             if hasDetected then
+                if autoleave then
+                    lp:Kick('Leaved!')
+                    return
+                end
                 task.spawn(function()
                     if notify_sound then
                         notify_sound:Play()
