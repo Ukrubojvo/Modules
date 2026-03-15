@@ -4054,7 +4054,7 @@
                 placeholder = "Enter config name..."
             })
             
-            section2:button({name = "Save Config", confirm = true, confirm_text = "Save changes?", callback = function() 
+            section2:button({name = "Save Config", confirm = true, callback = function() 
                 local config_name = flags["config_name_text"]
                 
                 if not config_name or config_name == "" then
@@ -4075,7 +4075,7 @@
                 }) 
             end}) 
             
-            section2:button({name = "Load Config", confirm = true, confirm_text = "Load now?", callback = function() 
+            section2:button({name = "Load Config", confirm = true, callback = function() 
                 local config_name = flags["config_name_text"]
                 
                 if not config_name or config_name == "" then
