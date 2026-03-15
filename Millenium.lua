@@ -3757,7 +3757,7 @@
             local confirming = false
             local confirm_thread = nil
             local original_name = cfg.name
-            local confirm_text = options.confirm_text or "Confirm?"
+            local confirm_text = options.confirm_text or "Are You Sure?"
 
             items[ "button" ].MouseButton1Click:Connect(function()
                 if options.confirm then
