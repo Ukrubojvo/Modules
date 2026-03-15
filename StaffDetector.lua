@@ -39,15 +39,27 @@ xpcall(function()
 
     pcall(function()
         if not autoload then return end
-        queue_on_teleport([[
-            pcall(function()
-                autoload = true;
-                autoleave = ]]..autoleave..[[
-                local GitRequests = loadstring(game:HttpGet('https://raw.githubusercontent.com/Ukrubojvo/Roblox-GitRequests/refs/heads/main/GitRequests.lua'))()
-                local Repo = GitRequests.Repo("Ukrubojvo", "Modules")
-                loadstring(Repo:getFileContent("StaffDetector.lua"))()
-            end)
-        ]])
+        if autoleave then
+            queue_on_teleport([[
+                pcall(function()
+                    autoload = true;
+                    autoleave = true;
+                    local GitRequests = loadstring(game:HttpGet('https://raw.githubusercontent.com/Ukrubojvo/Roblox-GitRequests/refs/heads/main/GitRequests.lua'))()
+                    local Repo = GitRequests.Repo("Ukrubojvo", "Modules")
+                    loadstring(Repo:getFileContent("StaffDetector.lua"))()
+                end)
+            ]])
+        else
+            queue_on_teleport([[
+                pcall(function()
+                    autoload = true;
+                    autoleave = false;
+                    local GitRequests = loadstring(game:HttpGet('https://raw.githubusercontent.com/Ukrubojvo/Roblox-GitRequests/refs/heads/main/GitRequests.lua'))()
+                    local Repo = GitRequests.Repo("Ukrubojvo", "Modules")
+                    loadstring(Repo:getFileContent("StaffDetector.lua"))()
+                end)
+            ]])
+        end
     end)
 
     local function fetchURL(url)
