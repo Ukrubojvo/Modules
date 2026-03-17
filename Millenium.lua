@@ -657,7 +657,7 @@
                     AnchorPoint = vec2(0.5, 0.5);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(11, 11, 15)  -- NEW: --bg
+                    BackgroundColor3 = rgb(13, 13, 17)  -- NEW: --bg
                 });
                 
                 library:create( "UICorner" , {
@@ -678,7 +678,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 196, 1, -25);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(11, 11, 15)  -- NEW: --bg
+                    BackgroundColor3 = rgb(13, 13, 17)  -- NEW: --bg
                 });
                 
                 library:create( "Frame" , {
@@ -784,7 +784,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -196, 1, -81);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(11, 11, 15);  -- NEW: --bg
+                    BackgroundColor3 = rgb(13, 13, 17);  -- NEW: --bg
                     ZIndex = 2;
                 });                
 
@@ -4240,7 +4240,7 @@
                     BackgroundTransparency = 1;
                     AnchorPoint = vec2(1, 0);
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = rgb(11, 11, 15)  -- NEW: --bg
+                    BackgroundColor3 = rgb(13, 13, 17)  -- NEW: --bg
                 });
                 
                 library:create( "UIStroke" , {
