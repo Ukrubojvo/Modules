@@ -87,7 +87,7 @@
 
     local themes = {
         preset = {
-            accent = rgb(155, 150, 219),  -- ← 보라색(Accent) 그대로 유지
+            accent = rgb(151, 151, 151),
         }, 
 
         utility = {
