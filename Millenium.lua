@@ -4105,7 +4105,7 @@
                     if library:get_auto_load_config() == config_name then
                         library:set_auto_load_config(nil)
                         if autoload_label then
-                            autoload_label.set_name("Current Auto Load: None")
+                            autoload_label.set_name("Auto Load: None")
                         end
                     end
                     
@@ -4126,7 +4126,7 @@
             
             local current_autoload = library:get_auto_load_config()
             local autoload_label = section2:label({
-                name = "Current Auto Load: " .. (current_autoload or "None"),
+                name = "Auto Load: " .. (current_autoload or "None"),
                 seperator = false
             })
             
@@ -4145,7 +4145,7 @@
                 
                 if isfile(config_path) then
                     library:set_auto_load_config(config_name)
-                    autoload_label.set_name("Current Auto Load: " .. config_name)
+                    autoload_label.set_name("Auto Load: " .. config_name)
                     notifications:create_notification({
                         name = "Auto Load", 
                         info = "Set auto load to:\n" .. config_name
@@ -4160,7 +4160,7 @@
             
             section2:button({name = "Clear Auto Load", callback = function() 
                 library:set_auto_load_config(nil)
-                autoload_label.set_name("Current Auto Load: None")
+                autoload_label.set_name("Auto Load: None")
                 notifications:create_notification({
                     name = "Auto Load", 
                     info = "Auto load cleared"
