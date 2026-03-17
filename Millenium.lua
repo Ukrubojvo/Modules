@@ -1383,7 +1383,7 @@
                     Size = dim2(1, -2, 0, 35);
                     BorderSizePixel = 0;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(20, 20, 26)  -- NEW: --lift
                 });
                 
                 library:create( "UIStroke" , {
@@ -1436,7 +1436,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(20, 20, 26)  -- NEW: --lift
                 });
                 
                 if cfg.fading_toggle then 
