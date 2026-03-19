@@ -433,7 +433,7 @@
                 if type(v) == "table" and v.key then
                     Config[_] = {active = v.active, mode = v.mode, key = tostring(v.key)}
                 elseif type(v) == "table" and v["Transparency"] and v["Color"] then
-                    Config[_] = {Transparency = v["Transparency"], Color = v["Color"]:ToHex()}
+                    -- skip (컬러 저장 안함) Config[_] = {Transparency = v["Transparency"], Color = v["Color"]:ToHex()}
                 else
                     Config[_] = v
                 end
@@ -4166,7 +4166,7 @@
                     info = "Auto load cleared"
                 })
             end})
-            
+            --[[
             section2:label({name = "", seperator = true})
             
             section2:colorpicker({
@@ -4176,6 +4176,7 @@
                 end, 
                 color = themes.preset.accent
             })
+            ]]
         end
     --
 
