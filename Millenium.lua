@@ -1316,6 +1316,12 @@
                     Parent = items[ "outline" ];
                     CornerRadius = dim(0, 7)
                 });
+
+                library:create( "UIStroke" , {
+                    Color = rgb(58, 58, 58);  -- NEW: --stroke
+                    Parent = items[ "outline" ];
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                });
                 
                 items[ "inline" ] = library:create( "Frame" , {
                     Parent = items[ "outline" ];
@@ -1383,6 +1389,7 @@
                     Size = dim2(1, -2, 0, 35);
                     BorderSizePixel = 0;
                     TextSize = 16;
+                    BackgroundTransparency = 1;
                     BackgroundColor3 = rgb(20, 20, 26)  -- NEW: --lift
                 });
                 
@@ -1436,6 +1443,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 1;
                     BackgroundColor3 = rgb(20, 20, 26)  -- NEW: --lift
                 });
                 
