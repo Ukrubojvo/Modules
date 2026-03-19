@@ -1318,7 +1318,7 @@
                 });
 
                 library:create( "UIStroke" , {
-                    Color = rgb(58, 58, 58);  -- NEW: --stroke
+                    Color = rgb(27, 27, 27);  -- NEW: --stroke
                     Parent = items[ "outline" ];
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 });
