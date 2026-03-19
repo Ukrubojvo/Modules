@@ -4038,7 +4038,7 @@
             library:update_config_list()
             
             local column2 = main:column({})
-            local section2 = column2:section({name = "Settings", size = 1, default = true, icon = "rbxassetid://129380150574313"})
+            local section2 = column2:section({name = "Settings", size = 1, default = true, icon = "rbxassetid://101463883805422"})
             
             section2:textbox({
                 name = "Config Name:", 
