@@ -1821,7 +1821,7 @@
                 -- value settings
                 min = options.min or options.minimum or 0,
                 max = options.max or options.maximum or 100,
-                intervals = options.interval or options.decimal or 1,
+                interval = options.interval or options.decimal or 1,
                 default = options.default or 10,
                 value = options.default or 10, 
                 seperator = options.seperator or options.Seperator or false;
@@ -1989,7 +1989,7 @@
             end 
 
             function cfg.set(value)
-                cfg.value = clamp(library:round(value, cfg.intervals), cfg.min, cfg.max)
+                cfg.value = clamp(library:round(value, cfg.interval), cfg.min, cfg.max)
 
                 library:tween(items[ "fill" ], {Size = dim2((cfg.value - cfg.min) / (cfg.max - cfg.min), cfg.value == cfg.min and 0 or -4, 0, 2)}, Enum.EasingStyle.Linear, 0.05)
                 items[ "value" ].Text = tostring(cfg.value) .. cfg.suffix
