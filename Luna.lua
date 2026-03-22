@@ -3748,10 +3748,6 @@ function Luna:CreateWindow(WindowSettings)
 
 			end
 
-				return BindV
-
-			end
-
 			-- Dynamic Input
 			function Section:CreateInput(InputSettings, Flag)
 				TabPage.Position = UDim2.new(0,0,0,28)
@@ -7007,7 +7003,6 @@ function Luna:CreateWindow(WindowSettings)
 		Window.State = true
 		LunaUI.MobileSupport.Visible = false
 	end)
-
 	return Window
 end
 
