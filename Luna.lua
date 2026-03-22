@@ -3573,7 +3573,8 @@ function Luna:CreateWindow(WindowSettings)
 
 					modeButtons[modeName] = btn
 
-					btn.MouseButton1Click:Connect(function()
+					btn.InputBegan:Connect(function(input)
+						if input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
 						CurrentMode = modeName
 						BindSettings.Mode = modeName
 						BindSettings.HoldToInteract = (modeName == "Hold")
@@ -5300,7 +5301,8 @@ function Luna:CreateWindow(WindowSettings)
 
 				modeButtons[modeName] = btn
 
-				btn.MouseButton1Click:Connect(function()
+				btn.InputBegan:Connect(function(input)
+					if input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
 					CurrentMode = modeName
 					BindSettings.Mode = modeName
 					BindSettings.HoldToInteract = (modeName == "Hold")
