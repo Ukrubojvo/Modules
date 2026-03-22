@@ -3477,9 +3477,13 @@ function Luna:CreateWindow(WindowSettings)
 				Bind.BindFrame.BindBox.Text = BindSettings.CurrentBind
 				Bind.BindFrame.BindBox.Size = UDim2.new(0, Bind.BindFrame.BindBox.TextBounds.X + 20, 0, 42)
 
+				local justFocused = false
 				Bind.BindFrame.BindBox.Focused:Connect(function()
+					justFocused = true
 					CheckingForKey = true
 					Bind.BindFrame.BindBox.Text = ""
+					task.wait()
+					justFocused = false
 				end)
 
 				Bind.BindFrame.BindBox.FocusLost:Connect(function()
@@ -3624,7 +3628,7 @@ function Luna:CreateWindow(WindowSettings)
 
 				UserInputService.InputBegan:Connect(function(input, processed)
 
-					if CheckingForKey then
+					if CheckingForKey and not justFocused then
 						-- Detect mouse buttons as bindable inputs
 						local newBindName = nil
 						if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -5200,9 +5204,13 @@ function Luna:CreateWindow(WindowSettings)
 			Bind.BindFrame.BindBox.Text = BindSettings.CurrentBind
 			Bind.BindFrame.BindBox.Size = UDim2.new(0, Bind.BindFrame.BindBox.TextBounds.X + 20, 0, 42)
 
+			local justFocused = false
 			Bind.BindFrame.BindBox.Focused:Connect(function()
+				justFocused = true
 				CheckingForKey = true
 				Bind.BindFrame.BindBox.Text = ""
+				task.wait()
+				justFocused = false
 			end)
 
 			Bind.BindFrame.BindBox.FocusLost:Connect(function()
@@ -5526,9 +5534,13 @@ function Luna:CreateWindow(WindowSettings)
 			Bind.BindFrame.BindBox.Text = BindSettings.CurrentBind
 			Bind.BindFrame.BindBox.Size = UDim2.new(0, Bind.BindFrame.BindBox.TextBounds.X + 16, 0, 42)
 
+			local justFocused = false
 			Bind.BindFrame.BindBox.Focused:Connect(function()
+				justFocused = true
 				CheckingForKey = true
 				Bind.BindFrame.BindBox.Text = ""
+				task.wait()
+				justFocused = false
 			end)
 
 			Bind.BindFrame.BindBox.FocusLost:Connect(function()
@@ -5547,7 +5559,7 @@ function Luna:CreateWindow(WindowSettings)
 			end)
 			UserInputService.InputBegan:Connect(function(input, processed)
 
-				if CheckingForKey then
+				if CheckingForKey and not justFocused then
 					if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Enum.KeyCode.K then
 						local SplitMessage = string.split(tostring(input.KeyCode), ".")
 						local NewKeyNoEnum = SplitMessage[3]
