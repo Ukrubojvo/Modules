@@ -3402,7 +3402,8 @@ function Luna:CreateWindow(WindowSettings)
 					Name = "Bind",
 					Description = nil,
 					CurrentBind = "Q",
-					HoldToInteract = false, -- setting this makes the Bind in toggle mode
+					HoldToInteract = false,
+					Mode = nil, -- "Toggle", "Hold", "Always" (overrides HoldToInteract if set)
 					Callback = function(Bind)
 						-- The function that takes place when the Bind is pressed
 						-- The variable (Bind) is a boolean for whether the Bind is being held or not (HoldToInteract needs to be true) or whether the Bind is currently active
@@ -3410,9 +3411,33 @@ function Luna:CreateWindow(WindowSettings)
 
 					OnChangedCallback = function(Bind)
 						-- The function that takes place when the binded key changes
-						-- The variable (Bind) is a Enum.KeyCode for the new Binded Key
+						-- The variable (Bind) is a Enum.KeyCode or mouse button name for the new Binded Key
 					end,
 				}, BindSettings or {})
+
+				-- Determine initial mode: Mode field takes priority, otherwise derive from HoldToInteract
+				if BindSettings.Mode == nil then
+					BindSettings.Mode = BindSettings.HoldToInteract and "Hold" or "Toggle"
+				end
+				local CurrentMode = BindSettings.Mode
+
+				-- Mouse button mapping (MB1 / MB2 / MB3)
+				local MouseBindMap = {
+					MB1 = Enum.UserInputType.MouseButton1,
+					MB2 = Enum.UserInputType.MouseButton2,
+					MB3 = Enum.UserInputType.MouseButton3,
+				}
+
+				local function InputMatchesBind(input)
+					local mouseType = MouseBindMap[BindSettings.CurrentBind]
+					if mouseType then
+						return input.UserInputType == mouseType
+					else
+						return BindSettings.CurrentBind ~= nil
+							and input.KeyCode ~= Enum.KeyCode.Unknown
+							and input.KeyCode == Enum.KeyCode[BindSettings.CurrentBind]
+					end
+				end
 
 				local CheckingForKey = false
 
@@ -3449,7 +3474,6 @@ function Luna:CreateWindow(WindowSettings)
 				TweenService:Create(Bind.BindFrame.UIStroke, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {Transparency = 0.3}):Play()
 				TweenService:Create(Bind.BindFrame.BindBox, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {TextTransparency = 0}):Play()
 
-
 				Bind.BindFrame.BindBox.Text = BindSettings.CurrentBind
 				Bind.BindFrame.BindBox.Size = UDim2.new(0, Bind.BindFrame.BindBox.TextBounds.X + 20, 0, 42)
 
@@ -3465,6 +3489,116 @@ function Luna:CreateWindow(WindowSettings)
 					end
 				end)
 
+				-- Right-click context menu for mode selection
+				local ContextMenu = Instance.new("Frame")
+				ContextMenu.Name = "BindModeMenu"
+				ContextMenu.Size = UDim2.new(0, 110, 0, 96)
+				ContextMenu.BackgroundColor3 = Color3.fromRGB(22, 20, 28)
+				ContextMenu.BorderSizePixel = 0
+				ContextMenu.ZIndex = 200
+				ContextMenu.Visible = false
+				ContextMenu.ClipsDescendants = false
+				ContextMenu.Parent = Bind
+
+				local ContextStroke = Instance.new("UIStroke")
+				ContextStroke.Color = Color3.fromRGB(64, 61, 76)
+				ContextStroke.Thickness = 1
+				ContextStroke.Parent = ContextMenu
+
+				local ContextCorner = Instance.new("UICorner")
+				ContextCorner.CornerRadius = UDim.new(0, 6)
+				ContextCorner.Parent = ContextMenu
+
+				local ContextLayout = Instance.new("UIListLayout")
+				ContextLayout.SortOrder = Enum.SortOrder.LayoutOrder
+				ContextLayout.Padding = UDim.new(0, 0)
+				ContextLayout.Parent = ContextMenu
+
+				local ContextPad = Instance.new("UIPadding")
+				ContextPad.PaddingTop = UDim.new(0, 4)
+				ContextPad.PaddingBottom = UDim.new(0, 4)
+				ContextPad.Parent = ContextMenu
+
+				local modeButtons = {}
+				local modeList = {"Toggle", "Hold", "Always"}
+
+				local function UpdateModeButtons()
+					for _, mn in ipairs(modeList) do
+						local b = modeButtons[mn]
+						if b then
+							b.Dot.BackgroundTransparency = mn == CurrentMode and 0 or 1
+							b.TextColor3 = mn == CurrentMode and Color3.fromRGB(210, 210, 220) or Color3.fromRGB(140, 138, 155)
+						end
+					end
+				end
+
+				for i, modeName in ipairs(modeList) do
+					local btn = Instance.new("TextButton")
+					btn.Name = modeName
+					btn.Size = UDim2.new(1, 0, 0, 26)
+					btn.BackgroundColor3 = Color3.fromRGB(87, 84, 104)
+					btn.BackgroundTransparency = 1
+					btn.Font = Enum.Font.GothamMedium
+					btn.TextSize = 11
+					btn.TextXAlignment = Enum.TextXAlignment.Left
+					btn.ZIndex = 201
+					btn.LayoutOrder = i
+					btn.BorderSizePixel = 0
+					btn.Parent = ContextMenu
+
+					local btnPad = Instance.new("UIPadding")
+					btnPad.PaddingLeft = UDim.new(0, 10)
+					btnPad.Parent = btn
+
+					local dot = Instance.new("Frame")
+					dot.Name = "Dot"
+					dot.Size = UDim2.new(0, 6, 0, 6)
+					dot.Position = UDim2.new(1, -16, 0.5, -3)
+					dot.BackgroundColor3 = Color3.fromRGB(117, 164, 206)
+					dot.BackgroundTransparency = modeName == CurrentMode and 0 or 1
+					dot.BorderSizePixel = 0
+					dot.ZIndex = 202
+					dot.Parent = btn
+
+					local dotCorner = Instance.new("UICorner")
+					dotCorner.CornerRadius = UDim.new(1, 0)
+					dotCorner.Parent = dot
+
+					btn.Text = modeName
+					btn.TextColor3 = modeName == CurrentMode and Color3.fromRGB(210, 210, 220) or Color3.fromRGB(140, 138, 155)
+
+					modeButtons[modeName] = btn
+
+					btn.MouseButton1Click:Connect(function()
+						CurrentMode = modeName
+						BindSettings.Mode = modeName
+						BindSettings.HoldToInteract = (modeName == "Hold")
+						UpdateModeButtons()
+						ContextMenu.Visible = false
+					end)
+
+					btn.MouseEnter:Connect(function()
+						TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundTransparency = 0.85}):Play()
+					end)
+					btn.MouseLeave:Connect(function()
+						TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundTransparency = 1}):Play()
+					end)
+				end
+
+				-- Show context menu on right-click of the BindFrame
+				Bind.BindFrame["MouseButton2Click"]:Connect(function()
+					UpdateModeButtons()
+					ContextMenu.Position = UDim2.new(1, 4, 0, 0)
+					ContextMenu.Visible = not ContextMenu.Visible
+				end)
+
+				-- Close context menu on any left-click elsewhere
+				UserInputService.InputBegan:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 and ContextMenu.Visible then
+						ContextMenu.Visible = false
+					end
+				end)
+
 				Bind["MouseEnter"]:Connect(function()
 					tween(Bind.UIStroke, {Color = Color3.fromRGB(87, 84, 104)})
 				end)
@@ -3472,32 +3606,50 @@ function Luna:CreateWindow(WindowSettings)
 				Bind["MouseLeave"]:Connect(function()
 					tween(Bind.UIStroke, {Color = Color3.fromRGB(64,61,76)})
 				end)
+
+				-- Shared callback error flash helper
+				local function FireCallbackError(errMsg)
+					TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
+					TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
+					TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
+					Bind.Title.Text = "Callback Error"
+					print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(errMsg))
+					wait(0.5)
+					Bind.Title.Text = BindSettings.Name
+					TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
+					TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
+					TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
+				end
+
 				UserInputService.InputBegan:Connect(function(input, processed)
 
 					if CheckingForKey then
-						if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Window.Bind then
+						-- Detect mouse buttons as bindable inputs
+						local newBindName = nil
+						if input.UserInputType == Enum.UserInputType.MouseButton1 then
+							newBindName = "MB1"
+						elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
+							newBindName = "MB2"
+						elseif input.UserInputType == Enum.UserInputType.MouseButton3 then
+							newBindName = "MB3"
+						elseif input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Window.Bind then
 							local SplitMessage = string.split(tostring(input.KeyCode), ".")
-							local NewKeyNoEnum = SplitMessage[3]
-							Bind.BindFrame.BindBox.Text = tostring(NewKeyNoEnum)
-							BindSettings.CurrentBind = tostring(NewKeyNoEnum)
+							newBindName = SplitMessage[3]
+						end
+
+						if newBindName then
+							Bind.BindFrame.BindBox.Text = tostring(newBindName)
+							BindSettings.CurrentBind = tostring(newBindName)
 							local Success, Response = pcall(function()
 								BindSettings.OnChangedCallback(BindSettings.CurrentBind)
 							end)
 							if not Success then
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-								TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-								Bind.Title.Text = "Callback Error"
-								print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-								wait(0.5)
-								Bind.Title.Text = BindSettings.Name
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-								TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
+								FireCallbackError(Response)
 							end
 							Bind.BindFrame.BindBox:ReleaseFocus()
 						end
-					elseif BindSettings.CurrentBind ~= nil and (input.KeyCode == Enum.KeyCode[BindSettings.CurrentBind] and not processed) then -- Test
+
+					elseif not processed and InputMatchesBind(input) then
 						local Held = true
 						local Connection
 						Connection = input.Changed:Connect(function(prop)
@@ -3507,24 +3659,24 @@ function Luna:CreateWindow(WindowSettings)
 							end
 						end)
 
-						if not BindSettings.HoldToInteract then
+						if CurrentMode == "Toggle" then
+							-- Toggle: flip active state each press
 							BindV.Active = not BindV.Active
 							local Success, Response = pcall(function()
 								BindSettings.Callback(BindV.Active)
 							end)
-							if not Success then
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-								TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-								Bind.Title.Text = "Callback Error"
-								print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-								wait(0.5)
-								Bind.Title.Text = BindSettings.Name
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-								TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-								TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
-							end
+							if not Success then FireCallbackError(Response) end
+
+						elseif CurrentMode == "Always" then
+							-- Always: fires true every press, never toggles off
+							BindV.Active = true
+							local Success, Response = pcall(function()
+								BindSettings.Callback(true)
+							end)
+							if not Success then FireCallbackError(Response) end
+
 						else
+							-- Hold: callback(true) while held, callback(false) on release
 							wait(0.1)
 							if Held then
 								local Loop; Loop = RunService.Stepped:Connect(function()
@@ -3532,37 +3684,15 @@ function Luna:CreateWindow(WindowSettings)
 										local Success, Response = pcall(function()
 											BindSettings.Callback(false)
 										end)
-										if not Success then
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-											TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-											Bind.Title.Text = "Callback Error"
-											print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-											wait(0.5)
-											Bind.Title.Text = BindSettings.Name
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-											TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
-										end 
+										if not Success then FireCallbackError(Response) end
 										Loop:Disconnect()
 									else
 										local Success, Response = pcall(function()
 											BindSettings.Callback(true)
 										end)
-										if not Success then
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-											TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-											Bind.Title.Text = "Callback Error"
-											print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-											wait(0.5)
-											Bind.Title.Text = BindSettings.Name
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-											TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-											TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
-										end
+										if not Success then FireCallbackError(Response) end
 									end
-								end)	
+								end)
 							end
 						end
 					end
@@ -3577,13 +3707,19 @@ function Luna:CreateWindow(WindowSettings)
 					NewBindSettings = Kwargify({
 						Name = BindSettings.Name,
 						Description = BindSettings.Description,
-						CurrentBind =  BindSettings.CurrentBind,
+						CurrentBind = BindSettings.CurrentBind,
 						HoldToInteract = BindSettings.HoldToInteract,
+						Mode = BindSettings.Mode,
 						Callback = BindSettings.Callback
 					}, NewBindSettings or {})
 
 					BindV.Settings = NewBindSettings
 					BindSettings = NewBindSettings
+
+					if NewBindSettings.Mode then
+						CurrentMode = NewBindSettings.Mode
+						UpdateModeButtons()
+					end
 
 					Bind.Name = BindSettings.Name
 					Bind.Title.Text = BindSettings.Name
@@ -3593,7 +3729,6 @@ function Luna:CreateWindow(WindowSettings)
 
 					Bind.BindFrame.BindBox.Text = BindSettings.CurrentBind
 					Bind.BindFrame.Size = UDim2.new(0, Bind.BindFrame.BindBox.TextBounds.X + 20, 0, 42)
-
 
 					BindV.CurrentBind = BindSettings.CurrentBind
 				end
@@ -3608,6 +3743,10 @@ function Luna:CreateWindow(WindowSettings)
 				end
 
 				-- Luna.Flags[BindSettings.Flag] = BindSettings
+
+				return BindV
+
+			end
 
 				return BindV
 
@@ -4989,7 +5128,8 @@ function Luna:CreateWindow(WindowSettings)
 				Name = "Bind",
 				Description = nil,
 				CurrentBind = "Q",
-				HoldToInteract = false, -- setting this makes the Bind in toggle mode
+				HoldToInteract = false,
+				Mode = nil, -- "Toggle", "Hold", "Always" (overrides HoldToInteract if set)
 				Callback = function(Bind)
 					-- The function that takes place when the Bind is pressed
 					-- The variable (Bind) is a boolean for whether the Bind is being held or not (HoldToInteract needs to be true) or whether the Bind is currently active
@@ -4997,9 +5137,33 @@ function Luna:CreateWindow(WindowSettings)
 
 				OnChangedCallback = function(Bind)
 					-- The function that takes place when the binded key changes
-					-- The variable (Bind) is a Enum.KeyCode for the new Binded Key
+					-- The variable (Bind) is a Enum.KeyCode or mouse button name for the new Binded Key
 				end,
 			}, BindSettings or {})
+
+			-- Determine initial mode: Mode field takes priority, otherwise derive from HoldToInteract
+			if BindSettings.Mode == nil then
+				BindSettings.Mode = BindSettings.HoldToInteract and "Hold" or "Toggle"
+			end
+			local CurrentMode = BindSettings.Mode
+
+			-- Mouse button mapping (MB1 / MB2 / MB3)
+			local MouseBindMap = {
+				MB1 = Enum.UserInputType.MouseButton1,
+				MB2 = Enum.UserInputType.MouseButton2,
+				MB3 = Enum.UserInputType.MouseButton3,
+			}
+
+			local function InputMatchesBind(input)
+				local mouseType = MouseBindMap[BindSettings.CurrentBind]
+				if mouseType then
+					return input.UserInputType == mouseType
+				else
+					return BindSettings.CurrentBind ~= nil
+						and input.KeyCode ~= Enum.KeyCode.Unknown
+						and input.KeyCode == Enum.KeyCode[BindSettings.CurrentBind]
+				end
+			end
 
 			local CheckingForKey = false
 
@@ -5036,7 +5200,6 @@ function Luna:CreateWindow(WindowSettings)
 			TweenService:Create(Bind.BindFrame.UIStroke, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {Transparency = 0.3}):Play()
 			TweenService:Create(Bind.BindFrame.BindBox, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {TextTransparency = 0}):Play()
 
-
 			Bind.BindFrame.BindBox.Text = BindSettings.CurrentBind
 			Bind.BindFrame.BindBox.Size = UDim2.new(0, Bind.BindFrame.BindBox.TextBounds.X + 20, 0, 42)
 
@@ -5052,6 +5215,116 @@ function Luna:CreateWindow(WindowSettings)
 				end
 			end)
 
+			-- Right-click context menu for mode selection
+			local ContextMenu = Instance.new("Frame")
+			ContextMenu.Name = "BindModeMenu"
+			ContextMenu.Size = UDim2.new(0, 110, 0, 96)
+			ContextMenu.BackgroundColor3 = Color3.fromRGB(22, 20, 28)
+			ContextMenu.BorderSizePixel = 0
+			ContextMenu.ZIndex = 200
+			ContextMenu.Visible = false
+			ContextMenu.ClipsDescendants = false
+			ContextMenu.Parent = Bind
+
+			local ContextStroke = Instance.new("UIStroke")
+			ContextStroke.Color = Color3.fromRGB(64, 61, 76)
+			ContextStroke.Thickness = 1
+			ContextStroke.Parent = ContextMenu
+
+			local ContextCorner = Instance.new("UICorner")
+			ContextCorner.CornerRadius = UDim.new(0, 6)
+			ContextCorner.Parent = ContextMenu
+
+			local ContextLayout = Instance.new("UIListLayout")
+			ContextLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			ContextLayout.Padding = UDim.new(0, 0)
+			ContextLayout.Parent = ContextMenu
+
+			local ContextPad = Instance.new("UIPadding")
+			ContextPad.PaddingTop = UDim.new(0, 4)
+			ContextPad.PaddingBottom = UDim.new(0, 4)
+			ContextPad.Parent = ContextMenu
+
+			local modeButtons = {}
+			local modeList = {"Toggle", "Hold", "Always"}
+
+			local function UpdateModeButtons()
+				for _, mn in ipairs(modeList) do
+					local b = modeButtons[mn]
+					if b then
+						b.Dot.BackgroundTransparency = mn == CurrentMode and 0 or 1
+						b.TextColor3 = mn == CurrentMode and Color3.fromRGB(210, 210, 220) or Color3.fromRGB(140, 138, 155)
+					end
+				end
+			end
+
+			for i, modeName in ipairs(modeList) do
+				local btn = Instance.new("TextButton")
+				btn.Name = modeName
+				btn.Size = UDim2.new(1, 0, 0, 26)
+				btn.BackgroundColor3 = Color3.fromRGB(87, 84, 104)
+				btn.BackgroundTransparency = 1
+				btn.Font = Enum.Font.GothamMedium
+				btn.TextSize = 11
+				btn.TextXAlignment = Enum.TextXAlignment.Left
+				btn.ZIndex = 201
+				btn.LayoutOrder = i
+				btn.BorderSizePixel = 0
+				btn.Parent = ContextMenu
+
+				local btnPad = Instance.new("UIPadding")
+				btnPad.PaddingLeft = UDim.new(0, 10)
+				btnPad.Parent = btn
+
+				local dot = Instance.new("Frame")
+				dot.Name = "Dot"
+				dot.Size = UDim2.new(0, 6, 0, 6)
+				dot.Position = UDim2.new(1, -16, 0.5, -3)
+				dot.BackgroundColor3 = Color3.fromRGB(117, 164, 206)
+				dot.BackgroundTransparency = modeName == CurrentMode and 0 or 1
+				dot.BorderSizePixel = 0
+				dot.ZIndex = 202
+				dot.Parent = btn
+
+				local dotCorner = Instance.new("UICorner")
+				dotCorner.CornerRadius = UDim.new(1, 0)
+				dotCorner.Parent = dot
+
+				btn.Text = modeName
+				btn.TextColor3 = modeName == CurrentMode and Color3.fromRGB(210, 210, 220) or Color3.fromRGB(140, 138, 155)
+
+				modeButtons[modeName] = btn
+
+				btn.MouseButton1Click:Connect(function()
+					CurrentMode = modeName
+					BindSettings.Mode = modeName
+					BindSettings.HoldToInteract = (modeName == "Hold")
+					UpdateModeButtons()
+					ContextMenu.Visible = false
+				end)
+
+				btn.MouseEnter:Connect(function()
+					TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundTransparency = 0.85}):Play()
+				end)
+				btn.MouseLeave:Connect(function()
+					TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundTransparency = 1}):Play()
+				end)
+			end
+
+			-- Show context menu on right-click of the BindFrame
+			Bind.BindFrame["MouseButton2Click"]:Connect(function()
+				UpdateModeButtons()
+				ContextMenu.Position = UDim2.new(1, 4, 0, 0)
+				ContextMenu.Visible = not ContextMenu.Visible
+			end)
+
+			-- Close context menu on any left-click elsewhere
+			UserInputService.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 and ContextMenu.Visible then
+					ContextMenu.Visible = false
+				end
+			end)
+
 			Bind["MouseEnter"]:Connect(function()
 				tween(Bind.UIStroke, {Color = Color3.fromRGB(87, 84, 104)})
 			end)
@@ -5059,32 +5332,50 @@ function Luna:CreateWindow(WindowSettings)
 			Bind["MouseLeave"]:Connect(function()
 				tween(Bind.UIStroke, {Color = Color3.fromRGB(64,61,76)})
 			end)
+
+			-- Shared callback error flash helper
+			local function FireCallbackError(errMsg)
+				TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
+				TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
+				TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
+				Bind.Title.Text = "Callback Error"
+				print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(errMsg))
+				wait(0.5)
+				Bind.Title.Text = BindSettings.Name
+				TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
+				TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
+				TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
+			end
+
 			UserInputService.InputBegan:Connect(function(input, processed)
 
 				if CheckingForKey then
-					if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Window.Bind then
+					-- Detect mouse buttons as bindable inputs
+					local newBindName = nil
+					if input.UserInputType == Enum.UserInputType.MouseButton1 then
+						newBindName = "MB1"
+					elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
+						newBindName = "MB2"
+					elseif input.UserInputType == Enum.UserInputType.MouseButton3 then
+						newBindName = "MB3"
+					elseif input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Window.Bind then
 						local SplitMessage = string.split(tostring(input.KeyCode), ".")
-						local NewKeyNoEnum = SplitMessage[3]
-						Bind.BindFrame.BindBox.Text = tostring(NewKeyNoEnum)
-						BindSettings.CurrentBind = tostring(NewKeyNoEnum)
+						newBindName = SplitMessage[3]
+					end
+
+					if newBindName then
+						Bind.BindFrame.BindBox.Text = tostring(newBindName)
+						BindSettings.CurrentBind = tostring(newBindName)
 						local Success, Response = pcall(function()
 							BindSettings.OnChangedCallback(BindSettings.CurrentBind)
 						end)
 						if not Success then
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-							TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-							Bind.Title.Text = "Callback Error"
-							print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-							wait(0.5)
-							Bind.Title.Text = BindSettings.Name
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-							TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
+							FireCallbackError(Response)
 						end
 						Bind.BindFrame.BindBox:ReleaseFocus()
 					end
-				elseif BindSettings.CurrentBind ~= nil and (input.KeyCode == Enum.KeyCode[BindSettings.CurrentBind] and not processed) then -- Test
+
+				elseif not processed and InputMatchesBind(input) then
 					local Held = true
 					local Connection
 					Connection = input.Changed:Connect(function(prop)
@@ -5094,24 +5385,24 @@ function Luna:CreateWindow(WindowSettings)
 						end
 					end)
 
-					if not BindSettings.HoldToInteract then
+					if CurrentMode == "Toggle" then
+						-- Toggle: flip active state each press
 						BindV.Active = not BindV.Active
 						local Success, Response = pcall(function()
 							BindSettings.Callback(BindV.Active)
 						end)
-						if not Success then
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-							TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-							Bind.Title.Text = "Callback Error"
-							print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-							wait(0.5)
-							Bind.Title.Text = BindSettings.Name
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-							TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-							TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
-						end
+						if not Success then FireCallbackError(Response) end
+
+					elseif CurrentMode == "Always" then
+						-- Always: fires true every press, never toggles off
+						BindV.Active = true
+						local Success, Response = pcall(function()
+							BindSettings.Callback(true)
+						end)
+						if not Success then FireCallbackError(Response) end
+
 					else
+						-- Hold: callback(true) while held, callback(false) on release
 						wait(0.1)
 						if Held then
 							local Loop; Loop = RunService.Stepped:Connect(function()
@@ -5119,37 +5410,15 @@ function Luna:CreateWindow(WindowSettings)
 									local Success, Response = pcall(function()
 										BindSettings.Callback(false)
 									end)
-									if not Success then
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-										TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-										Bind.Title.Text = "Callback Error"
-										print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-										wait(0.5)
-										Bind.Title.Text = BindSettings.Name
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-										TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
-									end 
+									if not Success then FireCallbackError(Response) end
 									Loop:Disconnect()
 								else
 									local Success, Response = pcall(function()
 										BindSettings.Callback(true)
 									end)
-									if not Success then
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-										TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-										Bind.Title.Text = "Callback Error"
-										print("Luna Interface Suite | "..BindSettings.Name.." Callback Error " ..tostring(Response))
-										wait(0.5)
-										Bind.Title.Text = BindSettings.Name
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-										TweenService:Create(Bind, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(32, 30, 38)}):Play()
-										TweenService:Create(Bind.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0.5}):Play()
-									end
+									if not Success then FireCallbackError(Response) end
 								end
-							end)	
+							end)
 						end
 					end
 				end
@@ -5164,13 +5433,19 @@ function Luna:CreateWindow(WindowSettings)
 				NewBindSettings = Kwargify({
 					Name = BindSettings.Name,
 					Description = BindSettings.Description,
-					CurrentBind =  BindSettings.CurrentBind,
+					CurrentBind = BindSettings.CurrentBind,
 					HoldToInteract = BindSettings.HoldToInteract,
+					Mode = BindSettings.Mode,
 					Callback = BindSettings.Callback
 				}, NewBindSettings or {})
 
 				BindV.Settings = NewBindSettings
 				BindSettings = NewBindSettings
+
+				if NewBindSettings.Mode then
+					CurrentMode = NewBindSettings.Mode
+					UpdateModeButtons()
+				end
 
 				Bind.Name = BindSettings.Name
 				Bind.Title.Text = BindSettings.Name
@@ -5180,7 +5455,6 @@ function Luna:CreateWindow(WindowSettings)
 
 				Bind.BindFrame.BindBox.Text = BindSettings.CurrentBind
 				Bind.BindFrame.Size = UDim2.new(0, Bind.BindFrame.BindBox.TextBounds.X + 20, 0, 42)
-
 
 				BindV.CurrentBind = BindSettings.CurrentBind
 			end
