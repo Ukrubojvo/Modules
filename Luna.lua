@@ -3586,12 +3586,13 @@ function Luna:CreateWindow(WindowSettings)
 				end
 
 				-- Show context menu on right-click of the BindFrame
-				Bind.BindFrame["MouseButton2Click"]:Connect(function()
-					UpdateModeButtons()
-					ContextMenu.Position = UDim2.new(1, 4, 0, 0)
-					ContextMenu.Visible = not ContextMenu.Visible
+				Bind.BindFrame.InputBegan:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton2 then
+						UpdateModeButtons()
+						ContextMenu.Position = UDim2.new(1, 4, 0, 0)
+						ContextMenu.Visible = not ContextMenu.Visible
+					end
 				end)
-
 				-- Close context menu on any left-click elsewhere
 				UserInputService.InputBegan:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and ContextMenu.Visible then
@@ -5308,10 +5309,12 @@ function Luna:CreateWindow(WindowSettings)
 			end
 
 			-- Show context menu on right-click of the BindFrame
-			Bind.BindFrame["MouseButton2Click"]:Connect(function()
-				UpdateModeButtons()
-				ContextMenu.Position = UDim2.new(1, 4, 0, 0)
-				ContextMenu.Visible = not ContextMenu.Visible
+			Bind.BindFrame.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton2 then
+					UpdateModeButtons()
+					ContextMenu.Position = UDim2.new(1, 4, 0, 0)
+					ContextMenu.Visible = not ContextMenu.Visible
+				end
 			end)
 
 			-- Close context menu on any left-click elsewhere
