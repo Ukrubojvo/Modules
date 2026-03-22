@@ -3502,7 +3502,7 @@ function Luna:CreateWindow(WindowSettings)
 				ContextMenu.ZIndex = 200
 				ContextMenu.Visible = false
 				ContextMenu.ClipsDescendants = false
-				ContextMenu.Parent = Bind
+				ContextMenu.Parent = Main
 
 				local ContextStroke = Instance.new("UIStroke")
 				ContextStroke.Color = Color3.fromRGB(64, 61, 76)
@@ -5229,7 +5229,7 @@ function Luna:CreateWindow(WindowSettings)
 			ContextMenu.ZIndex = 200
 			ContextMenu.Visible = false
 			ContextMenu.ClipsDescendants = false
-			ContextMenu.Parent = Bind
+			ContextMenu.Parent = Main
 
 			local ContextStroke = Instance.new("UIStroke")
 			ContextStroke.Color = Color3.fromRGB(64, 61, 76)
@@ -5320,7 +5320,13 @@ function Luna:CreateWindow(WindowSettings)
 			Bind.BindFrame.InputBegan:Connect(function(input)
 				if input.UserInputType == Enum.UserInputType.MouseButton2 then
 					UpdateModeButtons()
-					ContextMenu.Position = UDim2.new(1, 4, 0, 0)
+					local absPos = Bind.BindFrame.AbsolutePosition
+					local absSize = Bind.BindFrame.AbsoluteSize
+					local mainPos = Main.AbsolutePosition
+					ContextMenu.Position = UDim2.fromOffset(
+						absPos.X - mainPos.X + absSize.X + 4,
+						absPos.Y - mainPos.Y
+					)
 					ContextMenu.Visible = not ContextMenu.Visible
 				end
 			end)
