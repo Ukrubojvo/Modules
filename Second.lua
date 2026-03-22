@@ -261,8 +261,8 @@ function CircleClick(Button, X, Y)
     end)
 end
 
-local RcHub = {}
-function RcHub:MakeNotify(NotifyConfig)
+local AntiLua = {}
+function AntiLua:MakeNotify(NotifyConfig)
     local NotifyConfig = NotifyConfig or {}
     NotifyConfig.Title = NotifyConfig.Title or "AntiLua"
     NotifyConfig.Description = NotifyConfig.Description or "Notification"
@@ -461,7 +461,7 @@ function RcHub:MakeNotify(NotifyConfig)
 end
 
 function rcchub(msg, delay, color, title, desc)
-    return RcHub:MakeNotify({
+    return AntiLua:MakeNotify({
         Title = title or "AntiLua",
         Description = desc or "Notification",
         Content = msg or "Content",
@@ -470,7 +470,7 @@ function rcchub(msg, delay, color, title, desc)
     })
 end
 
-function RcHub:Window(GuiConfig)
+function AntiLua:Window(GuiConfig)
     GuiConfig              = GuiConfig or {}
     GuiConfig.Title        = GuiConfig.Title or "AntiLua"
     GuiConfig.Footer       = GuiConfig.Footer or "AntiLua <3"
@@ -2707,4 +2707,4 @@ function RcHub:Window(GuiConfig)
     return Tabs
 end
 
-return RcHub
+return AntiLua
