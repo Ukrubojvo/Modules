@@ -3599,7 +3599,7 @@ function Luna:CreateWindow(WindowSettings)
 				end)
 				-- Close context menu on any left-click elsewhere
 				UserInputService.InputBegan:Connect(function(input)
-					if input.UserInputType == Enum.UserInputType.MouseButton1 and ContextMenu.Visible then
+					if input.UserInputType == Enum.UserInputType.MouseButton2 and ContextMenu.Visible then
 						ContextMenu.Visible = false
 					end
 				end)
@@ -5359,9 +5359,7 @@ function Luna:CreateWindow(WindowSettings)
 				if CheckingForKey then
 					-- Detect mouse buttons as bindable inputs
 					local newBindName = nil
-					if input.UserInputType == Enum.UserInputType.MouseButton1 then
-						newBindName = "MB1"
-					elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
+					if input.UserInputType == Enum.UserInputType.MouseButton2 then
 						newBindName = "MB2"
 					elseif input.UserInputType == Enum.UserInputType.MouseButton3 then
 						newBindName = "MB3"
