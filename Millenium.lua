@@ -801,7 +801,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 25);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(18, 18, 23)  -- NEW: --surface
+                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                 });
                 
                 library:create( "UICorner" , {
@@ -815,7 +815,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 6);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(18, 18, 23)  -- NEW: --surface
+                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                 });
                 
                 items[ "game" ] = library:create( "TextLabel" , {
@@ -1309,7 +1309,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 0, cfg.size, -3);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(18, 18, 23)  -- NEW: --surface
+                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                 });
 
                 library:create( "UICorner" , {
@@ -1318,7 +1318,7 @@
                 });
 
                 library:create( "UIStroke" , {
-                    Color = rgb(22, 22, 22);  -- NEW: --stroke
+                    Color = rgb(27, 27, 27);  -- NEW: --stroke
                     Parent = items[ "outline" ];
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 });
@@ -2778,7 +2778,7 @@
                         Size = dim2(0, 166, 0, 197);
                         BorderSizePixel = 0;
                         Visible = true;
-                        BackgroundColor3 = rgb(18, 18, 23)  -- NEW: --surface
+                        BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                     });
 
                     items[ "colorpicker_fade" ] = library:create( "Frame" , {
@@ -2790,7 +2790,7 @@
                         Size = dim2(1, 0, 1, 0);
                         BorderSizePixel = 0;
                         ZIndex = 100;
-                        BackgroundColor3 = rgb(18, 18, 23)  -- NEW: --surface
+                        BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                     });
                     
                     items[ "colorpicker_components" ] = library:create( "Frame" , {
@@ -3818,7 +3818,7 @@
                     ClipsDescendants = false;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = rgb(18, 18, 23)  -- NEW: --surface
+                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                 });
                 
                 items[ "inline" ] = library:create( "Frame" , {
