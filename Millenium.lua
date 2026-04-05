@@ -2138,7 +2138,7 @@
                     Size = dim2(0, 0, 0, 22);
                     AutomaticSize = Enum.AutomaticSize.X;
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(26, 26, 26);
+                    BackgroundColor3 = rgb(29, 29, 29);
                     BorderColor3 = rgb(0, 0, 0);
                     ClipsDescendants = false;
                 });
@@ -2150,7 +2150,7 @@
 
                 library:create("UIStroke", {
                     Parent = items["dropdown"];
-                    Color = rgb(42, 42, 42);
+                    Color = rgb(24, 24, 24);
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
                 });
 
@@ -2182,7 +2182,7 @@
                     TextSize = 13;
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(204, 204, 204);
+                    BackgroundColor3 = rgb(88, 88, 88);
                     LayoutOrder = 1;
                 });
 
@@ -2195,19 +2195,31 @@
                     Size = dim2(0, 14, 0, 14);
                     BorderSizePixel = 0;
                     BorderColor3 = rgb(0, 0, 0);
-                    BackgroundColor3 = rgb(204, 204, 204);
+                    BackgroundColor3 = rgb(88, 88, 88);
                     LayoutOrder = 2;
                 });
 
                 items["dropdown_holder"] = library:create("Frame", {
                     Parent = items["dropdown_object"];
                     Name = "\0";
-                    BackgroundTransparency = 1;
+                    BackgroundTransparency = 0;
                     Position = dim2(0, 0, 0, header_height + 6);
                     Size = dim2(1, 0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    Visible = false;
+                    Visible = true;
+                    BackgroundColor3 = rgb(22, 22, 22);
+                });
+
+                library:create("UICorner", {
+                    Parent = items["dropdown_holder"];
+                    CornerRadius = dim(0, 5);
+                });
+
+                library:create("UIStroke", {
+                    Parent = items["dropdown_holder"];
+                    Color = rgb(24, 24, 24);
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
                 });
 
                 if cfg.searchable then
