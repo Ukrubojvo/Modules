@@ -2738,6 +2738,13 @@
                         BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                     });
                     
+                    library:create("UIStroke", {
+                        Parent = items["outline"];
+                        Color = rgb(27, 27, 27);
+                        Enabled = true;
+                        ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
+                    })
+                    
                     library:create( "UICorner" , {
                         Parent = items[ "colorpicker_components" ];
                         CornerRadius = dim(0, 6)
@@ -3427,6 +3434,13 @@
                         BorderSizePixel = 0;
                         BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                     });
+
+                    library:create("UIStroke", {
+                        Parent = items["outline"];
+                        Color = rgb(27, 27, 27);
+                        Enabled = true;
+                        ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
+                    })
                     
                     library:create( "UIPadding" , {
                         PaddingBottom = dim(0, 6);
@@ -3763,13 +3777,20 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -2, 1, -2);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --surface-2
+                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                 });
                 
                 library:create( "UICorner" , {
                     Parent = items[ "inline" ];
                     CornerRadius = dim(0, 7)
                 });
+
+                library:create("UIStroke", {
+                    Parent = items["outline"];
+                    Color = rgb(27, 27, 27);
+                    Enabled = true;
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
+                })
                 
                 items[ "elements" ] = library:create( "Frame" , {
                     BorderColor3 = rgb(0, 0, 0);
