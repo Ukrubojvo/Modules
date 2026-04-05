@@ -2226,7 +2226,7 @@
                     items["search_holder"] = library:create("Frame", {
                         Parent = items["dropdown_holder"];
                         Size = dim2(1, 0, 0, 24);
-                        BackgroundColor3 = rgb(19, 19, 19);
+                        BackgroundColor3 = rgb(20, 20, 20);
                         BorderSizePixel = 0;
                     });
 
