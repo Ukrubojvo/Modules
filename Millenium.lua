@@ -87,7 +87,7 @@
 
     local themes = {
         preset = {
-            accent = rgb(151, 151, 151),
+            accent = rgb(125, 125, 125),
         }, 
 
         utility = {
@@ -1656,7 +1656,7 @@
                             Size = dim2(0, 16, 0, 16);
                             BorderSizePixel = 0;
                             TextSize = 14;
-                            BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                            BackgroundColor3 = rgb(108, 108, 108)
                         }); library:apply_theme(items[ "toggle_button" ], "accent", "BackgroundColor3");
                         
                         library:create( "UICorner" , {
@@ -1672,7 +1672,7 @@
                             BorderColor3 = rgb(0, 0, 0);
                             Position = dim2(0, 1, 0, 1);
                             BorderSizePixel = 0;
-                            BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
+                            BackgroundColor3 = rgb(42, 42, 42)
                         }); library:apply_theme(items[ "outline" ], "accent", "BackgroundColor3");
                         
                         items[ "tick" ] = library:create( "ImageLabel" , {
@@ -1712,7 +1712,7 @@
                             Size = dim2(0, 36, 0, 18);
                             BorderSizePixel = 0;
                             TextSize = 14;
-                            BackgroundColor3 = themes.preset.accent
+                            BackgroundColor3 = rgb(125, 125, 125)
                         }); library:apply_theme(items[ "toggle_button" ], "accent", "BackgroundColor3");
                         
                         library:create( "UICorner" , {
@@ -1728,7 +1728,7 @@
                             BorderColor3 = rgb(0, 0, 0);
                             Position = dim2(0, 1, 0, 1);
                             BorderSizePixel = 0;
-                            BackgroundColor3 = themes.preset.accent
+                            BackgroundColor3 = rgb(125, 125, 125)
                         }); library:apply_theme(items[ "inline" ], "accent", "BackgroundColor3");
                         
                         library:create( "UICorner" , {
@@ -1767,9 +1767,9 @@
                     library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)})
                     library:tween(items[ "outline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(19, 19, 19)})
                 else
-                    library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)}, Enum.EasingStyle.Quad)
-                    library:tween(items[ "inline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)}, Enum.EasingStyle.Quad)
-                    library:tween(items[ "circle" ], {BackgroundColor3 = bool and rgb(254, 254, 254) or rgb(58, 58, 58), Position = bool and dim2(1, -14, 0, 2) or dim2(0, 2, 0, 2)}, Enum.EasingStyle.Quad)
+                    library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and rgb(125, 125, 125) or rgb(42, 42, 42)}, Enum.EasingStyle.Quad)
+                    library:tween(items[ "inline" ], {BackgroundColor3 = bool and rgb(125, 125, 125) or rgb(42, 42, 42)}, Enum.EasingStyle.Quad)
+                    library:tween(items[ "circle" ], {BackgroundColor3 = bool and rgb(254, 254, 254) or rgb(108, 108, 108), Position = bool and dim2(1, -14, 0, 2) or dim2(0, 2, 0, 2)}, Enum.EasingStyle.Quad)
                 end
 
                 cfg.callback(bool)
