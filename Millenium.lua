@@ -239,7 +239,7 @@
             Frame.BorderColor3 = rgb(0, 0, 0)
             Frame.Size = dim2(0, 10, 0, 10)
             Frame.BorderSizePixel = 0
-            Frame.BackgroundColor3 = rgb(255, 255, 255)
+            Frame.BackgroundColor3 = rgb(204, 204, 204)
             Frame.Parent = frame
             Frame.BackgroundTransparency = 1 
             Frame.Text = ""
@@ -699,7 +699,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 1, -60);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255);
+                    BackgroundColor3 = rgb(204, 204, 204);
                     CanvasSize = dim2(0, 0, 0, 0);
                     ScrollBarThickness = 2;
                     VerticalScrollBarInset = Enum.ScrollBarInset.None;
@@ -727,14 +727,14 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Parent = items[ "side_frame" ];
                     Name = "\0";
-                    Text = string.format('%s<font color = "rgb(255, 255, 255)">%s</font>', cfg.name, cfg.suffix);
+                    Text = string.format('%s<font color = "rgb(204, 204, 204)">%s</font>', cfg.name, cfg.suffix);
                     BackgroundTransparency = 1;
                     Size = dim2(1, 0, 0, 70);
                     TextColor3 = themes.preset.accent;
                     BorderSizePixel = 0;
                     RichText = true;
                     TextSize = 30;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
                 
                 items[ "multi_holder" ] = library:create( "Frame" , {
@@ -745,7 +745,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -196, 0, 56);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 }); cfg.multi_holder = items[ "multi_holder" ];
                 
                 library:create( "Frame" , {
@@ -764,7 +764,7 @@
                     Parent = items[ "main" ];
                     BorderColor3 = rgb(0, 0, 0);
                     Name = "\0";
-                    BackgroundColor3 = rgb(255, 255, 255);
+                    BackgroundColor3 = rgb(204, 204, 204);
                     Size = dim2(1, 75, 1, 75);
                     AnchorPoint = vec2(0.5, 0.5);
                     Image = "rbxassetid://112971167999062";
@@ -833,7 +833,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 }); 
                 
                 items[ "other_info" ] = library:create( "TextLabel" , {
@@ -852,7 +852,7 @@
                     AutomaticSize = Enum.AutomaticSize.XY;
                     FontFace = fonts.font;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "other_info" ], "accent", "TextColor3");        
             end 
 
@@ -891,7 +891,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -216, 1, -101);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 -- Tab buttons 
@@ -921,7 +921,7 @@
                         Name = "\0";
                         Size = dim2(0, 22, 0, 22);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     }); library:apply_theme(items[ "icon" ], "accent", "ImageColor3");
                     
                     items[ "name" ] = library:create( "TextLabel" , {
@@ -938,7 +938,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.X;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UIPadding" , {
@@ -969,7 +969,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, 0, 1, 0);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255);
+                        BackgroundColor3 = rgb(204, 204, 204);
                         CanvasSize = dim2(0, 0, 0, 0);
                         ScrollBarThickness = 0;
                         AutomaticCanvasSize = Enum.AutomaticSize.X;
@@ -1027,7 +1027,7 @@
                                     BorderSizePixel = 0;
                                     AutomaticSize = Enum.AutomaticSize.XY;
                                     TextSize = 16;
-                                    BackgroundColor3 = rgb(255, 255, 255)
+                                    BackgroundColor3 = rgb(204, 204, 204)
                                 });
                                 
                                 library:create( "UIPadding" , {
@@ -1074,7 +1074,7 @@
                                     Size = dim2(1, -20, 1, -20);
                                     BorderSizePixel = 0;
                                     Visible = false;
-                                    BackgroundColor3 = rgb(255, 255, 255)
+                                    BackgroundColor3 = rgb(204, 204, 204)
                                 });
                                 
                                 library:create( "UIListLayout" , {
@@ -1217,7 +1217,7 @@
                     BorderSizePixel = 0; 
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIPadding" , {
@@ -1242,7 +1242,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(0, 0, cfg.size, 0);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UIPadding" , {
@@ -1274,7 +1274,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         BorderSizePixel = 0;
                         Visible = true;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UIListLayout" , {
@@ -1348,7 +1348,7 @@
                     Size = dim2(1, 0, 1, -40);
                     BackgroundTransparency = 1;
                     Position = dim2(0, 0, 0, 35);
-                    BackgroundColor3 = rgb(255, 255, 255);
+                    BackgroundColor3 = rgb(204, 204, 204);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     CanvasSize = dim2(0, 0, 0, 0)
@@ -1363,7 +1363,7 @@
                     Size = dim2(1, -20, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIListLayout" , {
@@ -1416,7 +1416,7 @@
                     Name = "\0";
                     Size = dim2(0, 22, 0, 22);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "Icon" ], "accent", "ImageColor3");
                 
                 items[ "section_title" ] = library:create( "TextLabel" , {
@@ -1433,7 +1433,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.X;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "Frame" , {
@@ -1577,7 +1577,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 items[ "name" ] = library:create( "TextLabel" , {
@@ -1593,7 +1593,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
 
                 if cfg.info then 
@@ -1612,7 +1612,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                 end 
                 
@@ -1629,7 +1629,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 0, 1, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIListLayout" , {
@@ -1684,7 +1684,7 @@
                             Parent = items[ "outline" ];
                             Size = dim2(1, 2, 1, 2);
                             BorderSizePixel = 0;
-                            BackgroundColor3 = rgb(255, 255, 255);
+                            BackgroundColor3 = rgb(204, 204, 204);
                             ZIndex = 1;
                         });
 
@@ -1799,7 +1799,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                    BackgroundColor3 = rgb(32, 32, 32)  -- NEW: --lift
                 });
             end
 
@@ -1845,7 +1845,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 items[ "name" ] = library:create( "TextLabel" , {
@@ -1861,7 +1861,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 if cfg.info then 
@@ -1880,7 +1880,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                 end 
 
@@ -1898,7 +1898,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 12);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIListLayout" , {
@@ -1978,7 +1978,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIPadding" , {
@@ -2031,7 +2031,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                    BackgroundColor3 = rgb(32, 32, 32)  -- NEW: --lift
                 });
             end 
 
@@ -2079,7 +2079,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 items["name"] = library:create("TextLabel", {
@@ -2095,7 +2095,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 if cfg.info then 
@@ -2114,7 +2114,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                 end 
 
@@ -2131,7 +2131,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 0, 1, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create("UIListLayout", {
@@ -2177,7 +2177,7 @@
                     TextTruncate = Enum.TextTruncate.AtEnd;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create("UIPadding", {
@@ -2198,7 +2198,7 @@
                     Name = "\0";
                     Size = dim2(0, 12, 0, 12);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
 
                 items["dropdown_holder"] = library:create("Frame", {
@@ -2304,7 +2304,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255);
+                    BackgroundColor3 = rgb(204, 204, 204);
                     ZIndex = 10;
                 }); 
                 library:apply_theme(button, "accent", "TextColor3");
@@ -2516,7 +2516,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                    BackgroundColor3 = rgb(32, 32, 32)  -- NEW: --lift
                 });
             end 
 
@@ -2564,7 +2564,7 @@
                 BorderSizePixel = 0;
                 AutomaticSize = Enum.AutomaticSize.Y;
                 TextSize = 14;
-                BackgroundColor3 = rgb(255, 255, 255)
+                BackgroundColor3 = rgb(204, 204, 204)
             });
             
             if cfg.name then
@@ -2581,7 +2581,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
             end
 
@@ -2601,7 +2601,7 @@
                 BorderSizePixel = 0;
                 AutomaticSize = Enum.AutomaticSize.XY;
                 TextSize = 16;
-                BackgroundColor3 = rgb(255, 255, 255)
+                BackgroundColor3 = rgb(204, 204, 204)
                 });
             end 
             
@@ -2620,7 +2620,7 @@
                 BorderColor3 = rgb(0, 0, 0);
                 Size = dim2(0, 0, 1, 0);
                 BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
+                BackgroundColor3 = rgb(204, 204, 204)
             });
             
             library:create( "UIListLayout" , {
@@ -2650,7 +2650,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                 end
             end
@@ -2675,7 +2675,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                 end
             end
@@ -2688,7 +2688,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                    BackgroundColor3 = rgb(32, 32, 32)  -- NEW: --lift
                 });
             end 
 
@@ -2827,7 +2827,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         ZIndex = 2;
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UICorner" , {
@@ -2848,7 +2848,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, 0, 1, 0);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UIGradient" , {
@@ -2898,7 +2898,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, -20, 0, 8);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255);
+                        BackgroundColor3 = rgb(204, 204, 204);
                         AutoButtonColor = false;
                         Text = "";
                     });
@@ -2981,7 +2981,7 @@
                     });
                     
                     library:create( "UIGradient" , {
-                        Color = rgbseq{rgbkey(0, rgb(0, 0, 0)), rgbkey(1, rgb(255, 255, 255))};
+                        Color = rgbseq{rgbkey(0, rgb(0, 0, 0)), rgbkey(1, rgb(204, 204, 204))};
                         Parent = items[ "alpha_gradient" ]
                     });
                     
@@ -3012,7 +3012,7 @@
                     library:create( "UIGradient" , {
                         Rotation = 90;
                         Parent = items[ "colorpicker_components" ];
-                        Color = rgbseq{rgbkey(0, rgb(255, 255, 255)), rgbkey(1, rgb(66, 66, 66))}
+                        Color = rgbseq{rgbkey(0, rgb(204, 204, 204)), rgbkey(1, rgb(66, 66, 66))}
                     });
 
                     items[ "input" ] = library:create( "TextBox" , {
@@ -3236,7 +3236,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 items[ "name" ] = library:create( "TextLabel" , {
@@ -3252,7 +3252,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 16;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIPadding" , {
@@ -3269,7 +3269,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 12);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIListLayout" , {
@@ -3381,7 +3381,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.Y;
                         TextSize = 14;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     items[ "name" ] = library:create( "TextLabel" , {
@@ -3397,7 +3397,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UIPadding" , {
@@ -3413,7 +3413,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(0, 0, 1, 0);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UIListLayout" , {
@@ -3459,7 +3459,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 14;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UIPadding" , {
@@ -3528,7 +3528,7 @@
                             BorderSizePixel = 0;
                             AutomaticSize = Enum.AutomaticSize.XY;
                             TextSize = 14;
-                            BackgroundColor3 = rgb(255, 255, 255)
+                            BackgroundColor3 = rgb(204, 204, 204)
                         }); cfg.hold_instances[option] = name
                         library:apply_theme(name, "accent", "TextColor3")
                         
@@ -3706,7 +3706,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 items[ "button" ] = library:create( "TextButton" , {
@@ -3742,7 +3742,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "name" ], "accent", "BackgroundColor3");                            
             end 
 
@@ -3796,7 +3796,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 0, 1, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 })
                 
                 library:create("UIListLayout", {
@@ -3845,7 +3845,7 @@
                     Size = dim2(1, -20, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIListLayout" , {
@@ -3872,7 +3872,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 16, 0, 16);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });                
             end 
 
@@ -3915,7 +3915,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIListLayout" , {
@@ -3965,7 +3965,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
                         TextSize = 14;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(204, 204, 204)
                     });
                     
                     library:create( "UICorner" , {
@@ -4271,7 +4271,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UICorner" , {
@@ -4293,7 +4293,7 @@
                     TextWrapped = true;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    BackgroundColor3 = rgb(204, 204, 204)
                 });
                 
                 library:create( "UIPadding" , {
