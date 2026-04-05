@@ -2206,8 +2206,8 @@
                     Position = dim2(0, 0, 0, header_height + 6);
                     Size = dim2(1, 0, 0, 0);
                     BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.Y;
-                    Visible = true;
+                    AutomaticSize = cfg.scrolling and Enum.AutomaticSize.None or Enum.AutomaticSize.Y;
+                    Visible = false;
                     BackgroundColor3 = rgb(22, 22, 22);
                 });
 
@@ -2252,14 +2252,36 @@
                     });
                 end
 
-                items["scroll_frame"] = library:create("Frame", {
-                    Parent = items["dropdown_holder"];
-                    Size = dim2(1, 0, 0, 0);
-                    Position = dim2(0, 0, 0, cfg.searchable and 28 or 0);
-                    BackgroundTransparency = 1;
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.Y;
-                });
+                local scroll_offset = cfg.searchable and 28 or 0
+
+                if cfg.scrolling then
+                    local max_height = cfg.max_visible_items * 28
+                    items["scroll_frame"] = library:create("ScrollingFrame", {
+                        Parent = items["dropdown_holder"];
+                        Size = dim2(1, 0, 0, max_height);
+                        Position = dim2(0, 0, 0, scroll_offset);
+                        BackgroundTransparency = 1;
+                        BorderSizePixel = 0;
+                        ScrollBarThickness = 3;
+                        ScrollBarImageColor3 = rgb(100, 100, 100);
+                        ScrollBarImageTransparency = 0;
+                        AutomaticCanvasSize = Enum.AutomaticCanvasSize.Y;
+                        CanvasSize = dim2(0, 0, 0, 0);
+                        ElasticBehavior = Enum.ElasticBehavior.Never;
+                    });
+
+                    items["dropdown_holder"].Size = dim2(1, 0, 0, max_height + scroll_offset)
+                    items["dropdown_holder"].AutomaticSize = Enum.AutomaticSize.None
+                else
+                    items["scroll_frame"] = library:create("Frame", {
+                        Parent = items["dropdown_holder"];
+                        Size = dim2(1, 0, 0, 0);
+                        Position = dim2(0, 0, 0, scroll_offset);
+                        BackgroundTransparency = 1;
+                        BorderSizePixel = 0;
+                        AutomaticSize = Enum.AutomaticSize.Y;
+                    });
+                end
 
                 library:create("UIListLayout", {
                     Parent = items["scroll_frame"];
@@ -2351,7 +2373,7 @@
                         for _, option in cfg.option_instances do 
                             if find(cfg.multi_items, option.Text) then
                                 insert(selected, option.Text)
-                                option.TextColor3 = themes.preset.accent
+                                option.TextColor3 = rgb(255, 255, 255)
                             end
                         end
                     else
@@ -2370,7 +2392,7 @@
 
                         for _, option in cfg.option_instances do 
                             if find(cfg.multi_items, option.Text) then
-                                option.TextColor3 = themes.preset.accent
+                                option.TextColor3 = rgb(255, 255, 255)
                             end
                         end
 
@@ -2382,7 +2404,7 @@
                     for _, option in cfg.option_instances do 
                         if option.Text == value then 
                             insert(selected, option.Text)
-                            option.TextColor3 = themes.preset.accent
+                            option.TextColor3 = rgb(255, 255, 255)
                         end
                     end
                 end
@@ -3382,6 +3404,13 @@
                         TextSize = 14;
                         BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     });
+
+                    library:create("UIStroke", {
+                        Parent = items["keybind_holder"];
+                        Color = rgb(24, 24, 24);
+                        Enabled = true;
+                        ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
+                    })
                     
                     library:create( "UICorner" , {
                         Parent = items[ "keybind_holder" ];
