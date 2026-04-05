@@ -3763,7 +3763,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -2, 1, -2);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
+                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --surface-2
                 });
                 
                 library:create( "UICorner" , {
