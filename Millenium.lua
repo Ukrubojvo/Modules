@@ -1921,7 +1921,7 @@
                     Size = dim2(1, -4, 0, 4);
                     BorderSizePixel = 0;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                    BackgroundColor3 = rgb(42, 42, 42)  -- NEW: --lift
                 });
                 
                 library:create( "UICorner" , {
