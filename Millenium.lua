@@ -2157,6 +2157,13 @@
                     TextSize = 14;
                     BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
+
+                library:create("UIStroke", {
+                    Parent = items["dropdown"];
+                    Enabled = true;
+                    Color = rgb(24, 24, 24);
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                });
                 
                 library:create("UICorner", {
                     Parent = items["dropdown"];
@@ -2219,7 +2226,7 @@
                     ClipsDescendants = true;
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(24, 24, 24);  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22);  -- NEW: --lift
                     ZIndex = 10;
                 });
 
