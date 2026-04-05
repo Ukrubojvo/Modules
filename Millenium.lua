@@ -2265,7 +2265,7 @@
                         ScrollBarThickness = 3;
                         ScrollBarImageColor3 = rgb(100, 100, 100);
                         ScrollBarImageTransparency = 0;
-                        AutomaticCanvasSize = Enum.AutomaticCanvasSize.Y;
+                        AutomaticCanvasSize = Enum.AutomaticSize.Y;
                         CanvasSize = dim2(0, 0, 0, 0);
                         ElasticBehavior = Enum.ElasticBehavior.Never;
                     });
