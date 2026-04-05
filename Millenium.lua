@@ -657,7 +657,7 @@
                     AnchorPoint = vec2(0.5, 0.5);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(13, 13, 17)  -- NEW: --bg
+                    BackgroundColor3 = rgb(16, 16, 16)  -- NEW: --bg
                 });
                 
                 library:create( "UICorner" , {
@@ -678,7 +678,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 196, 1, -25);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(13, 13, 17)  -- NEW: --bg
+                    BackgroundColor3 = rgb(16, 16, 16)  -- NEW: --bg
                 });
                 
                 library:create( "Frame" , {
@@ -688,7 +688,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 1, 1, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
                 items[ "button_holder" ] = library:create( "ScrollingFrame" , {
@@ -727,7 +727,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Parent = items[ "side_frame" ];
                     Name = "\0";
-                    Text = string.format('<u>%s</u><font color = "rgb(255, 255, 255)">%s</font>', cfg.name, cfg.suffix);
+                    Text = string.format('%s<font color = "rgb(255, 255, 255)">%s</font>', cfg.name, cfg.suffix);
                     BackgroundTransparency = 1;
                     Size = dim2(1, 0, 0, 70);
                     TextColor3 = themes.preset.accent;
@@ -755,7 +755,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
                 items[ "shadow" ] = library:create( "ImageLabel" , {
@@ -784,7 +784,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -196, 1, -81);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(13, 13, 17);  -- NEW: --bg
+                    BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
                     ZIndex = 2;
                 });                
 
@@ -907,7 +907,7 @@
                         Size = dim2(1, 0, 0, 35);
                         BorderSizePixel = 0;
                         TextSize = 16;
-                        BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     });
                     
                     items[ "icon" ] = library:create( "ImageLabel" , {
@@ -1011,7 +1011,7 @@
                                     BorderSizePixel = 0;
                                     AutomaticSize = Enum.AutomaticSize.X;
                                     TextSize = 16;
-                                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                                 });
                                 
                                 multi_items[ "name" ] = library:create( "TextLabel" , {
@@ -1318,7 +1318,7 @@
                 });
 
                 library:create( "UIStroke" , {
-                    Color = rgb(27, 27, 27);  -- NEW: --stroke
+                    Color = rgb(22, 22, 22);  -- NEW: --stroke
                     Parent = items[ "outline" ];
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 });
@@ -1330,7 +1330,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -2, 1, -2);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(16, 16, 20)  -- NEW: --surface-2
+                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                 });
                 
                 library:create( "UICorner" , {
@@ -1461,7 +1461,7 @@
                         Size = dim2(0, 36, 0, 18);
                         BorderSizePixel = 0;
                         TextSize = 14;
-                        BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     });  library:apply_theme(items[ "toggle" ], "accent", "BackgroundColor3");
                     
                     library:create( "UICorner" , {
@@ -1477,7 +1477,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Position = dim2(0, 1, 0, 1);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     });  library:apply_theme(items[ "toggle_outline" ], "accent", "BackgroundColor3");
                     
                     library:create( "UICorner" , {
@@ -1534,8 +1534,8 @@
                 end)
 
                 function cfg.toggle_section(bool)
-                    library:tween(items[ "toggle" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(27, 27, 27)}, Enum.EasingStyle.Quad)
-                    library:tween(items[ "toggle_outline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(27, 27, 27)}, Enum.EasingStyle.Quad)
+                    library:tween(items[ "toggle" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)}, Enum.EasingStyle.Quad)
+                    library:tween(items[ "toggle_outline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)}, Enum.EasingStyle.Quad)
                     library:tween(items[ "toggle_circle" ], {BackgroundColor3 = bool and rgb(254, 254, 254) or rgb(58, 58, 58), Position = bool and dim2(1, -14, 0, 2) or dim2(0, 2, 0, 2)}, Enum.EasingStyle.Quad)
                     library:tween(items[ "fade" ], {BackgroundTransparency = bool and 1 or 0.8}, Enum.EasingStyle.Quad)
                 end 
@@ -1599,7 +1599,7 @@
                 if cfg.info then 
                     items[ "info" ] = library:create( "TextLabel" , {
                         FontFace = fonts.small;
-                        TextColor3 = rgb(120, 120, 120);  -- NEW: text-sub
+                        TextColor3 = rgb(105, 105, 105);  -- NEW: text-sub
                         BorderColor3 = rgb(0, 0, 0);
                         TextWrapped = true;
                         Text = cfg.info;
@@ -1656,7 +1656,7 @@
                             Size = dim2(0, 16, 0, 16);
                             BorderSizePixel = 0;
                             TextSize = 14;
-                            BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                            BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                         }); library:apply_theme(items[ "toggle_button" ], "accent", "BackgroundColor3");
                         
                         library:create( "UICorner" , {
@@ -1672,7 +1672,7 @@
                             BorderColor3 = rgb(0, 0, 0);
                             Position = dim2(0, 1, 0, 1);
                             BorderSizePixel = 0;
-                            BackgroundColor3 = rgb(16, 16, 20)  -- NEW: --surface-2
+                            BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                         }); library:apply_theme(items[ "outline" ], "accent", "BackgroundColor3");
                         
                         items[ "tick" ] = library:create( "ImageLabel" , {
@@ -1764,11 +1764,11 @@
                 
                 if cfg.type == "checkbox" then 
                     library:tween(items[ "tick" ], {Rotation = bool and 0 or 45, ImageTransparency = bool and 0 or 1})
-                    library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(27, 27, 27)})
-                    library:tween(items[ "outline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(16, 16, 20)})
+                    library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)})
+                    library:tween(items[ "outline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(19, 19, 19)})
                 else
-                    library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(27, 27, 27)}, Enum.EasingStyle.Quad)
-                    library:tween(items[ "inline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(27, 27, 27)}, Enum.EasingStyle.Quad)
+                    library:tween(items[ "toggle_button" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)}, Enum.EasingStyle.Quad)
+                    library:tween(items[ "inline" ], {BackgroundColor3 = bool and themes.preset.accent or rgb(22, 22, 22)}, Enum.EasingStyle.Quad)
                     library:tween(items[ "circle" ], {BackgroundColor3 = bool and rgb(254, 254, 254) or rgb(58, 58, 58), Position = bool and dim2(1, -14, 0, 2) or dim2(0, 2, 0, 2)}, Enum.EasingStyle.Quad)
                 end
 
@@ -1799,7 +1799,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
             end
 
@@ -1867,7 +1867,7 @@
                 if cfg.info then 
                     items[ "info" ] = library:create( "TextLabel" , {
                         FontFace = fonts.small;
-                        TextColor3 = rgb(120, 120, 120);  -- NEW: text-sub
+                        TextColor3 = rgb(105, 105, 105);  -- NEW: text-sub
                         BorderColor3 = rgb(0, 0, 0);
                         TextWrapped = true;
                         Text = cfg.info;
@@ -1921,7 +1921,7 @@
                     Size = dim2(1, -4, 0, 4);
                     BorderSizePixel = 0;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
                 library:create( "UICorner" , {
@@ -2031,7 +2031,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
             end 
 
@@ -2101,7 +2101,7 @@
                 if cfg.info then 
                     items["info"] = library:create("TextLabel", {
                         FontFace = fonts.small;
-                        TextColor3 = rgb(120, 120, 120);  -- NEW: text-sub
+                        TextColor3 = rgb(105, 105, 105);  -- NEW: text-sub
                         BorderColor3 = rgb(0, 0, 0);
                         TextWrapped = true;
                         Text = cfg.info;
@@ -2155,7 +2155,7 @@
                     Size = dim2(0, cfg.width, 0, 16);
                     BorderSizePixel = 0;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
                 library:create("UICorner", {
@@ -2219,7 +2219,7 @@
                     ClipsDescendants = true;
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27);  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22);  -- NEW: --lift
                     ZIndex = 10;
                 });
                 
@@ -2233,7 +2233,7 @@
                         Parent = items["outline"];
                         Size = dim2(1, -6, 0, 24);
                         Position = dim2(0, 3, 0, 3);
-                        BackgroundColor3 = rgb(16, 16, 20);  -- NEW: --surface-2
+                        BackgroundColor3 = rgb(19, 19, 19);  -- NEW: --surface-2
                         BorderSizePixel = 0;
                         ZIndex = 10;
                     });
@@ -2516,7 +2516,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
             end 
 
@@ -2588,7 +2588,7 @@
             if cfg.info then 
                 items[ "info" ] = library:create( "TextLabel" , {
                 FontFace = fonts.small;
-                TextColor3 = rgb(120, 120, 120);  -- NEW: text-sub
+                TextColor3 = rgb(105, 105, 105);  -- NEW: text-sub
                 BorderColor3 = rgb(0, 0, 0);
                 TextWrapped = true;
                 Text = cfg.info;
@@ -2662,7 +2662,7 @@
                 else
                     items[ "info" ] = library:create( "TextLabel" , {
                         FontFace = fonts.small;
-                        TextColor3 = rgb(120, 120, 120);
+                        TextColor3 = rgb(105, 105, 105);
                         BorderColor3 = rgb(0, 0, 0);
                         TextWrapped = true;
                         Text = text;
@@ -2688,7 +2688,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
             end 
 
@@ -2800,7 +2800,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, -2, 1, -2);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(16, 16, 20)  -- NEW: --surface-2
+                        BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                     });
                     
                     library:create( "UICorner" , {
@@ -3031,7 +3031,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Position = dim2(1, -8, 1, -11);
                         Size = dim2(1, -16, 0, 18);
-                        BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     }); 
                     
                     library:create( "UICorner" , {
@@ -3295,7 +3295,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Position = dim2(1, 0, 0, 0);
                     Size = dim2(1, -4, 0, 30);
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 }); 
 
                 library:create( "UICorner" , {
@@ -3438,7 +3438,7 @@
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.X;
                         TextSize = 14;
-                        BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     });
                     
                     library:create( "UICorner" , {
@@ -3490,7 +3490,7 @@
                         ClipsDescendants = true;
                         BorderColor3 = rgb(0, 0, 0);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(16, 16, 20)  -- NEW: --surface-2
+                        BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                     });
                     
                     library:create( "UIPadding" , {
@@ -3722,7 +3722,7 @@
                     Size = dim2(1, -8, 0, 30);
                     BorderSizePixel = 0;
                     TextSize = 14;
-                    BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
                 library:create( "UICorner" , {
@@ -3828,7 +3828,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -2, 1, -2);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(16, 16, 20)  -- NEW: --surface-2
+                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                 });
                 
                 library:create( "UICorner" , {
@@ -3950,7 +3950,7 @@
                         Size = dim2(1, 0, 0, 30);
                         BorderSizePixel = 0;
                         TextSize = 14;
-                        BackgroundColor3 = rgb(27, 27, 27)  -- NEW: --lift
+                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     }); cfg.data_store[#cfg.data_store + 1] = button;
 
                     local name = library:create( "TextLabel" , {
@@ -4249,7 +4249,7 @@
                     BackgroundTransparency = 1;
                     AnchorPoint = vec2(1, 0);
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = rgb(13, 13, 17)  -- NEW: --bg
+                    BackgroundColor3 = rgb(16, 16, 16)  -- NEW: --bg
                 });
                 
                 library:create( "UIStroke" , {
@@ -4281,7 +4281,7 @@
                 
                 items[ "info" ] = library:create( "TextLabel" , {
                     FontFace = fonts.font;
-                    TextColor3 = rgb(120, 120, 120);  -- NEW: text-sub
+                    TextColor3 = rgb(105, 105, 105);  -- NEW: text-sub
                     BorderColor3 = rgb(0, 0, 0);
                     Text = cfg.info;
                     Parent = items[ "notification" ];
