@@ -721,6 +721,15 @@
                     PaddingLeft = dim(0, 10)
                 });
 
+                library:create("Frame", {
+                    Parent = items["side_frame"];
+                    AnchorPoint = vec2(0, 0);
+                    Position = dim2(0, 0, 0, 10);
+                    Size = dim2(1, 0, 0, 60);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(16, 16, 16);
+                });
+
                 items["title"] = library:create("ViewportFrame", {
                     Parent = items["side_frame"];
                     Name = "\0";
@@ -749,15 +758,6 @@
                     TextSize = 26;
                     BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
-
-                library:create("Frame", {
-                    Parent = items["side_frame"];
-                    AnchorPoint = vec2(0, 0);
-                    Position = dim2(0, 0, 0, 65);
-                    Size = dim2(1, 0, 0, 10);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(16, 16, 16);
-                });
 
                 library:create("Frame", {
                     Parent = items["side_frame"];
