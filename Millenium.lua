@@ -681,23 +681,13 @@
                     BackgroundColor3 = rgb(16, 16, 16)  -- NEW: --bg
                 });
                 
-                library:create( "Frame" , {
-                    AnchorPoint = vec2(1, 0);
-                    Parent = items[ "side_frame" ];
-                    Position = dim2(1, 0, 0, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(0, 1, 1, 0);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
-                });
-                
                 items[ "button_holder" ] = library:create( "ScrollingFrame" , {
                     Parent = items[ "side_frame" ];
                     Name = "\0";
                     BackgroundTransparency = 1;
                     Position = dim2(0, 0, 0, 60);
                     BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 1, -90);
+                    Size = dim2(1, 0, 1, -100);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(204, 204, 204);
                     CanvasSize = dim2(0, 0, 0, 0);
@@ -908,6 +898,16 @@
                     Position = dim2(0, 0, 1, 0);
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                });
+
+                library:create( "Frame" , {
+                    AnchorPoint = vec2(1, 0);
+                    Parent = items[ "side_frame" ];
+                    Position = dim2(1, 0, 0, 0);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Size = dim2(0, 1, 1, 0);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
