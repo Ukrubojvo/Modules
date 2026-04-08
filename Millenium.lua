@@ -738,7 +738,7 @@
                     BackgroundTransparency = 1;
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);
-                    ImageColor3 = themes.preset.accent;
+                    ImageColor3 = rgb(204, 204, 204);
                     LightDirection = vec3(-1, -2, -1);
                     Ambient = rgb(180, 180, 180);
                 });
@@ -752,7 +752,7 @@
                     BackgroundTransparency = 1;
                     Size = dim2(0.7, 0, 0, 70);
                     Position = dim2(0.25, 0, 0, 0);
-                    TextColor3 = themes.preset.accent;
+                    TextColor3 = rgb(204, 204, 204);
                     BorderSizePixel = 0;
                     RichText = true;
                     TextSize = 26;
