@@ -721,23 +721,6 @@
                     PaddingLeft = dim(0, 10)
                 });
 
-                --[[
-                items[ "title" ] = library:create( "TextLabel" , {
-                    FontFace = fonts.font;
-                    BorderColor3 = rgb(0, 0, 0);
-                    Parent = items[ "side_frame" ];
-                    Name = "\0";
-                    Text = string.format('%s<font color = "rgb(204, 204, 204)">%s</font>', cfg.name, cfg.suffix);
-                    BackgroundTransparency = 1;
-                    Size = dim2(1, 0, 0, 70);
-                    TextColor3 = themes.preset.accent;
-                    BorderSizePixel = 0;
-                    RichText = true;
-                    TextSize = 30;
-                    BackgroundColor3 = rgb(204, 204, 204)
-                }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
-                ]]
-
                 items["title"] = library:create("ViewportFrame", {
                     Parent = items["side_frame"];
                     Name = "\0";
@@ -746,7 +729,7 @@
                     BackgroundTransparency = 0;
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);
-                    ImageColor3 = rgb(255, 255, 255);
+                    ImageColor3 = themes.preset.accent;
                     LightDirection = vec3(-1, -2, -1);
                     Ambient = rgb(180, 180, 180);
                 });
@@ -824,7 +807,7 @@
                         end
 
                         --------------------
-                        local CAM_DIST = 5
+                        local CAM_DIST = 4
                         local CAM_HEIGHT = 0
                         local ROT_SPEED = 1
                         ---------------------
