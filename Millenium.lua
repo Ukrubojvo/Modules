@@ -749,6 +749,11 @@
                     LightDirection = vec3(-1, -2, -1);
                     Ambient = rgb(180, 180, 180);
                 });
+                
+                library:create("UICorner", {
+                    Parent = items["title"];
+                    CornerRadius = dim(0, 10);
+                });
 
                 library:create("Frame", {
                     Parent = items["side_frame"];
