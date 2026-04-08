@@ -751,7 +751,7 @@
                     Text = string.format('%s<font color = "rgb(255, 255, 255)">%s</font>', cfg.name, cfg.suffix);
                     BackgroundTransparency = 1;
                     Size = dim2(0.7, 0, 0, 70);
-                    Position = dim2(0.225, 0, 0, 0);
+                    Position = dim2(0.22, 0, 0, 0);
                     TextColor3 = rgb(204, 204, 204);
                     BorderSizePixel = 0;
                     RichText = true;
