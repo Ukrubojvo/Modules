@@ -793,9 +793,9 @@
                         end
 
                         --------------------
-                        local CAM_DIST = 4
-                        local CAM_HEIGHT = 1
-                        local ROT_SPEED = 0.4
+                        local CAM_DIST = 3
+                        local CAM_HEIGHT = 0
+                        local ROT_SPEED = 0.5
                         ---------------------
                         local angle = 0
 
