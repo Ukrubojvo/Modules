@@ -697,7 +697,7 @@
                     BackgroundTransparency = 1;
                     Position = dim2(0, 0, 0, 60);
                     BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 1, -60);
+                    Size = dim2(1, 0, 1, -75);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(204, 204, 204);
                     CanvasSize = dim2(0, 0, 0, 0);
@@ -766,6 +766,53 @@
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
+                });
+
+                items["profile"] = library:create("Frame", {
+                    Parent = items[ "side_frame" ];
+                    AnchorPoint = vec2(0, 1);
+                    Position = dim2(0, 0, 1, 0);
+                    Size = dim2(1, 0, 0, 70);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
+                })
+
+                library:create("ImageLabel", {
+                    Parent = items["profile"];
+                    AnchorPoint = vec2(0, 0);
+                    Position = dim2(0, 10, 0, 10);
+                    Size = dim2(0, 50, 0, 50);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(204, 204, 204);
+                    Image = lp.UserId and ("https://www.roblox.com/headshot-thumbnail/image?userId=%s&width=420&height=420&format=png"):format(lp.UserId) or "";
+                });
+
+                library:create("TextLabel", {
+                    Parent = items["profile"];
+                    AnchorPoint = vec2(0, 0);
+                    Position = dim2(0, 70, 0, 10);
+                    Size = dim2(1, -70, 0, 20);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(204, 204, 204);
+                    TextColor3 = rgb(190, 190, 190);  -- NEW: text-dim
+                    FontFace = fonts.small;
+                    TextSize = 14;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    Text = lp.DisplayName or "Unknown";
+                });
+
+                library:create("TextLabel", {
+                    Parent = items["profile"];
+                    AnchorPoint = vec2(0, 0);
+                    Position = dim2(0, 70, 0, 30);
+                    Size = dim2(1, -70, 0, 20);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(204, 204, 204);
+                    TextColor3 = rgb(125, 125, 125);  -- NEW: text-dim-2
+                    FontFace = fonts.small;
+                    TextSize = 14;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    Text = "@" .. (lp.Name or "unknown");
                 });
 
                 do
