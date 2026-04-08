@@ -807,7 +807,7 @@
                         end
 
                         --------------------
-                        local CAM_DIST = 4
+                        local CAM_DIST = 6
                         local CAM_HEIGHT = 0
                         local ROT_SPEED = 1
                         ---------------------
