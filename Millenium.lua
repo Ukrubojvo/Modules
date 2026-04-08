@@ -738,8 +738,6 @@
                 }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
                 ]]
 
-                local LOGO_ASSET_ID = 82139490777282
-
                 items["title"] = library:create("ViewportFrame", {
                     Parent = items["side_frame"];
                     Name = "\0";
@@ -753,6 +751,8 @@
                 });
 
                 do
+                    local LOGO_ASSET_ID = "rbxassetid://82139490777282"
+
                     local world_model = Instance.new("WorldModel")
                     world_model.Parent = items["title"]
 
@@ -763,8 +763,9 @@
                     local logo_model = nil
 
                     pcall(function()
-                        local asset = game:GetService("InsertService"):LoadAsset(LOGO_ASSET_ID)
-                        local found = asset:FindFirstChildOfClass("Model") or asset:FindFirstChildOfClass("BasePart")
+                        local objects = game:GetObjects(LOGO_ASSET_ID)
+                        local found = objects and objects[1]
+
                         if found then
                             found.Parent = world_model
                             logo_model = found
@@ -775,15 +776,15 @@
                                     part.Material = Enum.Material.Neon
                                     part.Color = rgb(204, 204, 204)
                                     part.CastShadow = false
+                                    part.Anchored = true
                                 end
                             end
                         end
-                        asset:Destroy()
                     end)
 
-                    if logo_model then
-                        local angle = 0
-
+                    if not logo_model then
+                        warn("[ViewportFrame] Model Load Failed - ID:", LOGO_ASSET_ID)
+                    else
                         local center_pos
                         if logo_model:IsA("Model") then
                             center_pos = logo_model:GetPivot().Position
@@ -791,9 +792,10 @@
                             center_pos = logo_model.Position
                         end
 
-                        local CAM_DIST  = 8    -- 멀수록 모델이 작게 보임
-                        local CAM_HEIGHT = 1    -- 위에서 내려다보는 높이
-                        local ROT_SPEED = 0.4  -- 회전 속도 (라디안/초)
+                        local CAM_DIST   = 8
+                        local CAM_HEIGHT = 1
+                        local ROT_SPEED  = 0.4
+                        local angle      = 0
 
                         library:connection(run.RenderStepped, function(dt)
                             angle = angle + ROT_SPEED * dt
