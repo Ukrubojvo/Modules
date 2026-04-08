@@ -741,7 +741,8 @@
                 items["title"] = library:create("ViewportFrame", {
                     Parent = items["side_frame"];
                     Name = "\0";
-                    Size = dim2(0.4, 0, 0, 70);
+                    Size = dim2(0.3, 0, 0, 70);
+                    Position = dim2(0.05, 0, 0, 0);
                     BackgroundTransparency = 0;
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);
@@ -763,7 +764,7 @@
                     Text = string.format('%s<font color = "rgb(204, 204, 204)">%s</font>', cfg.name, cfg.suffix);
                     BackgroundTransparency = 1;
                     Size = dim2(0.7, 0, 0, 70);
-                    Position = dim2(0.55, 0, 0, 0);
+                    Position = dim2(0.25, 0, 0, 0);
                     TextColor3 = themes.preset.accent;
                     BorderSizePixel = 0;
                     RichText = true;
