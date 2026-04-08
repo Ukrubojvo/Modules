@@ -778,9 +778,8 @@
                 })
 
                 library:create("Frame", {
-                    Parent = items["side_frame"];
-                    AnchorPoint = vec2(0, 1);
-                    Position = dim2(0, 0, 1, 0);
+                    Parent = items["profile"];
+                    AnchorPoint = vec2(0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
