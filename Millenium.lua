@@ -1291,7 +1291,7 @@
 
         function library:seperator(properties)
             local cfg = {items = {}, name = properties.Name or properties.name or "General"}
-
+            if cfg.name == 'Home' then return setmetatable(cfg, library) end
             local items = cfg.items do 
                 items[ "name" ] = library:create( "TextLabel" , {
                     FontFace = fonts.font;
