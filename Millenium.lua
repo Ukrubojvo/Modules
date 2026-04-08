@@ -750,6 +750,15 @@
                     Ambient = rgb(180, 180, 180);
                 });
 
+                library:create("Frame", {
+                    Parent = items["side_frame"];
+                    AnchorPoint = vec2(0, 0);
+                    Position = dim2(0, 0, 0, 70);
+                    Size = dim2(1, 0, 0, 1);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
+                });
+
                 do
                     local LOGO_ASSET_ID = "rbxassetid://82139490777282"
 
