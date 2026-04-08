@@ -701,7 +701,7 @@
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(204, 204, 204);
                     CanvasSize = dim2(0, 0, 0, 0);
-                    ScrollBarThickness = 2;
+                    ScrollBarThickness = 0;
                     VerticalScrollBarInset = Enum.ScrollBarInset.None;
                     AutomaticCanvasSize = Enum.AutomaticSize.Y;
                     ScrollingDirection = Enum.ScrollingDirection.Y;
