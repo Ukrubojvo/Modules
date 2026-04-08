@@ -792,10 +792,12 @@
                             center_pos = logo_model.Position
                         end
 
-                        local CAM_DIST   = 8
+                        --------------------
+                        local CAM_DIST = 4
                         local CAM_HEIGHT = 1
-                        local ROT_SPEED  = 0.4
-                        local angle      = 0
+                        local ROT_SPEED = 0.4
+                        ---------------------
+                        local angle = 0
 
                         library:connection(run.RenderStepped, function(dt)
                             angle = angle + ROT_SPEED * dt
