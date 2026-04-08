@@ -725,7 +725,7 @@
                     Parent = items["side_frame"];
                     AnchorPoint = vec2(0, 0);
                     Position = dim2(0, 0, 0, 10);
-                    Size = dim2(1, 0, 0, 60);
+                    Size = dim2(1, 0, 0, 65);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);
                 });
@@ -748,14 +748,14 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Parent = items[ "side_frame" ];
                     Name = "\0";
-                    Text = string.format('%s<font color = "rgb(204, 204, 204)">%s</font>', cfg.name, cfg.suffix);
+                    Text = string.format('%s<font color = "rgb(255, 255, 255)">%s</font>', cfg.name, cfg.suffix);
                     BackgroundTransparency = 1;
                     Size = dim2(0.7, 0, 0, 70);
-                    Position = dim2(0.25, 0, 0, 0);
+                    Position = dim2(0.225, 0, 0, 0);
                     TextColor3 = rgb(204, 204, 204);
                     BorderSizePixel = 0;
                     RichText = true;
-                    TextSize = 26;
+                    TextSize = 24;
                     BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
 
