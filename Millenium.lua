@@ -777,6 +777,15 @@
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
                 })
 
+                library:create("Frame", {
+                    Parent = items["side_frame"];
+                    AnchorPoint = vec2(0, 1);
+                    Position = dim2(0, 0, 1, 0);
+                    Size = dim2(1, 0, 0, 1);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
+                });
+
                 library:create("ImageLabel", {
                     Parent = items["profile"];
                     AnchorPoint = vec2(0, 0);
@@ -788,14 +797,14 @@
                 });
 
                 library:create("UICorner", {
-                    Parent = items["profile"];
+                    Parent = items["ImageLabel"];
                     CornerRadius = dim(0, 999);
                 });
 
                 library:create("TextLabel", {
                     Parent = items["profile"];
                     AnchorPoint = vec2(0, 0);
-                    Position = dim2(0, 70, 0, 10);
+                    Position = dim2(0, 70, 0, 15);
                     Size = dim2(1, -70, 0, 20);
                     BorderSizePixel = 0;
                     BackgroundTransparency = 1;
