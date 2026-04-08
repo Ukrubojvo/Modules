@@ -785,7 +785,7 @@
                     BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
                 });
 
-                library:create("ImageLabel", {
+                items["ProfileImage"] = library:create("ImageLabel", {
                     Parent = items["profile"];
                     AnchorPoint = vec2(0, 0);
                     Position = dim2(0, 10, 0, 10);
@@ -796,7 +796,7 @@
                 });
 
                 library:create("UICorner", {
-                    Parent = items["ImageLabel"];
+                    Parent = items["ProfileImage"];
                     CornerRadius = dim(0, 999);
                 });
 
