@@ -726,7 +726,7 @@
                     Name = "\0";
                     Size = dim2(0.3, 0, 0, 70);
                     Position = dim2(0.05, 0, 0, 0);
-                    BackgroundTransparency = 0;
+                    BackgroundTransparency = 1;
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);
                     ImageColor3 = themes.preset.accent;
