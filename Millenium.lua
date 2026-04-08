@@ -753,6 +753,15 @@
                 library:create("Frame", {
                     Parent = items["side_frame"];
                     AnchorPoint = vec2(0, 0);
+                    Position = dim2(0, 0, 0, 65);
+                    Size = dim2(1, 0, 0, 10);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(16, 16, 16);
+                });
+
+                library:create("Frame", {
+                    Parent = items["side_frame"];
+                    AnchorPoint = vec2(0, 0);
                     Position = dim2(0, 0, 0, 70);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
