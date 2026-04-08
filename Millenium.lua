@@ -721,7 +721,7 @@
                     PaddingLeft = dim(0, 10)
                 });
 
-                local accent = themes.preset.accent
+                --[[
                 items[ "title" ] = library:create( "TextLabel" , {
                     FontFace = fonts.font;
                     BorderColor3 = rgb(0, 0, 0);
@@ -736,6 +736,78 @@
                     TextSize = 30;
                     BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
+                ]]
+
+                local LOGO_ASSET_ID = 82139490777282
+
+                items["title"] = library:create("ViewportFrame", {
+                    Parent = items["side_frame"];
+                    Name = "\0";
+                    Size = dim2(1, 0, 0, 70);
+                    BackgroundTransparency = 1;
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(16, 16, 16);
+                    ImageColor3 = rgb(204, 204, 204);
+                    LightDirection = vec3(-1, -2, -1);
+                    Ambient = rgb(180, 180, 180);
+                });
+
+                do
+                    local world_model = Instance.new("WorldModel")
+                    world_model.Parent = items["title"]
+
+                    local vp_camera = Instance.new("Camera")
+                    vp_camera.Parent = items["title"]
+                    items["title"].CurrentCamera = vp_camera
+
+                    local logo_model = nil
+
+                    pcall(function()
+                        local asset = game:GetService("InsertService"):LoadAsset(LOGO_ASSET_ID)
+                        local found = asset:FindFirstChildOfClass("Model") or asset:FindFirstChildOfClass("BasePart")
+                        if found then
+                            found.Parent = world_model
+                            logo_model = found
+
+                            local parts = logo_model:IsA("BasePart") and {logo_model} or logo_model:GetDescendants()
+                            for _, part in ipairs(parts) do
+                                if part:IsA("BasePart") then
+                                    part.Material = Enum.Material.Neon
+                                    part.Color = rgb(204, 204, 204)
+                                    part.CastShadow = false
+                                end
+                            end
+                        end
+                        asset:Destroy()
+                    end)
+
+                    if logo_model then
+                        local angle = 0
+
+                        local center_pos
+                        if logo_model:IsA("Model") then
+                            center_pos = logo_model:GetPivot().Position
+                        else
+                            center_pos = logo_model.Position
+                        end
+
+                        local CAM_DIST  = 8    -- 멀수록 모델이 작게 보임
+                        local CAM_HEIGHT = 1    -- 위에서 내려다보는 높이
+                        local ROT_SPEED = 0.4  -- 회전 속도 (라디안/초)
+
+                        library:connection(run.RenderStepped, function(dt)
+                            angle = angle + ROT_SPEED * dt
+                            vp_camera.CFrame = CFrame.lookAt(
+                                vec3(
+                                    center_pos.X + math.cos(angle) * CAM_DIST,
+                                    center_pos.Y + CAM_HEIGHT,
+                                    center_pos.Z + math.sin(angle) * CAM_DIST
+                                ),
+                                center_pos
+                            )
+                        end)
+                    end
+                end
                 
                 items[ "multi_holder" ] = library:create( "Frame" , {
                     Parent = items[ "main" ];
