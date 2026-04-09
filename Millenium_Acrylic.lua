@@ -362,8 +362,8 @@
                 end
 
                 local zIndex = 1 - 0.05 * frame.ZIndex
-                local tl = frame.AbsolutePosition + Vector2.new(1, 0)
-				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(1, 0)
+                local tl = frame.AbsolutePosition + Vector2.new(2, 0)
+				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(2, 0)
                 local tr = Vector2.new(br.X, tl.Y)
                 local bl = Vector2.new(tl.X, br.Y)
 
@@ -851,7 +851,7 @@
                     BackgroundTransparency = 1;
                     Position = dim2(0, 0, 0, 60);
                     BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 1, -100);
+                    Size = dim2(1, 0, 1, -140);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(204, 204, 204);
                     CanvasSize = dim2(0, 0, 0, 0);
