@@ -362,8 +362,8 @@
                 end
 
                 local zIndex = 1 - 0.05 * frame.ZIndex
-                local tl = frame.AbsolutePosition
-                local br = frame.AbsolutePosition + frame.AbsoluteSize
+                local tl = frame.AbsolutePosition + Vector2.new(1, 0)
+				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(1, 0)
                 local tr = Vector2.new(br.X, tl.Y)
                 local bl = Vector2.new(tl.X, br.Y)
 
@@ -875,6 +875,7 @@
                     PaddingLeft = dim(0, 10)
                 });
 
+				--[[
                 library:create("Frame", {
                     Parent = items["side_frame"];
                     AnchorPoint = vec2(0, 0);
@@ -883,6 +884,7 @@
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);
                 });
+				]]
 
                 items["title"] = library:create("ViewportFrame", {
                     Parent = items["side_frame"];
@@ -928,6 +930,7 @@
                     Position = dim2(0, 0, 1, 0);
                     Size = dim2(1, 0, 0, 70);
                     BorderSizePixel = 0;
+					BackgroundTransparency = 1;
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
                 })
 
