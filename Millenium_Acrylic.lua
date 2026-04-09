@@ -4471,7 +4471,7 @@
 
         
         function notifications:fade(path, is_fading)
-            local fading = is_fading and 1 or 0 
+            local fading = is_fading and 1 or 0.35
             
             library:tween(path, {BackgroundTransparency = fading}, Enum.EasingStyle.Quad, 1)
 
