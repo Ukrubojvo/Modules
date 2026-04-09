@@ -921,7 +921,7 @@
                     Position = dim2(0, 0, 0, 70);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
+                    BackgroundColor3 = rgb(58, 58, 58);  -- --lift 색
                 });
 
                 items["profile"] = library:create("Frame", {
@@ -939,7 +939,7 @@
                     AnchorPoint = vec2(0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
+                    BackgroundColor3 = rgb(58, 58, 58);  -- --lift 색
                 });
 
                 items["ProfileImage"] = library:create("ImageLabel", {
@@ -1066,7 +1066,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                    BackgroundColor3 = rgb(58, 58, 58)  -- NEW: --lift
                 });
 
                 library:create( "Frame" , {
@@ -1076,7 +1076,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 1, 1, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                    BackgroundColor3 = rgb(58, 58, 58)  -- NEW: --lift
                 });
                 
                 items[ "global_fade" ] = library:create( "Frame" , {
@@ -1113,7 +1113,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)
+                    BackgroundColor3 = rgb(58, 58, 58)
                 });
                 
                 items[ "game" ] = library:create( "TextLabel" , {
@@ -1404,7 +1404,7 @@
 							local page = cfg.current_multi; 
                             
                             if page and page.text ~= data.text then 
-                                self.items[ "global_fade" ].BackgroundTransparency = 0
+                                self.items[ "global_fade" ].BackgroundTransparency = 1
                                 library:tween(self.items[ "global_fade" ], {BackgroundTransparency = 1}, Enum.EasingStyle.Quad, 0.4)
                                 
                                 local old_size = page.page.Size
@@ -1449,7 +1449,7 @@
                 
                 if selected_tab then 
                     if selected_tab[ 4 ] ~= items[ "tab_holder" ] then 
-                        self.items[ "global_fade" ].BackgroundTransparency = 0
+                        self.items[ "global_fade" ].BackgroundTransparency = 1
                         
                         library:tween(self.items[ "global_fade" ], {BackgroundTransparency = 1}, Enum.EasingStyle.Quad, 0.4)
                         selected_tab[ 4 ].Size = dim2(1, -216, 1, -101)
@@ -1777,7 +1777,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Position = dim2(0, 1, 0, 1);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
+                        BackgroundColor3 = rgb(58, 58, 58)  -- NEW: --lift
                     });  library:apply_theme(items[ "toggle_outline" ], "accent", "BackgroundColor3");
                     
                     library:create( "UICorner" , {
@@ -3035,6 +3035,7 @@
                         Size = dim2(0, 166, 0, 197);
                         BorderSizePixel = 0;
                         Visible = true;
+                        BackgroundTransparency = 0.75;
                         BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                     });
 
