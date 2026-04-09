@@ -362,8 +362,8 @@
                 end
 
                 local zIndex = 1 - 0.05 * frame.ZIndex
-                local tl = frame.AbsolutePosition + Vector2.new(4, 0)
-				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(4, 0)
+                local tl = frame.AbsolutePosition + Vector2.new(8, 0)
+				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(8, 0)
                 local tr = Vector2.new(br.X, tl.Y)
                 local bl = Vector2.new(tl.X, br.Y)
 
@@ -820,7 +820,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0.55;
                 });
                 
                 library:create( "UICorner" , {
@@ -1122,7 +1122,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 25);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
+                    BackgroundTransparency = 1;
                 });
                 
                 library:create( "UICorner" , {
@@ -1134,9 +1134,9 @@
                     Name = "\0";
                     Parent = items[ "info" ];
                     BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 0, 6);
+                    Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
+                    BackgroundColor3 = rgb(22, 22, 22)
                 });
                 
                 items[ "game" ] = library:create( "TextLabel" , {
@@ -4555,7 +4555,7 @@
                     AnchorPoint = vec2(1, 0);
                     AutomaticSize = Enum.AutomaticSize.Y;
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0.55;
                 });
                 
                 library:create( "UIStroke" , {
