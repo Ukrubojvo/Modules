@@ -868,7 +868,7 @@
                 });
                 
                 library:create( "UIPadding" , {
-                    PaddingTop = dim(0, 16);
+                    PaddingTop = dim(0, 0);
                     PaddingBottom = dim(0, 36);
                     Parent = items[ "button_holder" ];
                     PaddingRight = dim(0, 11);
@@ -915,16 +915,6 @@
                     BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
 
-                library:create("Frame", {
-                    Parent = items["side_frame"];
-                    AnchorPoint = vec2(0, 0);
-                    Position = dim2(0, 0, 0, 70);
-                    Size = dim2(1, 0, 0, 1);
-                    BorderSizePixel = 0;
-                    BackgroundTransparency = 0.75;
-                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
-                });
-
                 items["profile"] = library:create("Frame", {
                     Parent = items[ "side_frame" ];
                     AnchorPoint = vec2(0, 1);
@@ -934,15 +924,6 @@
 					BackgroundTransparency = 1;
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
                 })
-
-                library:create("Frame", {
-                    Parent = items["profile"];
-                    AnchorPoint = vec2(0, 0);
-                    Size = dim2(1, 0, 0, 1);
-                    BorderSizePixel = 0;
-                    BackgroundTransparency = 0.75;
-                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
-                });
 
                 items["ProfileImage"] = library:create("ImageLabel", {
                     Parent = items["profile"];
@@ -1060,17 +1041,6 @@
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(204, 204, 204)
                 }); cfg.multi_holder = items[ "multi_holder" ];
-                
-                library:create( "Frame" , {
-                    AnchorPoint = vec2(0, 1);
-                    Parent = items[ "multi_holder" ];
-                    Position = dim2(0, 0, 1, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 0, 1);
-                    BorderSizePixel = 0;
-                    BackgroundTransparency = 0.75;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
-                });
 
                 library:create( "Frame" , {
                     AnchorPoint = vec2(1, 0);
