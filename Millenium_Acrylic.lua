@@ -921,7 +921,8 @@
                     Position = dim2(0, 0, 0, 70);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(58, 58, 58);  -- --lift 색
+                    BackgroundTransparency = 0.75;
+                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
                 });
 
                 items["profile"] = library:create("Frame", {
@@ -939,7 +940,8 @@
                     AnchorPoint = vec2(0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(58, 58, 58);  -- --lift 색
+                    BackgroundTransparency = 0.75;
+                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
                 });
 
                 items["ProfileImage"] = library:create("ImageLabel", {
@@ -1066,7 +1068,8 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(58, 58, 58)  -- NEW: --lift
+                    BackgroundTransparency = 0.75;
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
 
                 library:create( "Frame" , {
@@ -1076,7 +1079,8 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 1, 1, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(58, 58, 58)  -- NEW: --lift
+                    BackgroundTransparency = 0.75;
+                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
                 items[ "global_fade" ] = library:create( "Frame" , {
@@ -1113,7 +1117,8 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(58, 58, 58)
+                    BackgroundTransparency = 0.75;
+                    BackgroundColor3 = rgb(22, 22, 22)
                 });
                 
                 items[ "game" ] = library:create( "TextLabel" , {
@@ -1777,7 +1782,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Position = dim2(0, 1, 0, 1);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(58, 58, 58)  -- NEW: --lift
+                        BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                     });  library:apply_theme(items[ "toggle_outline" ], "accent", "BackgroundColor3");
                     
                     library:create( "UICorner" , {
