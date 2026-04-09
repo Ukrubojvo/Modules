@@ -849,7 +849,7 @@
                     Parent = items[ "side_frame" ];
                     Name = "\0";
                     BackgroundTransparency = 1;
-                    Position = dim2(0, 0, 0, 60);
+                    Position = dim2(0, 0, 0, 70);
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 1, -140);
                     BorderSizePixel = 0;
