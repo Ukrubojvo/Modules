@@ -362,8 +362,8 @@
                 end
 
                 local zIndex = 1 - 0.05 * frame.ZIndex
-                local tl = frame.AbsolutePosition + Vector2.new(2, 0)
-				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(2, 0)
+                local tl = frame.AbsolutePosition + Vector2.new(4, 0)
+				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(4, 0)
                 local tr = Vector2.new(br.X, tl.Y)
                 local bl = Vector2.new(tl.X, br.Y)
 
