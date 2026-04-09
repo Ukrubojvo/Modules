@@ -1079,24 +1079,6 @@
                     BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
-                items[ "shadow" ] = library:create( "ImageLabel" , {
-                    ImageColor3 = rgb(0, 0, 0);
-                    ScaleType = Enum.ScaleType.Slice;
-                    Parent = items[ "main" ];
-                    BorderColor3 = rgb(0, 0, 0);
-                    Name = "\0";
-                    BackgroundColor3 = rgb(204, 204, 204);
-                    Size = dim2(1, 75, 1, 75);
-                    AnchorPoint = vec2(0.5, 0.5);
-                    Image = "rbxassetid://112971167999062";
-                    BackgroundTransparency = 1;
-                    Position = dim2(0.5, 0, 0.5, 0);
-                    SliceScale = 0.75;
-                    ZIndex = -100;
-                    BorderSizePixel = 0;
-                    SliceCenter = rect(vec2(112, 112), vec2(147, 147))
-                });
-                
                 items[ "global_fade" ] = library:create( "Frame" , {
                     Parent = items[ "main" ];
                     Name = "\0";
@@ -1108,11 +1090,6 @@
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
                     ZIndex = 2;
                 });                
-
-                library:create( "UICorner" , {
-                    Parent = items[ "shadow" ];
-                    CornerRadius = dim(0, 5)
-                });
                 
                 items[ "info" ] = library:create( "Frame" , {
                     AnchorPoint = vec2(0, 1);
