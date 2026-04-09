@@ -820,7 +820,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
-                    BackgroundTransparency = 0.45;
+                    BackgroundTransparency = 0.75;
                 });
                 
                 library:create( "UICorner" , {
@@ -4555,7 +4555,7 @@
                     AnchorPoint = vec2(1, 0);
                     AutomaticSize = Enum.AutomaticSize.Y;
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
-                    BackgroundTransparency = 0.45;
+                    BackgroundTransparency = 0.75;
                 });
                 
                 library:create( "UIStroke" , {
