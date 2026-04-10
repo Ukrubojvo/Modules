@@ -3539,6 +3539,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Position = dim2(1, 0, 0, 0);
                     Size = dim2(1, -4, 0, 30);
+                    BackgroundTransparency = 0.75;
                     BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 }); 
 
