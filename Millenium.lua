@@ -157,6 +157,27 @@
         
     library.__index = library
 
+    local _acrylic_dof = nil
+    do
+        for _, v in pairs(lighting:GetChildren()) do
+            if v:IsA("DepthOfFieldEffect") and v:HasTag(".acrylic") then
+                _acrylic_dof = v
+                break
+            end
+        end
+        if not _acrylic_dof then
+            _acrylic_dof = Instance.new("DepthOfFieldEffect", lighting)
+            _acrylic_dof.FarIntensity = 0
+            _acrylic_dof.FocusDistance = 51.6
+            _acrylic_dof.InFocusRadius = 50
+            _acrylic_dof.NearIntensity = 1
+            _acrylic_dof.Name = http_service:GenerateGUID(true)
+            _acrylic_dof:AddTag(".acrylic")
+        end
+    end
+    local _acrylic_root = Instance.new('Folder', camera)
+    _acrylic_root.Name = http_service:GenerateGUID(true)
+
     for _, path in next, library.folders do 
         makefolder(library.directory .. path)
     end
@@ -231,6 +252,147 @@
             local tween = tween_service:Create(obj, TweenInfo.new(time or 0.25, easing_style or Enum.EasingStyle.Quint, Enum.EasingDirection.InOut, 0, false, 0), properties):Play()
                 
             return tween
+        end
+
+        function library:apply_acrylic(frame, transparency)
+            transparency = transparency or 0.7
+
+            local wedgeguid = http_service:GenerateGUID(true)
+            local parts = {}
+            local folder = Instance.new('Folder', _acrylic_root)
+            folder.Name = http_service:GenerateGUID(true)
+            local sz = 0.2
+
+            local acos, max, pi, sqrt = math.acos, math.max, math.pi, math.sqrt
+
+            local function makePart()
+                local p = Instance.new('Part')
+                p.TopSurface = Enum.SurfaceType.Smooth
+                p.BottomSurface = Enum.SurfaceType.Smooth
+                p.Anchored = true
+                p.CanCollide = false
+                p.CastShadow = false
+                p.Material = Enum.Material.Glass
+                p.Size = Vector3.new(sz, sz, sz)
+                p.Name = http_service:GenerateGUID(true)
+                local mesh = Instance.new('SpecialMesh', p)
+                mesh.MeshType = Enum.MeshType.Wedge
+                mesh.Name = wedgeguid
+                return p
+            end
+
+            local function DrawTriangle(v1, v2, v3, p0, p1)
+                local s1 = (v1 - v2).Magnitude
+                local s2 = (v2 - v3).Magnitude
+                local s3 = (v3 - v1).Magnitude
+                local smax = max(s1, s2, s3)
+                local A, B, C
+                if s1 == smax then A, B, C = v1, v2, v3
+                elseif s2 == smax then A, B, C = v2, v3, v1
+                else A, B, C = v3, v1, v2 end
+
+                local AB, AC = B - A, C - A
+                local para = (AB.X*AC.X + AB.Y*AC.Y + AB.Z*AC.Z) / (A - B).Magnitude
+                local perp = sqrt(AC.Magnitude^2 - para*para)
+                local dif_para = (A - B).Magnitude - para
+
+                local st = CFrame.new(B, A)
+                local za = CFrame.Angles(pi/2, 0, 0)
+                local cf0 = st
+                local Top_Look = (cf0 * za).LookVector
+                local Mid_Point = A + CFrame.new(A, B).LookVector * para
+                local Needed_Look = CFrame.new(Mid_Point, C).LookVector
+                local dot = math.clamp(
+                    Top_Look.X*Needed_Look.X + Top_Look.Y*Needed_Look.Y + Top_Look.Z*Needed_Look.Z, -1, 1
+                )
+                local ac = CFrame.Angles(0, 0, acos(dot))
+                cf0 = cf0 * ac
+                if ((cf0 * za).LookVector - Needed_Look).Magnitude > 0.01 then
+                    cf0 = cf0 * CFrame.Angles(0, 0, -2*acos(dot))
+                end
+                cf0 = cf0 * CFrame.new(0, perp/2, -(dif_para + para/2))
+
+                local cf1 = st * ac * CFrame.Angles(0, pi, 0)
+                if ((cf1 * za).LookVector - Needed_Look).Magnitude > 0.01 then
+                    cf1 = cf1 * CFrame.Angles(0, 0, 2*acos(dot))
+                end
+                cf1 = cf1 * CFrame.new(0, perp/2, dif_para/2)
+
+                if not p0 then p0 = makePart() end
+                local m0 = p0:FindFirstChild(wedgeguid)
+                if m0 then m0.Scale = Vector3.new(0, perp/sz, para/sz) end
+                p0.CFrame = cf0
+
+                if not p1 then p1 = makePart() end
+                local m1 = p1:FindFirstChild(wedgeguid)
+                if m1 then m1.Scale = Vector3.new(0, perp/sz, dif_para/sz) end
+                p1.CFrame = cf1
+
+                return p0, p1
+            end
+
+            local function DrawQuad(v1, v2, v3, v4, p)
+                p[1], p[2] = DrawTriangle(v1, v2, v3, p[1], p[2])
+                p[3], p[4] = DrawTriangle(v3, v2, v4, p[3], p[4])
+            end
+
+            local function IsVisible(inst)
+                while inst do
+                    if inst:IsA("GuiObject") then
+                        if not inst.Visible then return false end
+                    elseif inst:IsA("ScreenGui") then
+                        if not inst.Enabled then return false end
+                        break
+                    end
+                    inst = inst.Parent
+                end
+                return true
+            end
+
+            for i = 1, 4 do parts[i] = makePart() end
+
+            local function UpdateOrientation()
+                if not frame or not frame.Parent then
+                    for _, pt in pairs(parts) do pt.Parent = nil end
+                    return
+                end
+                if not IsVisible(frame) then
+                    for _, pt in pairs(parts) do pt.Parent = nil end
+                    return
+                end
+
+                local zIndex = 1 - 0.05 * frame.ZIndex
+                local tl = frame.AbsolutePosition + Vector2.new(8, 0)
+				local br = frame.AbsolutePosition + frame.AbsoluteSize - Vector2.new(8, 0)
+                local tr = Vector2.new(br.X, tl.Y)
+                local bl = Vector2.new(tl.X, br.Y)
+
+                DrawQuad(
+                    camera:ScreenPointToRay(tl.X, tl.Y, zIndex).Origin,
+                    camera:ScreenPointToRay(tr.X, tr.Y, zIndex).Origin,
+                    camera:ScreenPointToRay(bl.X, bl.Y, zIndex).Origin,
+                    camera:ScreenPointToRay(br.X, br.Y, zIndex).Origin,
+                    parts
+                )
+
+                for _, pt in pairs(parts) do
+                    if pt.Parent ~= folder then pt.Parent = folder end
+                    pt.Transparency = transparency
+                    pt.BrickColor = BrickColor.new('Institutional white')
+                end
+            end
+
+            UpdateOrientation()
+
+            local bindName = http_service:GenerateGUID(true)
+            run:BindToRenderStep(bindName, 2000, UpdateOrientation)
+
+            frame.AncestryChanged:Connect(function()
+                if not frame.Parent then
+                    run:UnbindFromRenderStep(bindName)
+                    folder:Destroy()
+                end
+            end)
         end
 
         function library:resizify(frame) 
@@ -657,13 +819,15 @@
                     AnchorPoint = vec2(0.5, 0.5);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(16, 16, 16)  -- NEW: --bg
+                    BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
+                    BackgroundTransparency = 0.35;
                 });
                 
                 library:create( "UICorner" , {
                     Parent = items[ "main" ];
                     CornerRadius = dim(0, 10)
                 });
+                library:apply_acrylic(items["main"])
                 
                 library:create( "UIStroke" , {
                     Color = rgb(58, 58, 58);  -- NEW: --stroke
@@ -685,9 +849,9 @@
                     Parent = items[ "side_frame" ];
                     Name = "\0";
                     BackgroundTransparency = 1;
-                    Position = dim2(0, 0, 0, 60);
+                    Position = dim2(0, 0, 0, 70);
                     BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 1, -100);
+                    Size = dim2(1, 0, 1, -140);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(204, 204, 204);
                     CanvasSize = dim2(0, 0, 0, 0);
@@ -704,13 +868,14 @@
                 });
                 
                 library:create( "UIPadding" , {
-                    PaddingTop = dim(0, 16);
+                    PaddingTop = dim(0, 0);
                     PaddingBottom = dim(0, 36);
                     Parent = items[ "button_holder" ];
                     PaddingRight = dim(0, 11);
                     PaddingLeft = dim(0, 10)
                 });
 
+				--[[
                 library:create("Frame", {
                     Parent = items["side_frame"];
                     AnchorPoint = vec2(0, 0);
@@ -719,6 +884,7 @@
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(16, 16, 16);
                 });
+				]]
 
                 items["title"] = library:create("ViewportFrame", {
                     Parent = items["side_frame"];
@@ -749,31 +915,15 @@
                     BackgroundColor3 = rgb(204, 204, 204)
                 }); library:apply_theme(items[ "title" ], "accent", "TextColor3");
 
-                library:create("Frame", {
-                    Parent = items["side_frame"];
-                    AnchorPoint = vec2(0, 0);
-                    Position = dim2(0, 0, 0, 70);
-                    Size = dim2(1, 0, 0, 1);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
-                });
-
                 items["profile"] = library:create("Frame", {
                     Parent = items[ "side_frame" ];
                     AnchorPoint = vec2(0, 1);
                     Position = dim2(0, 0, 1, 0);
                     Size = dim2(1, 0, 0, 70);
                     BorderSizePixel = 0;
+					BackgroundTransparency = 1;
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
                 })
-
-                library:create("Frame", {
-                    Parent = items["profile"];
-                    AnchorPoint = vec2(0, 0);
-                    Size = dim2(1, 0, 0, 1);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22);  -- --lift 색
-                });
 
                 items["ProfileImage"] = library:create("ImageLabel", {
                     Parent = items["profile"];
@@ -891,16 +1041,6 @@
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(204, 204, 204)
                 }); cfg.multi_holder = items[ "multi_holder" ];
-                
-                library:create( "Frame" , {
-                    AnchorPoint = vec2(0, 1);
-                    Parent = items[ "multi_holder" ];
-                    Position = dim2(0, 0, 1, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 0, 1);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
-                });
 
                 library:create( "Frame" , {
                     AnchorPoint = vec2(1, 0);
@@ -909,25 +1049,8 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 1, 1, 0);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 0.75;
                     BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
-                });
-                
-                items[ "shadow" ] = library:create( "ImageLabel" , {
-                    ImageColor3 = rgb(0, 0, 0);
-                    ScaleType = Enum.ScaleType.Slice;
-                    Parent = items[ "main" ];
-                    BorderColor3 = rgb(0, 0, 0);
-                    Name = "\0";
-                    BackgroundColor3 = rgb(204, 204, 204);
-                    Size = dim2(1, 75, 1, 75);
-                    AnchorPoint = vec2(0.5, 0.5);
-                    Image = "rbxassetid://112971167999062";
-                    BackgroundTransparency = 1;
-                    Position = dim2(0.5, 0, 0.5, 0);
-                    SliceScale = 0.75;
-                    ZIndex = -100;
-                    BorderSizePixel = 0;
-                    SliceCenter = rect(vec2(112, 112), vec2(147, 147))
                 });
                 
                 items[ "global_fade" ] = library:create( "Frame" , {
@@ -941,11 +1064,6 @@
                     BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
                     ZIndex = 2;
                 });                
-
-                library:create( "UICorner" , {
-                    Parent = items[ "shadow" ];
-                    CornerRadius = dim(0, 5)
-                });
                 
                 items[ "info" ] = library:create( "Frame" , {
                     AnchorPoint = vec2(0, 1);
@@ -955,7 +1073,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 25);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
+                    BackgroundTransparency = 1;
                 });
                 
                 library:create( "UICorner" , {
@@ -967,9 +1085,10 @@
                     Name = "\0";
                     Parent = items[ "info" ];
                     BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 0, 6);
+                    Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
+                    BackgroundTransparency = 0.75;
+                    BackgroundColor3 = rgb(22, 22, 22)
                 });
                 
                 items[ "game" ] = library:create( "TextLabel" , {
@@ -1260,7 +1379,7 @@
 							local page = cfg.current_multi; 
                             
                             if page and page.text ~= data.text then 
-                                self.items[ "global_fade" ].BackgroundTransparency = 0
+                                self.items[ "global_fade" ].BackgroundTransparency = 1
                                 library:tween(self.items[ "global_fade" ], {BackgroundTransparency = 1}, Enum.EasingStyle.Quad, 0.4)
                                 
                                 local old_size = page.page.Size
@@ -1277,8 +1396,8 @@
                             end 
                             
                             library:tween(data.text, {TextColor3 = rgb(254, 254, 254)})
-                            library:tween(data.accent, {BackgroundTransparency = 0})
-                            library:tween(data.button, {BackgroundTransparency = 0})
+                            library:tween(data.accent, {BackgroundTransparency = 0.75})
+                            library:tween(data.button, {BackgroundTransparency = 0.75})
                             library:tween(data.page, {Size = dim2(1, 0, 1, 0)}, Enum.EasingStyle.Quad, 0.4)
 
                             data.page.Visible = true
@@ -1305,7 +1424,7 @@
                 
                 if selected_tab then 
                     if selected_tab[ 4 ] ~= items[ "tab_holder" ] then 
-                        self.items[ "global_fade" ].BackgroundTransparency = 0
+                        self.items[ "global_fade" ].BackgroundTransparency = 1
                         
                         library:tween(self.items[ "global_fade" ], {BackgroundTransparency = 1}, Enum.EasingStyle.Quad, 0.4)
                         selected_tab[ 4 ].Size = dim2(1, -216, 1, -101)
@@ -1321,7 +1440,7 @@
                     selected_tab[ 5 ].Parent = library[ "cache" ]
                 end
 
-                library:tween(items[ "button" ], {BackgroundTransparency = 0})
+                library:tween(items[ "button" ], {BackgroundTransparency = 0.75})
                 library:tween(items[ "icon" ], {ImageColor3 = themes.preset.accent})
                 library:tween(items[ "name" ], {TextColor3 = rgb(254, 254, 254)})
                 library:tween(items[ "tab_holder" ], {Size = dim2(1, -196, 1, -81)}, Enum.EasingStyle.Quad, 0.4)
@@ -1463,6 +1582,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 0, cfg.size, -3);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 0.75;
                     BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                 });
 
@@ -1484,6 +1604,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -2, 1, -2);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 0.75;
                     BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                 });
                 
@@ -2356,7 +2477,7 @@
                 items["dropdown_holder"] = library:create("Frame", {
                     Parent = items["dropdown_object"];
                     Name = "\0";
-                    BackgroundTransparency = 0;
+                    BackgroundTransparency = 0.75;
                     Position = dim2(0, 0, 0, header_height + 6);
                     Size = dim2(1, 0, 0, 0);
                     BorderSizePixel = 0;
@@ -2889,13 +3010,14 @@
                         Size = dim2(0, 166, 0, 197);
                         BorderSizePixel = 0;
                         Visible = true;
+                        BackgroundTransparency = 0.75;
                         BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                     });
 
                     items[ "colorpicker_fade" ] = library:create( "Frame" , {
                         Parent = items[ "colorpicker_holder" ];
                         Name = "\0";
-                        BackgroundTransparency = 0;
+                        BackgroundTransparency = 0.75;
                         Position = dim2(0, 0, 0, 0);
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, 0, 1, 0);
@@ -3166,7 +3288,7 @@
             end;
 
             function cfg.set_visible(bool)
-                items[ "colorpicker_fade" ].BackgroundTransparency = 0
+                items[ "colorpicker_fade" ].BackgroundTransparency = 0.75
                 items[ "colorpicker_holder" ].Parent = bool and library[ "items" ] or library[ "other" ]
                 items[ "colorpicker_holder" ].Position = dim_offset(items[ "colorpicker" ].AbsolutePosition.X, items[ "colorpicker" ].AbsolutePosition.Y + items[ "colorpicker" ].AbsoluteSize.Y + 45)
 
@@ -3854,6 +3976,7 @@
                     Size = dim2(1, -8, 0, 30);
                     BorderSizePixel = 0;
                     TextSize = 14;
+                    BackgroundTransparency = 0.75;
                     BackgroundColor3 = rgb(22, 22, 22)  -- NEW: --lift
                 });
                 
@@ -4348,7 +4471,7 @@
 
         
         function notifications:fade(path, is_fading)
-            local fading = is_fading and 1 or 0 
+            local fading = is_fading and 1 or 0.35
             
             library:tween(path, {BackgroundTransparency = fading}, Enum.EasingStyle.Quad, 1)
 
@@ -4385,10 +4508,10 @@
                     Name = "\0";
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundTransparency = 1;
                     AnchorPoint = vec2(1, 0);
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = rgb(16, 16, 16)  -- NEW: --bg
+                    BackgroundColor3 = rgb(16, 16, 16);  -- NEW: --bg
+                    BackgroundTransparency = 0.35;
                 });
                 
                 library:create( "UIStroke" , {
@@ -4397,6 +4520,8 @@
                     Transparency = 1;
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 });
+
+                library:apply_acrylic(items["notification"])
                 
                 items[ "title" ] = library:create( "TextLabel" , {
                     FontFace = fonts.font;
