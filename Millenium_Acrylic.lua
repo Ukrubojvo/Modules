@@ -2074,6 +2074,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 0.5;
                     BackgroundColor3 = rgb(32, 32, 32)  -- NEW: --lift
                 });
             end
@@ -2306,6 +2307,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 0.5;
                     BackgroundColor3 = rgb(32, 32, 32)  -- NEW: --lift
                 });
             end 
@@ -2748,6 +2750,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 0.5;
                     BackgroundColor3 = rgb(32, 32, 32);
                 });
             end
@@ -2920,6 +2923,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 1, 0, 1);
                     BorderSizePixel = 0;
+                    BackgroundTransparency = 0.5;
                     BackgroundColor3 = rgb(32, 32, 32)  -- NEW: --lift
                 });
             end 
