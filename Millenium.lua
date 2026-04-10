@@ -4077,7 +4077,7 @@
                     ClipsDescendants = false;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundTransparency = 1;
+                    BackgroundTransparency = 0.5;
                     BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface
                 });
                 
@@ -4088,7 +4088,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -2, 1, -2);
                     BorderSizePixel = 0;
-                    BackgroundTransparency = 1;
+                    BackgroundTransparency = 0.5;
                     BackgroundColor3 = rgb(19, 19, 19)  -- NEW: --surface-2
                 });
                 
@@ -4112,7 +4112,6 @@
                     Position = dim2(0, 10, 0, 10);
                     Size = dim2(1, -20, 0, 0);
                     BorderSizePixel = 0;
-                    BackgroundTransparency = 1;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     BackgroundColor3 = rgb(204, 204, 204)
                 });
@@ -4134,7 +4133,7 @@
                 });
                 
                 items[ "tick" ] = library:create( "ImageButton" , {
-                    Image = "rbxassetid://128797200442698";
+                    Image = "rbxassetid://101463883805422";
                     Name = "\0";
                     AutoButtonColor = false;
                     Parent = self.items[ "right_components" ];
