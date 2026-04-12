@@ -3,7 +3,38 @@ function missing(t, f, fallback)
     return fallback
 end
 
-local cloneref = missing("function", cloneref, function(...) return ... end)
+local cloneref = cloneref or function(ref)
+	if not getreg then return ref end
+	
+	local InstanceList
+	
+	local a = Instance.new("Part")
+	for _, c in pairs(getreg()) do
+		if type(c) == "table" and #c then
+			if rawget(c, "__mode") == "kvs" then
+				for d, e in pairs(c) do
+					if e == a then
+						InstanceList = c
+						break
+					end
+				end
+			end
+		end
+	end
+	local f = {}
+	function f.invalidate(g)
+		if not InstanceList then
+			return
+		end
+		for b, c in pairs(InstanceList) do
+			if c == g then
+				InstanceList[b] = nil
+				return g
+			end
+		end
+	end
+	return f.invalidate
+end
 local sethidden = missing("function", sethiddenproperty or set_hidden_property or set_hidden_prop)
 local gethidden = missing("function", gethiddenproperty or get_hidden_property or get_hidden_prop)
 local queueteleport = missing("function", queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport))

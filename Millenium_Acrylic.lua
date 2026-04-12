@@ -1827,7 +1827,7 @@
                 info = options.info or nil,
                 flag = options.flag or library:next_flag(),
                 
-                type = options.type and string.lower(options.type) or rand == 1 and "toggle" or "checkbox"; -- "toggle", "checkbox"
+                type = options.type and string.lower(options.type) or "toggle"; -- "toggle", "checkbox"
 
                 default = options.default or false,
                 folding = options.folding or false, 
