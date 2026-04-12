@@ -2106,6 +2106,8 @@
                 items = {}
             } 
 
+            if cfg.interval == 0 then cfg.interval = 1 end
+
             flags[cfg.flag] = cfg.default
 
             local items = cfg.items; do
