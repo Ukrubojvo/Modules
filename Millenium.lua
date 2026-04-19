@@ -768,6 +768,10 @@
                 connection:Disconnect() 
                 connection = nil 
             end
+
+            if _acrylic_dof then
+                _acrylic_dof.Enabled = false
+            end
             
             library = nil 
         end
@@ -1136,6 +1140,7 @@
 
             function cfg.toggle_menu(bool) 
                 library[ "items" ].Enabled = bool
+                _acrylic_dof.Enabled = bool
             end 
                 
             return setmetatable(cfg, library)
