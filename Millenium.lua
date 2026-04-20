@@ -623,8 +623,6 @@
                     else
                         function_set(v)
                     end
-                else
-                    warn("Failed to load: No UI update function registered for [" .. tostring(flag) .. "].")
                 end 
             end 
         end
