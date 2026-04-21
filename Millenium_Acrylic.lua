@@ -623,8 +623,6 @@
                     else
                         function_set(v)
                     end
-                else
-                    warn("Failed to load: No UI update function registered for [" .. tostring(flag) .. "].")
                 end 
             end 
         end
@@ -671,11 +669,12 @@
             end
         end
         
-        function library:round(number, float) 
+        function library:round(number, float)
+            number = tonumber(number) or 0
             local multiplier = 1 / (float or 1)
 
             return floor(number * multiplier + 0.5) / multiplier
-        end 
+        end
 
         function library:apply_theme(instance, theme, property) 
             insert(themes.utility[theme][property], instance)
