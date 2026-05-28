@@ -13,7 +13,7 @@ xpcall(function()
     end
 
     if autoload == nil then autoload=true end
-    if autoleave == nil then autoleave=true end
+    if autoleave == nil then autoleave=false end
 
     local players = cloneref(game:GetService("Players"))
     local coregui = gethui() or cloneref(game:GetService("CoreGui"))
