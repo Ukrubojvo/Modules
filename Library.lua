@@ -7154,7 +7154,7 @@ function Library:CreateMinimizer(Config)
 	end
 
 	local parentGui = Library.GUI or GUI
-	if parentGui then parentGui.DisplayOrder = 1000 end
+	if parentGui then parentGui.DisplayOrder = 2147483647 end
 	local isMobile = Mobile and true or false
 
 	local iconAsset = "rbxassetid://10734897102"
