@@ -8,10 +8,40 @@
 ]]
 
 -- Variables 
+    local cloneref = cloneref or function(ref)
+        if not getreg then return ref end
+        local InstanceList
+        local a = Instance.new("Part")
+        for _, c in pairs(getreg()) do
+            if type(c) == "table" and #c then
+                if rawget(c, "__mode") == "kvs" then
+                    for d, e in pairs(c) do
+                        if e == a then
+                            InstanceList = c
+                            break
+                        end
+                    end
+                end
+            end
+        end
+        local f = {}
+        function f.invalidate(g)
+            if not InstanceList then
+                return
+            end
+            for b, c in pairs(InstanceList) do
+                if c == g then
+                    InstanceList[b] = nil
+                    return g
+                end
+            end
+        end
+        return f.invalidate
+    end
     local uis = game:GetService("UserInputService") 
-    local players = game:GetService("Players") 
-    local ws = game:GetService("Workspace")
-    local rs = game:GetService("ReplicatedStorage")
+    local players = cloneref(game:GetService("Players")) 
+    local ws = cloneref(game:GetService("Workspace"))
+    local rs = cloneref(game:GetService("ReplicatedStorage"))
     local http_service = game:GetService("HttpService")
     local gui_service = game:GetService("GuiService")
     local lighting = game:GetService("Lighting")
@@ -44,7 +74,6 @@
 
     local camera = ws.CurrentCamera
     local lp = players.LocalPlayer 
-    local mouse = lp:GetMouse() 
     local gui_offset = gui_service:GetGuiInset().Y
 
     local max = math.max 
@@ -468,6 +497,7 @@
         end 
 
         function library:mouse_in_frame(uiobject)
+            local mouse = uis:GetMouseLocation()
             local y_cond = uiobject.AbsolutePosition.Y <= mouse.Y and mouse.Y <= uiobject.AbsolutePosition.Y + uiobject.AbsoluteSize.Y
             local x_cond = uiobject.AbsolutePosition.X <= mouse.X and mouse.X <= uiobject.AbsolutePosition.X + uiobject.AbsoluteSize.X
 
