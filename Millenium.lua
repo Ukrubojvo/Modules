@@ -1276,7 +1276,7 @@
                             
                             library:tween(data.text, {TextColor3 = rgb(235, 237, 244)})
                             library:tween(data.accent, {BackgroundTransparency = 0})
-                            library:tween(data.button, {BackgroundTransparency = 0})
+                            library:tween(data.button, {BackgroundTransparency = 1})
                             library:tween(data.page, {Size = dim2(1, 0, 1, 0)}, Enum.EasingStyle.Quad, 0.4)
 
                             data.page.Visible = true
