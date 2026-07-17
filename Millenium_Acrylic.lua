@@ -1169,7 +1169,7 @@
 
             function cfg.toggle_menu(bool) 
                 library[ "items" ].Enabled = bool
-                _acrylic_dof.Enabled = bool
+                if _acrylic_dof then _acrylic_dof.Enabled = bool end
             end 
                 
             return setmetatable(cfg, library)
