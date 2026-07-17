@@ -1163,7 +1163,7 @@
                                     BorderSizePixel = 0;
                                     AutomaticSize = Enum.AutomaticSize.X;
                                     TextSize = 16;
-                                    BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
+                                    BackgroundColor3 = rgb(10, 11, 16)  -- NEW: --lift
                                 });
                                 
                                 multi_items[ "name" ] = library:create( "TextLabel" , {
