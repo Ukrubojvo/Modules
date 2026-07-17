@@ -698,7 +698,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(10, 11, 16);  -- NEW: --bg
-                    BackgroundTransparency = 0.35;
+                    BackgroundTransparency = 0;
                 });
                 
                 library:create( "UICorner" , {
@@ -927,7 +927,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 1, 1, 0);
                     BorderSizePixel = 0;
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0;
                     BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                 });
                 
@@ -965,7 +965,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 1);
                     BorderSizePixel = 0;
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0;
                     BackgroundColor3 = rgb(20, 22, 30)
                 });
                 
@@ -1275,8 +1275,8 @@
                             end 
                             
                             library:tween(data.text, {TextColor3 = rgb(235, 237, 244)})
-                            library:tween(data.accent, {BackgroundTransparency = 0.75})
-                            library:tween(data.button, {BackgroundTransparency = 0.75})
+                            library:tween(data.accent, {BackgroundTransparency = 0})
+                            library:tween(data.button, {BackgroundTransparency = 0})
                             library:tween(data.page, {Size = dim2(1, 0, 1, 0)}, Enum.EasingStyle.Quad, 0.4)
 
                             data.page.Visible = true
@@ -1319,7 +1319,7 @@
                     selected_tab[ 5 ].Parent = library[ "cache" ]
                 end
 
-                library:tween(items[ "button" ], {BackgroundTransparency = 0.75})
+                library:tween(items[ "button" ], {BackgroundTransparency = 0})
                 library:tween(items[ "icon" ], {ImageColor3 = themes.preset.accent})
                 library:tween(items[ "name" ], {TextColor3 = rgb(235, 237, 244)})
                 library:tween(items[ "tab_holder" ], {Size = dim2(1, -196, 1, -81)}, Enum.EasingStyle.Quad, 0.4)
@@ -1461,7 +1461,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 0, cfg.size, -3);
                     BorderSizePixel = 0;
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0;
                     BackgroundColor3 = rgb(14, 15, 21)  -- NEW: --surface
                 });
 
@@ -1483,7 +1483,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -2, 1, -2);
                     BorderSizePixel = 0;
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0;
                     BackgroundColor3 = rgb(14, 15, 21)  -- NEW: --surface-2
                 });
                 
@@ -2360,7 +2360,7 @@
                 items["dropdown_holder"] = library:create("Frame", {
                     Parent = items["dropdown_object"];
                     Name = "\0";
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0;
                     Position = dim2(0, 0, 0, header_height + 6);
                     Size = dim2(1, 0, 0, 0);
                     BorderSizePixel = 0;
@@ -2895,14 +2895,14 @@
                         Size = dim2(0, 166, 0, 197);
                         BorderSizePixel = 0;
                         Visible = true;
-                        BackgroundTransparency = 0.75;
+                        BackgroundTransparency = 0;
                         BackgroundColor3 = rgb(14, 15, 21)  -- NEW: --surface
                     });
 
                     items[ "colorpicker_fade" ] = library:create( "Frame" , {
                         Parent = items[ "colorpicker_holder" ];
                         Name = "\0";
-                        BackgroundTransparency = 0.75;
+                        BackgroundTransparency = 0;
                         Position = dim2(0, 0, 0, 0);
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, 0, 1, 0);
@@ -3173,7 +3173,7 @@
             end;
 
             function cfg.set_visible(bool)
-                items[ "colorpicker_fade" ].BackgroundTransparency = 0.75
+                items[ "colorpicker_fade" ].BackgroundTransparency = 0
                 items[ "colorpicker_holder" ].Parent = bool and library[ "items" ] or library[ "other" ]
                 items[ "colorpicker_holder" ].Position = dim_offset(items[ "colorpicker" ].AbsolutePosition.X, items[ "colorpicker" ].AbsolutePosition.Y + items[ "colorpicker" ].AbsoluteSize.Y + 45)
 
@@ -3420,7 +3420,7 @@
                     BorderColor3 = rgb(0, 0, 0);
                     Position = dim2(1, 0, 0, 0);
                     Size = dim2(1, -4, 0, 30);
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0;
                     BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                 }); 
 
@@ -3862,7 +3862,7 @@
                     Size = dim2(1, -8, 0, 30);
                     BorderSizePixel = 0;
                     TextSize = 14;
-                    BackgroundTransparency = 0.75;
+                    BackgroundTransparency = 0;
                     BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                 });
                 
@@ -4360,7 +4360,7 @@
 
         
         function notifications:fade(path, is_fading)
-            local fading = is_fading and 1 or 0.35
+            local fading = is_fading and 1 or 0
             
             library:tween(path, {BackgroundTransparency = fading}, Enum.EasingStyle.Quad, 1)
 
@@ -4400,7 +4400,7 @@
                     AnchorPoint = vec2(1, 0);
                     AutomaticSize = Enum.AutomaticSize.Y;
                     BackgroundColor3 = rgb(10, 11, 16);  -- NEW: --bg
-                    BackgroundTransparency = 0.35;
+                    BackgroundTransparency = 0;
                 });
                 
                 library:create( "UIStroke" , {
