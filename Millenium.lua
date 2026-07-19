@@ -827,7 +827,7 @@
                     BackgroundTransparency = 1;
                     TextColor3 = rgb(207, 210, 220);  -- NEW: text-dim
                     FontFace = fonts.small;
-                    TextSize = 14;
+                    TextSize = 13;
                     TextXAlignment = Enum.TextXAlignment.Left;
                     Text = lp.DisplayName or "Unknown";
                 });
@@ -841,7 +841,7 @@
                     BackgroundTransparency = 1;
                     TextColor3 = rgb(111, 116, 132);  -- NEW: text-dim-2
                     FontFace = fonts.small;
-                    TextSize = 14;
+                    TextSize = 13;
                     TextXAlignment = Enum.TextXAlignment.Left;
                     Text = "@" .. (lp.Name or "unknown");
                 });
@@ -983,7 +983,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 }); 
                 
@@ -1002,7 +1002,7 @@
                     TextXAlignment = Enum.TextXAlignment.Right;
                     AutomaticSize = Enum.AutomaticSize.XY;
                     FontFace = fonts.font;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 }); library:apply_theme(items[ "other_info" ], "accent", "TextColor3");        
             end 
@@ -1058,7 +1058,7 @@
                         Name = "\0";
                         Size = dim2(1, 0, 0, 35);
                         BorderSizePixel = 0;
-                        TextSize = 16;
+                        TextSize = 14;
                         BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                     });
                     
@@ -1089,7 +1089,7 @@
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.X;
-                        TextSize = 16;
+                        TextSize = 14;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                     
@@ -1162,7 +1162,7 @@
                                     ClipsDescendants = true;
                                     BorderSizePixel = 0;
                                     AutomaticSize = Enum.AutomaticSize.X;
-                                    TextSize = 16;
+                                    TextSize = 14;
                                     BackgroundColor3 = rgb(10, 11, 16)  -- NEW: --lift
                                 });
                                 
@@ -1178,7 +1178,7 @@
                                     TextXAlignment = Enum.TextXAlignment.Left;
                                     BorderSizePixel = 0;
                                     AutomaticSize = Enum.AutomaticSize.XY;
-                                    TextSize = 16;
+                                    TextSize = 14;
                                     BackgroundColor3 = rgb(207, 210, 220)
                                 });
                                 
@@ -1368,7 +1368,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0; 
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -1542,7 +1542,7 @@
                     Position = dim2(0, 1, 0, 1);
                     Size = dim2(1, -2, 0, 35);
                     BorderSizePixel = 0;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundTransparency = 1;
                     BackgroundColor3 = rgb(20, 20, 26)  -- NEW: --lift
                 });
@@ -1586,7 +1586,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.X;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -1614,7 +1614,7 @@
                         Position = dim2(1, -9, 0.5, 0);
                         Size = dim2(0, 36, 0, 18);
                         BorderSizePixel = 0;
-                        TextSize = 14;
+                        TextSize = 13;
                         BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                     });  library:apply_theme(items[ "toggle" ], "accent", "BackgroundColor3");
                     
@@ -1730,7 +1730,7 @@
                     Size = dim2(1, 0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -1746,7 +1746,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
 
@@ -1765,7 +1765,7 @@
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 16;
+                        TextSize = 14;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                 end 
@@ -1809,7 +1809,7 @@
                             Position = dim2(1, 0, 0, 0);
                             Size = dim2(0, 16, 0, 16);
                             BorderSizePixel = 0;
-                            TextSize = 14;
+                            TextSize = 13;
                             BackgroundColor3 = rgb(108, 108, 108)
                         }); library:apply_theme(items[ "toggle_button" ], "accent", "BackgroundColor3");
                         
@@ -1865,7 +1865,7 @@
                             Position = dim2(1, -9, 0.5, 0);
                             Size = dim2(0, 36, 0, 18);
                             BorderSizePixel = 0;
-                            TextSize = 14;
+                            TextSize = 13;
                             BackgroundColor3 = rgb(111, 116, 132)
                         }); library:apply_theme(items[ "toggle_button" ], "accent", "BackgroundColor3");
                         
@@ -2001,7 +2001,7 @@
                     Size = dim2(1, 0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -2017,7 +2017,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -2036,7 +2036,7 @@
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 16;
+                        TextSize = 14;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                 end 
@@ -2077,7 +2077,7 @@
                     Position = dim2(1, 0, 0, 0);
                     Size = dim2(1, -4, 0, 4);
                     BorderSizePixel = 0;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(43, 46, 58)  -- NEW: --lift
                 });
                 
@@ -2134,7 +2134,7 @@
                     TextXAlignment = Enum.TextXAlignment.Right;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -2258,7 +2258,7 @@
                     BackgroundTransparency = 1;
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220);
                 });
 
@@ -2281,7 +2281,7 @@
                         BackgroundTransparency = 1;
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
-                        TextSize = 13;
+                        TextSize = 12;
                         BackgroundColor3 = rgb(207, 210, 220);
                     });
                 end
@@ -2337,7 +2337,7 @@
                     BackgroundTransparency = 1;
                     TextXAlignment = Enum.TextXAlignment.Left;
                     TextTruncate = Enum.TextTruncate.AtEnd;
-                    TextSize = 13;
+                    TextSize = 12;
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(88, 88, 88);
@@ -2405,7 +2405,7 @@
                         Position = dim2(0, 5, 0, 0);
                         BackgroundTransparency = 1;
                         TextXAlignment = Enum.TextXAlignment.Left;
-                        TextSize = 14;
+                        TextSize = 13;
                         ClearTextOnFocus = false;
                     });
                 end
@@ -2461,7 +2461,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     AutoButtonColor = false;
                     BorderSizePixel = 0;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220);
                 });
 
@@ -2679,7 +2679,7 @@
                 Size = dim2(1, 0, 0, 0);
                 BorderSizePixel = 0;
                 AutomaticSize = Enum.AutomaticSize.Y;
-                TextSize = 14;
+                TextSize = 13;
                 BackgroundColor3 = rgb(207, 210, 220)
             });
             
@@ -2696,7 +2696,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
             end
@@ -2716,7 +2716,7 @@
                 TextXAlignment = Enum.TextXAlignment.Left;
                 BorderSizePixel = 0;
                 AutomaticSize = Enum.AutomaticSize.XY;
-                TextSize = 16;
+                TextSize = 14;
                 BackgroundColor3 = rgb(207, 210, 220)
                 });
             end 
@@ -2765,7 +2765,7 @@
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 16;
+                        TextSize = 14;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                 end
@@ -2790,7 +2790,7 @@
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 16;
+                        TextSize = 14;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                 end
@@ -2855,7 +2855,7 @@
                         Position = dim2(1, 0, 0, 0);
                         Size = dim2(0, 16, 0, 16);
                         BorderSizePixel = 0;
-                        TextSize = 14;
+                        TextSize = 13;
                         BackgroundColor3 = rgb(54, 31, 184)
                     });
                     
@@ -3151,7 +3151,7 @@
                         PlaceholderColor3 = rgb(235, 237, 244);
                         CursorPosition = -1;
                         ClearTextOnFocus = false;
-                        TextSize = 14;
+                        TextSize = 13;
                         TextColor3 = rgb(166, 170, 184);  -- NEW: text-dim
                         BorderColor3 = rgb(0, 0, 0);
                         Position = dim2(1, -8, 1, -11);
@@ -3360,7 +3360,7 @@
                     Size = dim2(1, 0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -3376,7 +3376,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 16;
+                    TextSize = 14;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -3415,7 +3415,7 @@
                     PlaceholderText = cfg.placeholder;
                     CursorPosition = -1;
                     ClearTextOnFocus = false;
-                    TextSize = 14;
+                    TextSize = 13;
                     TextColor3 = rgb(166, 170, 184);  -- NEW: text-dim
                     BorderColor3 = rgb(0, 0, 0);
                     Position = dim2(1, 0, 0, 0);
@@ -3506,7 +3506,7 @@
                         Size = dim2(1, 0, 0, 0);
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.Y;
-                        TextSize = 14;
+                        TextSize = 13;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                     
@@ -3522,7 +3522,7 @@
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 16;
+                        TextSize = 14;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                     
@@ -3563,7 +3563,7 @@
                         Position = dim2(1, 0, 0, 0);
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.X;
-                        TextSize = 14;
+                        TextSize = 13;
                         BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                     });
 
@@ -3591,7 +3591,7 @@
                         TextXAlignment = Enum.TextXAlignment.Left;
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 14;
+                        TextSize = 13;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                     
@@ -3667,7 +3667,7 @@
                             TextXAlignment = Enum.TextXAlignment.Left;
                             BorderSizePixel = 0;
                             AutomaticSize = Enum.AutomaticSize.XY;
-                            TextSize = 14;
+                            TextSize = 13;
                             BackgroundColor3 = rgb(207, 210, 220)
                         }); cfg.hold_instances[option] = name
                         library:apply_theme(name, "accent", "TextColor3")
@@ -3861,7 +3861,7 @@
                     Position = dim2(1, -4, 0, 0);
                     Size = dim2(1, -8, 0, 30);
                     BorderSizePixel = 0;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundTransparency = 0;
                     BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                 });
@@ -3882,7 +3882,7 @@
                     Size = dim2(1, 0, 1, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 }); library:apply_theme(items[ "name" ], "accent", "BackgroundColor3");                            
             end 
@@ -4100,7 +4100,7 @@
                         Position = dim2(1, 0, 0, 0);
                         Size = dim2(1, 0, 0, 30);
                         BorderSizePixel = 0;
-                        TextSize = 14;
+                        TextSize = 13;
                         BackgroundColor3 = rgb(20, 22, 30)  -- NEW: --lift
                     }); cfg.data_store[#cfg.data_store + 1] = button;
 
@@ -4115,7 +4115,7 @@
                         Size = dim2(1, 0, 1, 0);
                         BorderSizePixel = 0;
                         AutomaticSize = Enum.AutomaticSize.XY;
-                        TextSize = 14;
+                        TextSize = 13;
                         BackgroundColor3 = rgb(207, 210, 220)
                     });
                     
@@ -4423,7 +4423,7 @@
                     Position = dim2(0, 7, 0, 6);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
@@ -4445,7 +4445,7 @@
                     TextXAlignment = Enum.TextXAlignment.Left;
                     TextWrapped = true;
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    TextSize = 14;
+                    TextSize = 13;
                     BackgroundColor3 = rgb(207, 210, 220)
                 });
                 
