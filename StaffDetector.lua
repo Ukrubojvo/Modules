@@ -104,7 +104,7 @@ xpcall(function()
         if data and data.roles then
             for _, r in ipairs(data.roles) do
                 local name = string.lower(r.name)
-                if string.find(name, "mod") or string.find(name, "staff") or string.find(name, "contributor") 
+                if string.find(name, "team") or string.find(name, "staff") or string.find(name, "contributor") 
                 or string.find(name, "script") or string.find(name, "build") then
                     table.insert(roleIds, r.id)
                 end
